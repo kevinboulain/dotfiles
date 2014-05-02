@@ -11,7 +11,7 @@ function use_default_venv {
     mount 2> $null | grep "$data_mount (hfs, local, journaled)" >& $null
     if [ $? -eq 0 ]
     then
-	export WORKON_HOME='/Volumes/Data/stuff/python/venv'
+	export WORKON_HOME="$data_mount/stuff/python/venv"
 	. /usr/local/bin/virtualenvwrapper.sh
 
 	# test if $default_venv exists
@@ -26,7 +26,8 @@ function use_default_venv {
 	    mkvirtualenv $default_venv
 	fi
     else
-	echo "$data_mount is not mounted..."
+	echo "$data_mount is not properly mounted..."
+	echo "Not switching to $default_venv venv..."
     fi
 }
 

@@ -3,7 +3,7 @@ export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 null='/dev/null'
 data_mount='/Volumes/Data'
 
-function venv {
+function use_default_venv {
     # creates and uses $default_venv
     default_venv='stuff'
 
@@ -36,7 +36,7 @@ function brew {
     /usr/local/bin/brew "$@"
 }
 
-venv
+use_default_venv
 
 alias clean="find . -type f -name '*~' -delete"
 alias l='ls'

@@ -21,5 +21,10 @@ else
     echo "$data_mount is not mounted..."
 fi
 
+function brew {
+    deactivate
+    /usr/local/bin/brew "$@"
+}
+
 alias clean="find . -type f -name '*~' -delete"
 alias l='ls'

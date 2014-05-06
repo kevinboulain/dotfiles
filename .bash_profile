@@ -37,6 +37,16 @@ function brew {
     /usr/local/bin/brew "$@"
 }
 
+function finder_show_all {
+    if [ "$1" == 'true' ] || [ "$1" == 'false' ]
+    then
+	/usr/bin/defaults write com.apple.finder AppleShowAllFiles $1
+	/usr/bin/killall Finder
+    else
+	echo 'Boolean parameter required...'
+    fi
+}
+
 use_default_venv
 
 alias clean="find . -type f -name '*~' -delete"

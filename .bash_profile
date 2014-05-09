@@ -33,7 +33,12 @@ function use_default_venv {
 
 function brew {
     # brew can not work in a venv
-    deactivate
+    if [ -n "$VIRTUAL_ENV" ]
+    then
+	# deactivate only if working on a venv
+	echo 'Using brew within a venv, deactivating it...'
+	deactivate
+    fi
     /usr/local/bin/brew "$@"
 }
 

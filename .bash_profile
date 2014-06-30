@@ -54,5 +54,7 @@ function finder_show_all {
 
 use_default_venv
 
-alias clean="find . -type f -name '*~' -delete"
+#alias clean="find . -type f -name '*~' -delete"
+alias clean="find . -name '*pyc' -delete -or -name '*~' -delete"
+alias clean_list="find . -name '*pyc' -or -name '*~'"
 alias l='ls'

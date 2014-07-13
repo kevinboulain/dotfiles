@@ -1,0 +1,13 @@
+[user]
+	email = kevinboulain@gmail.com
+	name = Kevin \"ether\" Boulain
+[alias]
+        st = status
+        ci = commit
+        lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ar)%Creset'
+[core]
+	pager = cat
+[merge]
+	conflictStyle = diff3
+[push]
+	default = simple

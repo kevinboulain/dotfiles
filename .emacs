@@ -24,7 +24,7 @@
 ; remove the \ for a wrapped line
 (set-display-table-slot standard-display-table 'wrap ?\ )
 
-; mouse support
-(require 'mouse)
-(xterm-mouse-mode t)
-(defun track-mouse (e))
+; mouse support, not practical for copy/paste
+;(require 'mouse)
+;(xterm-mouse-mode t)
+;(defun track-mouse (e))

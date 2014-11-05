@@ -1,6 +1,7 @@
 export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 export EDITOR='emacs'
 export PAGER='less'
+export PS1='\h:\W \[\033[0;36m\]>\[\033[0m\] '
 
 null='/dev/null'
 data_mount='/Volumes/Data'

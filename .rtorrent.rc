@@ -50,7 +50,7 @@ schedule = untied_directory,5,5,stop_untied=
 
 # Check hash for finished torrents. Might be usefull until the bug is
 # fixed that causes lack of diskspace not to be properly reported.
-#check_hash = no
+check_hash = yes
 
 # Set whetever the client should try to connect to UDP trackers.
 #use_udp_trackers = yes

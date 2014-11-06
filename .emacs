@@ -42,3 +42,9 @@
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 (setq auto-save-list-file-prefix temporary-file-directory)
+
+; show lines numbers, see http://www.emacswiki.org/LineNumbers
+(require 'linum)
+; add a blank space after the line number
+(setq linum-format "%d ")
+(global-linum-mode 1)

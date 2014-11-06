@@ -15,8 +15,8 @@ then
 else
      prompt_color=$red
 fi'
-# prompt
-PS1='\h:\W $(echo -ne $prompt_color)>$(echo -ne $esc) '
+# prompt, \[\]: allow readline to correctly calculate prompt size
+PS1='\h:\W \[$(echo -ne $prompt_color)\]>\[$(echo -ne $esc)\] '
 
 null='/dev/null'
 data_mount='/Volumes/Data'

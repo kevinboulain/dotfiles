@@ -40,7 +40,7 @@ function activate_default_venv {
 
     # where to store the venvs
     local python_directory="$config_directory/python"
-    WORKON_HOME="$python_directory/venv"
+    WORKON_HOME="$python_directory/venvs"
 
     # test if $WORKON_HOME directory exists
     if [ ! -d "$WORKON_HOME" ]; then

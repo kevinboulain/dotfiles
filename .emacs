@@ -1,3 +1,5 @@
+; require emacs 24+
+
 ; monokai theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs/")
 (load-theme 'monokai t)

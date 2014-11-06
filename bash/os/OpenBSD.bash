@@ -4,4 +4,4 @@
 
 export PKG_PATH="http://ftp.fr.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`"
 
-activate_default_venv ~/stuff
+activate_default_venv "$config_directory"

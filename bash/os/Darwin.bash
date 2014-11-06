@@ -4,7 +4,6 @@
 
 # where some stuff should be stored
 data_mount='/Volumes/Data'
-config_directory="$data_mount/stuff"
 
 # test if $data_mount if correctly mounted
 mount 2> "$null" | grep "$data_mount (hfs, local, journaled)" >& "$null"

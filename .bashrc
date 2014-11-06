@@ -7,22 +7,22 @@ export PAGER='less'
 
 # handy variables
 null='/dev/null'
-
 # find where this script is located
-bashrc_directory=$(dirname $(readlink "$bashrc"))
+# used in sub scripts!
+config_directory=$(dirname $(readlink "$bashrc"))
 
 # source some 'extensions'
-for script in "$bashrc_directory/bash/"{log,prompt,venvs}.bash; do
+for script in "$config_directory/bash/"{log,prompt,venvs}.bash; do
     . "$script"
 done
 
 # source os specific 'extension'
-os_script="$bashrc_directory/bash/os/`uname`.bash"
+os_script="$config_directory/bash/os/`uname`.bash"
 if [ -f "$os_script" ]; then
     . "$os_script"
 fi
 
-unset bashrc_directory os_script
+unset os_script
 
 # some aliases
 alias emacs='emacs -nw'

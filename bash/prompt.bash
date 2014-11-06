@@ -14,4 +14,4 @@ else
 fi'
 
 # prompt, \[\]: allow readline to correctly calculate prompt size
-PS1='\h:\W \[$(echo -ne $prompt_color)\]>\[$(echo -ne $esc)\] '
+PS1='\h:\W \u \[$(echo -ne $prompt_color)\]>\[$(echo -ne $esc)\] '

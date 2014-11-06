@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# require virtualenvwrapper (install it via pip)
+
 # deactivate the current venv, if any
 function deactivate_venv {
     if [ -n "$VIRTUAL_ENV" ]; then

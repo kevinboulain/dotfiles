@@ -1,7 +1,22 @@
 export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 export EDITOR='emacs'
 export PAGER='less'
-export PS1='\h:\W \[\033[0;36m\]>\[\033[0m\] '
+
+# some used escape codes
+cyan="\033[36m"
+red="\033[31m"
+esc="\033[0m"
+
+# executed at each command, set $prompt_color
+PROMPT_COMMAND='
+if [ $? = 0 ]
+then
+     prompt_color=$cyan
+else
+     prompt_color=$red
+fi'
+# prompt
+PS1='\h:\W $(echo -ne $prompt_color)>$(echo -ne $esc) '
 
 null='/dev/null'
 data_mount='/Volumes/Data'

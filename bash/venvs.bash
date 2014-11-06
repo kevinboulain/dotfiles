@@ -20,13 +20,13 @@ function activate_default_venv {
     fi
 
     # where the vens are stored
-    local venvs_directory=$1
+    local config_directory=$1
     # virtualenvwrapper.sh path
     local virtualenvwrapper="`which virtualenvwrapper.sh`"
 
-    # test if $venvs_directory exists
-    if [ ! -d "$venvs_directory" ]; then
-        log "'$venvs_directory' directory not found."
+    # test if $config_directory exists
+    if [ ! -d "$config_directory" ]; then
+        log "'$config_directory' directory not found."
         return 1
     fi
 
@@ -39,7 +39,8 @@ function activate_default_venv {
     deactivate_venv
 
     # where to store the venvs
-    WORKON_HOME="$venvs_directory/python/venv"
+    local python_directory="$config_directory/python"
+    WORKON_HOME="$python_directory/venv"
 
     # test if $WORKON_HOME directory exists
     if [ ! -d "$WORKON_HOME" ]; then
@@ -52,6 +53,7 @@ function activate_default_venv {
             return 1
         fi
     fi
+    export PYTHONPATH="$python_directory"
 
     # source virtualenvwrapper.sh
     export WORKON_HOME

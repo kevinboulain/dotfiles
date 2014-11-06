@@ -25,6 +25,10 @@ fi
 unset os_script
 
 # some aliases
+hash ag >& "$null"
+if [ $? -eq 0 ]; then
+    alias grep='ag'
+fi
 alias emacs='emacs -nw'
 alias clean="find . -name '*.pyc' -delete -or -name '*~' -delete -or -name '*.o' -delete"
 alias clean_list="find . -name '*.pyc' -or -name '*~' -or -name '*.o'"

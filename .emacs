@@ -24,7 +24,16 @@
 ; remove the \ for a wrapped line
 (set-display-table-slot standard-display-table 'wrap ?\ )
 
-; mouse support, not practical for copy/paste
-;(require 'mouse)
-;(xterm-mouse-mode t)
-;(defun track-mouse (e))
+; mouse support
+(unless window-system
+  ; mouse module
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  ; scroll down
+  (global-set-key [mouse-4] (lambda () (interactive) (scroll-down 1)))
+  ; scroll up
+  (global-set-key [mouse-5] (lambda () (interactive) (scroll-up 1)))
+  ; cusor move
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t)
+  )

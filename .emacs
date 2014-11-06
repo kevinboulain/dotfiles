@@ -37,3 +37,8 @@
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
   )
+
+; set the directories for backups, autosaves and sessions
+(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+(setq auto-save-list-file-prefix temporary-file-directory)

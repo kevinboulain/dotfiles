@@ -50,3 +50,8 @@
 ; add a blank space after the line number
 (setq linum-format "%d ")
 (global-linum-mode 1)
+
+(global-set-key (kbd "ESC <left>") 'shrink-window-horizontally)
+(global-set-key (kbd "ESC <right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "ESC <down>") 'shrink-window)
+(global-set-key (kbd "ESC <up>") 'enlarge-window)

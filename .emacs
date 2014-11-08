@@ -1,5 +1,8 @@
 ; require emacs 24+
 
+; some modules to load
+(add-to-list 'load-path "~/.emacs.d/modules/")
+
 ; monokai theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs/")
 (load-theme 'monokai t)
@@ -55,3 +58,9 @@
 (global-set-key (kbd "ESC <right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "ESC <down>") 'shrink-window)
 (global-set-key (kbd "ESC <up>") 'enlarge-window)
+
+; Mac OS X specific stuff
+(if (eq system-type 'darwin)
+    (progn
+      ; (turn-on-pbcopy) done via terminal-init-xterm-hook
+      (require 'pbcopy)))

@@ -4,8 +4,13 @@
 (add-to-list 'load-path "~/.emacs.d/modules/")
 
 ; monokai theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs/")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai/")
 (load-theme 'monokai t)
+
+; cscope module
+(add-to-list 'load-path "~/.emacs.d/xcscope/")
+(require 'xcscope)
+(cscope-setup)
 
 ; whitespace module
 (require 'whitespace)

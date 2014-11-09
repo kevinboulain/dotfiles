@@ -1,3 +1,6 @@
-[submodule ".emacs.d/monokai-emacs"]
-	path = .emacs.d/monokai-emacs
+[submodule ".emacs.d/xcscope"]
+	path = .emacs.d/xcscope
+	url = https://github.com/dkogan/xcscope.el.git
+[submodule ".emacs.d/monokai"]
+	path = .emacs.d/monokai
 	url = https://github.com/oneKelvinSmith/monokai-emacs.git

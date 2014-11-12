@@ -11,7 +11,7 @@
   (require 'linum)
   (setq linum-format "%d ") ; add a blank space after the line number
   (global-linum-mode 1)
-  )
+)
 
 ; Mac OS X specific stuff
 (when (eq system-type 'darwin)
@@ -20,7 +20,7 @@
 
   ; enable gud (lldb debugger in emacs mode)
   (require 'gud)
-  )
+)
 
 ; mouse support
 (unless window-system
@@ -31,7 +31,7 @@
   (global-set-key [mouse-5] (lambda () (interactive) (scroll-up 1)))
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
-  )
+)
 
 ; cscope module
 (add-to-list 'load-path "~/.emacs.d/xcscope/")
@@ -41,7 +41,12 @@
 ; whitespace module
 (require 'whitespace)
 (setq whitespace-line-column 80) ; highlight 80+ columns, this is the default
-(setq whitespace-style '(face lines-tail trailing empty)) ; what to display
+(setq whitespace-style
+  '(face ; visual impact
+    lines-tail trailing empty ; everything that have too much blank
+    ;tabs tab-mark spaces space-mark ; show tabs and spaces with faces
+  )
+) ; C-h v whitespace-style to display possibilites
 (global-whitespace-mode t) ; activate module
 
 ; show pointer's current column and line
@@ -50,6 +55,12 @@
 
 ; remove the menu (f10)
 (menu-bar-mode -1)
+
+; tab size
+(setq default-tab-width 2)
+
+; c mode indentation
+(setq c-basic-offset default-tab-width)
 
 ; indent with spaces only
 (setq-default indent-tabs-mode nil)

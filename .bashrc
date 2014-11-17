@@ -7,6 +7,10 @@ export PAGER='less'
 
 # handy variables
 null='/dev/null'
+# may be defined in .bash_profile
+if [ ! -n "$bashrc" ]; then
+    bashrc=~/.bashrc
+fi
 # find where this script is located, used in some sub scripts!
 config_directory=$(dirname $(readlink "$bashrc"))
 # bash sub scripts directory

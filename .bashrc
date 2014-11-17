@@ -7,22 +7,23 @@ export PAGER='less'
 
 # handy variables
 null='/dev/null'
-# find where this script is located
-# used in sub scripts!
+# find where this script is located, used in some sub scripts!
 config_directory=$(dirname $(readlink "$bashrc"))
+# bash sub scripts directory
+bash_directory="$config_directory/bash"
 
 # source some 'extensions'
-for script in "$config_directory/bash/"{log,prompt,venvs}.bash; do
+for script in "$bash_directory/"{log,prompt,venvs}.bash; do
     . "$script"
 done
 
 # source os specific 'extension'
-os_script="$config_directory/bash/os/`uname`.bash"
+os_script="$bash_directory/os/`uname`.bash"
 if [ -f "$os_script" ]; then
     . "$os_script"
 fi
 
-unset os_script
+unset os_script bash_directory
 
 # some aliases
 hash ag >& "$null"

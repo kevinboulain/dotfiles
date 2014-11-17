@@ -36,6 +36,8 @@ function activate_default_venv {
         return 1
     fi
 
+    # FIXME: if starting another bash when a venv is active
+    # deactivate command will not be found
     deactivate_venv
 
     # where to store the venvs

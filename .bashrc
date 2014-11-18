@@ -5,20 +5,20 @@ export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 export EDITOR='emacs'
 export PAGER='less'
 
-# handy variables
+# handy variables, may be used in some sub scripts!
 null='/dev/null'
-# may be defined in .bash_profile
-if [ ! -n "$bashrc" ]; then
-    bashrc=~/.bashrc
-fi
-# find where this script is located, used in some sub scripts!
+# may already be defined via .bash_profile
+if [ ! -n "$bashrc" ]; then bashrc=~/.bashrc; fi
+# find where this script is located
 config_directory=$(dirname $(readlink "$bashrc"))
 # bash sub scripts directory
 bash_directory="$config_directory/bash"
 
 # source some 'extensions'
-for script in "$bash_directory/"{log,prompt,venvs}.bash; do
-    . "$script"
+for script in "$bash_directory/"{log,alias,prompt,venvs}.bash; do
+    if [ -f "$script" ]; then
+        . "$script"
+    fi
 done
 
 # source os specific 'extension'
@@ -30,12 +30,10 @@ fi
 unset os_script bash_directory
 
 # some aliases
-hash ag >& "$null"
-if [ $? -eq 0 ]; then
-    alias grep='ag'
-fi
-alias emacs='emacs -nw'
-alias clean="find . -name '*.pyc' -delete -or -name '*~' -delete -or -name '*.o' -delete"
-alias clean_list="find . -name '*.pyc' -or -name '*~' -or -name '*.o'"
+alias_existing_command 'grep' 'ag'
+alias_existing_command 'clamscan' 'clamscan -i' # show only errors
+alias_existing_command 'lsvirtualenv' 'lsvirtualenv -b' # brief mode
+alias_existing_command 'emacs' 'emacs -nw' # no window
+alias clean="find . -name '*~' -delete"
+alias clean_list="find . -name '*~'"
 alias l='ls'
-alias lsvirtualenv='lsvirtualenv -b'

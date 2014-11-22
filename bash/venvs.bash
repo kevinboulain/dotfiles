@@ -118,7 +118,7 @@ function activate_default_venv {
     lsvirtualenv -b 2> "$null" | grep "$default_venv" >& "$null"
     if [ $? -eq 0 ]; then
         # use it
-        log "default venv '$default_venv' found, using it."
+        #log "default venv '$default_venv' found, using it."
         workon "$default_venv" && return 0
     else
         # create it

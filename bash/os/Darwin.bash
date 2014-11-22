@@ -34,3 +34,19 @@ function finder_show_all {
         log "boolean parameter required: 'true' or 'false'."
     fi
 }
+
+# coreutils via brew
+coreutils='/usr/local/opt/coreutils'
+if [ -d "$coreutils" ]; then
+    export PATH="$coreutils/libexec/gnubin:$PATH"
+    export MANPATH="$coreutils/libexec/gnuman:$MANPATH"
+fi
+unset coreutils
+
+# cross compiler binaries
+cross='/Volumes/Data/documents/cross-compilers'
+if [ -d "$cross" ]; then
+    export PATH="$cross/bin:$PATH"
+    export MANPATH="$cross/share/man:$MANPATH"
+fi
+unset cross

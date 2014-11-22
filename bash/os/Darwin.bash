@@ -4,7 +4,7 @@
 
 # where some stuff should be stored
 data_mount='/Volumes/Data'
-data_disk='/dev/disk0s4'
+data_disk='/dev/disk2'
 
 # test if $data_mount if correctly mounted
 mount 2> "$null" |

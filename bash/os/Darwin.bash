@@ -4,7 +4,7 @@
 
 # where some stuff should be stored
 data_mount='/Volumes/Data'
-data_disk='/dev/disk2'
+data_disk='/dev/disk0s4'
 
 # test if $data_mount if correctly mounted
 mount 2> "$null" |
@@ -34,6 +34,3 @@ function finder_show_all {
         log "boolean parameter required: 'true' or 'false'."
     fi
 }
-
-# oh hai lytchi :)
-alias lssh='ssh -l root -p 4222 -i ~/.lytchi_ssh/root'

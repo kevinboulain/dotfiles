@@ -2,6 +2,7 @@
 
 # some global variables that may influence
 export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
+export MANPATH=$(man --path)
 export EDITOR='emacs'
 export PAGER='less'
 
@@ -15,19 +16,13 @@ config_directory=$(dirname $(readlink "$bashrc"))
 bash_directory="$config_directory/bash"
 
 # source some 'extensions'
-for script in "$bash_directory/"{log,alias,prompt,venvs}.bash; do
+for script in "$bash_directory/"{log,alias,prompt,venvs,os/`uname`}.bash; do
     if [ -f "$script" ]; then
         . "$script"
     fi
 done
 
-# source os specific 'extension'
-os_script="$bash_directory/os/`uname`.bash"
-if [ -f "$os_script" ]; then
-    . "$os_script"
-fi
-
-unset os_script bash_directory
+unset bash_directory
 
 # some aliases
 alias_existing_command 'grep' 'ag'

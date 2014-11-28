@@ -18,16 +18,16 @@
 #upload_rate = 0
 
 # Default directory to save the downloaded torrents.
-directory = /Volumes/Data/torrents/download
+directory = /Volumes/Data/documents/torrents/download
 
 # Default session directory. Make sure you don't run multiple instance
 # of rtorrent using the same session directory. Perhaps using a
 # relative path?
-session = /Volumes/Data/torrents/session
+session = /Volumes/Data/documents/torrents/session
 
 # Watch a directory for new torrents, and stop those that have been
 # deleted.
-schedule = watch_directory,5,5,load_start=/Volumes/Data/torrents/watch/*.torrent
+schedule = watch_directory,5,5,load_start=/Volumes/Data/documents/torrents/watch/*.torrent
 schedule = untied_directory,5,5,stop_untied=
 
 # Close torrents when diskspace is low.

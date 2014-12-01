@@ -1,0 +1,3 @@
+xterm*scrollBar: false
+xterm*saveLines: 32768
+xterm*termName: xterm-256color

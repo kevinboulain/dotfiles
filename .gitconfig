@@ -11,3 +11,5 @@
 	conflictStyle = diff3
 [push]
 	default = simple
+[color]
+	ui = auto

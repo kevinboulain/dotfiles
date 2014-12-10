@@ -6,7 +6,7 @@
         ci = commit
         lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ar)%Creset'
 [core]
-	pager = cat
+	pager = less -R
 [merge]
 	conflictStyle = diff3
 [push]

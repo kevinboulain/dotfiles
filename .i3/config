@@ -15,9 +15,9 @@ set $red          #d64937
 
 #                       border background text          indicator
 client.focused          $red   $red       $bright_white $red
-client.unfocused        $black $black     $white        $white
-client.focused_inactive $black $black     $white        $white
-client.urgent           $black $black     $white        $white
+client.unfocused        $black $black     $white        $black
+client.focused_inactive $black $black     $white        $black
+client.urgent           $black $black     $white        $black
 
 # i3 config file (v4)
 #

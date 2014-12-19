@@ -44,7 +44,7 @@ fi
 unset coreutils
 
 # cross compiler binaries
-cross='/Volumes/Data/documents/cross-compilers'
+cross="$data_mount/documents/cross-compilers"
 if [ -d "$cross" ]; then
     export PATH="$cross/bin:$PATH"
     export MANPATH="$cross/share/man:$MANPATH"

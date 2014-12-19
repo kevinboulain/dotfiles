@@ -50,3 +50,10 @@ if [ -d "$cross" ]; then
     export MANPATH="$cross/share/man:$MANPATH"
 fi
 unset cross
+
+HOMEBREW_TEMP="$data_mount/tmp"
+if [ -d "$HOMEBREW_TEMP" ]; then
+    export HOMEBREW_TEMP
+else
+    unset HOMEBREW_TEMP
+fi

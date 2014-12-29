@@ -49,6 +49,15 @@
 ) ; C-h v whitespace-style to display possibilites
 (global-whitespace-mode t) ; activate module
 
+; haskell module
+(when (file-exists-p "~/.emacs.d/haskell/haskell-mode-autoloads.el")
+  (add-to-list 'load-path "~/.emacs.d/haskell/")
+  (require 'haskell-mode-autoloads) ; generate: make haskell-mode-autoloads.el
+  ; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  ; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+)
+
 ; show pointer's current column and line
 (setq line-number-mode t)
 (setq column-number-mode t)

@@ -87,3 +87,8 @@
 (global-set-key (kbd "ESC <right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "ESC <down>") 'shrink-window)
 (global-set-key (kbd "ESC <up>") 'enlarge-window)
+
+; show time
+; emacs does not refresh the screen for %S
+(setq display-time-format "%H:%M %d/%m/%Y")
+(display-time-mode 1)

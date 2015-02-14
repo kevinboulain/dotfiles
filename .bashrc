@@ -25,10 +25,4 @@ done
 unset bash_directory
 
 # some aliases
-alias_existing_command 'grep' 'ag'
-alias_existing_command 'clamscan' 'clamscan -i' # show only errors
-alias_existing_command 'lsvirtualenv' 'lsvirtualenv -b' # brief mode
-alias_existing_command 'emacs' 'emacs -nw' # no window
-alias clean="find . -name '*~' -delete"
-alias clean_list="find . -name '*~'"
 alias l='ls'

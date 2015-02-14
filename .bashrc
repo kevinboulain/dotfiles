@@ -16,7 +16,7 @@ config_directory=$(dirname $(readlink "$bashrc"))
 bash_directory="$config_directory/bash"
 
 # source some 'extensions'
-for script in "$bash_directory/"{log,alias,prompt,venvs,os/`uname`}.bash; do
+for script in "$bash_directory/"{log,alias,prompt,python,os/`uname`}.bash; do
     if [ -f "$script" ]; then
         . "$script"
     fi

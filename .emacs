@@ -50,12 +50,20 @@
 (global-whitespace-mode t) ; activate module
 
 ; haskell module
-(when (file-exists-p "~/.emacs.d/haskell/haskell-mode-autoloads.el")
+(when (file-readable-p "~/.emacs.d/haskell/haskell-mode-autoloads.el")
   (add-to-list 'load-path "~/.emacs.d/haskell/")
   (require 'haskell-mode-autoloads) ; generate: make haskell-mode-autoloads.el
   ; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
   ; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+)
+
+; ghc-mod, need a better way to specify it without the actual module version
+(when (file-readable-p "~/.cabal/share/x86_64-osx-ghc-7.8.4/ghc-mod-5.2.1.2/ghc.el")
+  (add-to-list 'load-path "~/.cabal/share/x86_64-osx-ghc-7.8.4/ghc-mod-5.2.1.2/")
+  (autoload 'ghc-init "ghc" nil t)
+  (autoload 'ghc-debug "ghc" nil t)
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
 )
 
 ; show pointer's current column and line

@@ -58,6 +58,15 @@
   (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 )
 
+; haskell lint
+(when (file-executable-p "~/.cabal/bin/hlint")
+  (require 'hs-lint)
+  (defun hs-lint-call () (local-set-key "\C-cl" 'hs-lint))
+  (add-hook 'haskell-mode-hook 'hs-lint-call)
+  ; move the cursor everytime, a bit too annoying for a save hook
+  ; (add-hook 'after-save-hook 'hs-lint)
+)
+
 ; ghc-mod, need a better way to specify it without the actual module version
 (when (file-readable-p "~/.cabal/share/x86_64-osx-ghc-7.8.4/ghc-mod-5.2.1.2/ghc.el")
   (add-to-list 'load-path "~/.cabal/share/x86_64-osx-ghc-7.8.4/ghc-mod-5.2.1.2/")

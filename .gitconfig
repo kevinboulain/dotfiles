@@ -1,15 +1,16 @@
 [user]
-	email = kevinboulain@gmail.com
-	name = Kevin Boulain
+# email = kevin.boulain@securactive.net
+  email = kevinboulain@gmail.com
+  name = Kevin Boulain
 [alias]
-        st = status
-        ci = commit
-        lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ar)%Creset'
+  st = status
+  ci = commit
+  lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ar)%Creset'
 [core]
-	pager = less -R
-[merge]
-	conflictStyle = diff3
+  pager = less -R
+#[merge]
+# conflictStyle = diff3
 [push]
-	default = simple
+  default = simple
 [color]
-	ui = auto
+  ui = auto

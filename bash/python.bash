@@ -4,7 +4,7 @@
 
 # source virtualenvwrapper script
 function source_script_venv {
-    if [ ! -n "$WORKON_HOME" ]; then
+    if [ -z "$WORKON_HOME" ]; then
         log "'\$WORKON_HOME' variable needs to be set..."
         return 1
     fi
@@ -73,7 +73,7 @@ function deactivate_current_venv {
 # function to use a default python venv, may create it
 # needs a single parameter which is where are stored the venvs
 function activate_default_venv {
-    if [ $# -ne 1 ] || [ ! -n "$1" ]; then
+    if [ $# -ne 1 ] || [ -z "$1" ]; then
         log "needs the path to Python venvs as a parameter"
         return 1
     fi

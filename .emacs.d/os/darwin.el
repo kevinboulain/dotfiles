@@ -1,10 +1,14 @@
 ; load haskell lint from cabal
 (haskell-lint
-  "~/.cabal/share/x86_64-osx-ghc-7.8.4/hlint-1.9.16/hs-lint.el"
+   (concat
+    (glob-last (glob-last "~/.cabal/share/" "x86_64-osx-ghc-.*") "hlint-*")
+   "/hs-lint.el")
 )
 ; load haskell ghc-mode from cabal
 (haskell-ghc-mode
-  "~/.cabal/share/x86_64-osx-ghc-7.8.4/ghc-mod-5.2.1.2/ghc.el"
+  (concat
+    (glob-last (glob-last "~/.cabal/share/" "x86_64-osx-ghc-.*") "ghc-mod-*")
+   "/ghc.el")
 )
 
 ; (turn-on-pbcopy) done via terminal-init-xterm-hook, from the modules directory

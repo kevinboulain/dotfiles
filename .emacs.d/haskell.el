@@ -58,17 +58,17 @@
 )
 
 ; load ghc-mod if available
-(defun haskell-ghc-mode (ghc-mode-el)
-  (when (file-readable-p ghc-mode-el)
-    (defvar ghc-mode-directory (dirname ghc-mode-el))
-    (add-to-list 'load-path ghc-mode-directory)
+(defun haskell-ghc-mod (ghc-mod-el)
+  (when (file-readable-p ghc-mod-el)
+    (defvar ghc-mod-directory (dirname ghc-mod-el))
+    (add-to-list 'load-path ghc-mod-directory)
 
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
     (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
   )
 )
-(haskell-ghc-mode
+(haskell-ghc-mod
   (concat
     (glob-last (glob-last "~/.cabal/share/" "x86_64-.*-ghc-.*") "ghc-mod-*")
     "/ghc.el"

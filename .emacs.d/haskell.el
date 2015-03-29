@@ -6,6 +6,9 @@
 ; we can use pattern match to find the latest version of ghc and of the module
 ; implying we want the latest ghc and the latest module for this ghc...
 
+; nil if the path doesn't exist
+(defvar cabal-latest (glob-last "~/.cabal/share/" "^x86_64-.*-ghc-.*$"))
+
 ; haskell mode
 ; to generate: make haskell-mode-autoloads.el
 (when (file-readable-p "~/.emacs.d/haskell/haskell-mode-autoloads.el")
@@ -29,11 +32,8 @@
       (setq haskell-hoogle-command nil)
     )
   )
-  (haskell-hoogle
-    (concat
-      (glob-last (glob-last "~/.cabal/share/" "x86_64-.*-ghc-.*") "hoogle-*")
-      "/databases"
-    )
+  (when cabal-latest
+    (haskell-hoogle (concat (glob-last cabal-latest "hoogle-*") "/databases"))
   )
 )
 
@@ -50,11 +50,8 @@
     ; (add-hook 'after-save-hook 'hs-lint)
   )
 )
-(haskell-lint
-  (concat
-    (glob-last (glob-last "~/.cabal/share/" "x86_64-.*-ghc-.*") "hlint-*")
-    "/hs-lint.el"
-  )
+(when cabal-latest
+  (haskell-lint (concat (glob-last cabal-latest "hlint-*") "/hs-lint.el"))
 )
 
 ; load ghc-mod if available
@@ -68,9 +65,6 @@
     (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
   )
 )
-(haskell-ghc-mod
-  (concat
-    (glob-last (glob-last "~/.cabal/share/" "x86_64-.*-ghc-.*") "ghc-mod-*")
-    "/ghc.el"
-  )
+(when cabal-latest
+  (haskell-ghc-mod (concat (glob-last cabal-latest "ghc-mod-*") "/ghc.el"))
 )

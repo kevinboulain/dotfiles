@@ -8,7 +8,10 @@
 
 ; pattern match against files
 (defun glob (path regexp)
-  (directory-files path t regexp)
+  (if (file-readable-p path)
+    (directory-files path t regexp)
+    ('())
+  )
 )
 
 ; get the last pattern match against files (useful for version ordering)

@@ -2,6 +2,8 @@
 
 # require virtualenvwrapper (install it via pip)
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 # source virtualenvwrapper script
 function source_script_venv {
     if [ -z "$WORKON_HOME" ]; then

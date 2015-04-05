@@ -5,8 +5,17 @@ if [ -d "$cabal" ]; then
 fi
 unset cabal
 
-# return whether or not we are in a cabal sandbox
+# return whether or not the actual directory has a cabal sandbox configuration
 function sandboxed {
     local -r cabal_sandbox_config="cabal.sandbox.config"
     [ -f "$cabal_sandbox_config" ]
+}
+
+# test if the current shell is sandboxed
+function current_sandbox {
+    if [ -n "$CABAL_SANDBOX_CONFIG" ]; then
+        echo "$CABAL_SANDBOX_CONFIG"
+        return 0
+    fi
+    return 1
 }

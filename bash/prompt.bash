@@ -17,6 +17,8 @@ function prompt_config {
     # haskell
     prompt_haskell=
     sandboxed && prompt_haskell="λ"
+    local -r sandbox=$(current_sandbox)
+    [ -n "$sandbox" ] && prompt_haskell="λ'"
 
     # python
     prompt_python=

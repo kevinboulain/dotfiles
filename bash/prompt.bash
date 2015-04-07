@@ -25,11 +25,11 @@ function prompt_config {
     local -r venv=$(current_venv)
     [ -n "$venv" ] && prompt_python="∞"
 
-    prompt_languages="$prompt_haskell $prompt_python"
+    prompt_languages="$prompt_python $prompt_haskell"
     if [[ "$prompt_languages" =~ ^[[:blank:]]+$ ]]; then
         prompt_languages=
     else
-        prompt_languages="($(echo -n $prompt_languages)) "
+        prompt_languages="($(echo -n $prompt_languages))"
     fi
 }
 

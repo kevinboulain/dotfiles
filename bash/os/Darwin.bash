@@ -2,6 +2,38 @@
 
 # some Mac OS X specific stuff
 
+# coreutils via brew
+# findutils (xargs) via brew, need --with-default-names
+coreutils='/usr/local/opt/coreutils'
+if [ -d "$coreutils" ]; then
+    export PATH="$coreutils/libexec/gnubin:$PATH"
+    export MANPATH="$coreutils/libexec/gnuman:$MANPATH"
+fi
+unset coreutils
+
+# sed via brew
+sed='/usr/local/opt/gnu-sed'
+if [ -d "$sed" ]; then
+    export PATH="$sed/libexec/gnubin:$PATH"
+    export MANPATH="$sed/libexec/gnuman:$MANPATH"
+fi
+unset sed
+
+# cross compiler binaries
+cross="$data_mount/documents/cross-compilers"
+if [ -d "$cross" ]; then
+    export PATH="$cross/bin:$PATH"
+    export MANPATH="$cross/share/man:$MANPATH"
+fi
+unset cross
+
+HOMEBREW_TEMP="$data_mount/tmp"
+if [ -d "$HOMEBREW_TEMP" ]; then
+    export HOMEBREW_TEMP
+else
+    unset HOMEBREW_TEMP
+fi
+
 # where some stuff should be stored
 data_mount='/Volumes/Data'
 data_disk='/dev/disk2'
@@ -34,35 +66,3 @@ function finder_show_all {
         log "boolean parameter required: 'true' or 'false'."
     fi
 }
-
-# coreutils via brew
-# findutils (xargs) via brew, need --with-default-names
-coreutils='/usr/local/opt/coreutils'
-if [ -d "$coreutils" ]; then
-    export PATH="$coreutils/libexec/gnubin:$PATH"
-    export MANPATH="$coreutils/libexec/gnuman:$MANPATH"
-fi
-unset coreutils
-
-# sed via brew
-sed='/usr/local/opt/gnu-sed'
-if [ -d "$sed" ]; then
-    export PATH="$sed/libexec/gnubin:$PATH"
-    export MANPATH="$sed/libexec/gnuman:$MANPATH"
-fi
-unset sed
-
-# cross compiler binaries
-cross="$data_mount/documents/cross-compilers"
-if [ -d "$cross" ]; then
-    export PATH="$cross/bin:$PATH"
-    export MANPATH="$cross/share/man:$MANPATH"
-fi
-unset cross
-
-HOMEBREW_TEMP="$data_mount/tmp"
-if [ -d "$HOMEBREW_TEMP" ]; then
-    export HOMEBREW_TEMP
-else
-    unset HOMEBREW_TEMP
-fi

@@ -74,6 +74,7 @@ function deactivate_current_venv {
 
 # function to use a default python venv, may create it
 # needs a single parameter which is where are stored the venvs
+# PATH modification should take before using the venv
 function activate_default_venv {
     if [ $# -ne 1 ] || [ -z "$1" ]; then
         log "needs the path to Python venvs as a parameter"

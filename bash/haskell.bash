@@ -19,3 +19,6 @@ function current_sandbox {
     fi
     return 1
 }
+
+# check local sandbox too
+export PATH="./.cabal-sandbox/bin:$PATH"

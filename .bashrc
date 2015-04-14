@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# some options
+shopt -s extglob # ls +!(boo*|?key*)
+
 # some global variables that may influence
 export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 export MANPATH=$(man --path)

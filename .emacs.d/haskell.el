@@ -15,13 +15,13 @@
   (add-to-list 'load-path "~/.emacs.d/haskell/")
   (require 'haskell-mode-autoloads)
   ; available modes
-  ; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
   ; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+  ; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
   ; load hoogle if available
   (defun haskell-hoogle (databases)
-    (define-key haskell-mode-map "\C-ch" 'haskell-hoogle)
+    (global-set-key (kbd "\C-ch") 'haskell-hoogle)
     ; hoogle buffer mode, comments for opening hoogle results into a browser
     ; need a local hoogle and existing databases
     (if (file-readable-p databases)

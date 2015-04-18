@@ -2,6 +2,10 @@
 
 # some Mac OS X specific stuff
 
+# where some stuff should be stored
+data_mount='/Volumes/Data'
+data_disk='/dev/disk2'
+
 # coreutils via brew
 # findutils (xargs) via brew, need --with-default-names
 coreutils='/usr/local/opt/coreutils'
@@ -33,10 +37,6 @@ if [ -d "$HOMEBREW_TEMP" ]; then
 else
     unset HOMEBREW_TEMP
 fi
-
-# where some stuff should be stored
-data_mount='/Volumes/Data'
-data_disk='/dev/disk2'
 
 # test if $data_mount if correctly mounted
 mount 2> "$null" |

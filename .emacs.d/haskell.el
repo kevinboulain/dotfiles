@@ -66,5 +66,5 @@
   )
 )
 (when cabal-latest
-  (haskell-ghc-mod (concat (glob-last cabal-latest "ghc-mod-*") "/ghc.el"))
+  (haskell-ghc-mod (concat (glob-last cabal-latest "ghc-mod-*") "/elisp/ghc.el"))
 )

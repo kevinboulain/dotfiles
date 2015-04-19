@@ -73,7 +73,6 @@ function deactivate_current_venv {
 }
 
 # function to use a default python venv, may create it
-# needs a single parameter which is where are stored the venvs
 # PATH modification should take before using the venv
 function activate_default_venv {
     if [ $# -ne 1 ] || [ -z "$1" ]; then
@@ -113,7 +112,7 @@ function activate_default_venv {
     export WORKON_HOME
     source_script_venv
     # something failed, source_script_venv() already log failures
-    if [ $? -ne 0 ]; then return 1; fi
+    [ $? -ne 0 ] && return 1
 
     # this function creates and uses $default_venv
     default_venv='stuff'

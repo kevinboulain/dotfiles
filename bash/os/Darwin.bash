@@ -44,6 +44,7 @@ mount 2> "$null" |
 if [ $? -eq 0 ]; then
     # activate the default python venv to not mess with the system python
     activate_default_venv "$config_directory"
+    activate_default_sandbox "$config_directory"
 
     # if brew is a file, overwrite it with this function to handle venvs
     if [ $? -eq 0 ] && [ "`type -t brew`" = 'file' ]; then

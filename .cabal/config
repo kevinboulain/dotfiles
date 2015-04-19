@@ -25,7 +25,7 @@ world-file: /Users/ether/.cabal/world
 -- program-prefix:
 -- program-suffix:
 -- library-vanilla: True
--- library-profiling:
+library-profiling: True
 -- shared:
 -- executable-dynamic: False
 -- profiling:

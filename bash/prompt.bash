@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
+# commands executed at each command
+function add_prompt_command {
+    if [ $# -ne 1 ] || [ -z "$1" ]; then
+        log "needs a string of commands to append to '\$PROMPT_COMMAND'"
+        return 1
+    fi
+
+    local -r commands=$1
+
+    if [ -n "$PROMPT_COMMAND" ]; then
+        PROMPT_COMMAND="$PROMPT_COMMAND; $commands"
+    else
+        PROMPT_COMMAND="$commands"
+    fi
+}
+
 # some escape codes
 cyan="\033[36m"
 red="\033[31m"
@@ -33,8 +49,7 @@ function prompt_config {
     fi
 }
 
-# executed at each command, set $prompt_color
-PROMPT_COMMAND="prompt_config"
+add_prompt_command "prompt_config"
 
 # prompt, \[\]: allow readline to correctly calculate prompt size
 PS1='$(echo -en "$prompt_languages")\h:\W \[$(echo -ne $prompt_color)\]\$\[$(echo -ne $esc)\] '

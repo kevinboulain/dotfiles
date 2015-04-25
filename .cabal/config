@@ -14,10 +14,10 @@
 require-sandbox: True
 -- ignore-sandbox: False
 remote-repo: hackage.haskell.org:http://hackage.haskell.org/packages/archive
-remote-repo-cache: /Users/ether/.cabal/packages
+remote-repo-cache: /tmp/
 -- local-repo:
 -- logs-dir:
-world-file: /Users/ether/.cabal/world
+-- world-file: /Users/ether/.cabal/world
 -- verbose: 1
 -- compiler: ghc
 -- with-compiler:
@@ -42,7 +42,7 @@ library-profiling: True
 -- flags:
 -- extra-include-dirs:
 -- extra-lib-dirs:
-extra-prog-path: /Users/ether/.cabal/bin
+-- extra-prog-path: /Users/ether/.cabal/bin
 -- instantiate-with:
 -- tests: False
 -- coverage: False
@@ -67,7 +67,7 @@ extra-prog-path: /Users/ether/.cabal/bin
 -- upgrade-dependencies: False
 -- root-cmd:
 -- symlink-bindir:
-build-summary: /Users/ether/.cabal/logs/build.log
+-- build-summary: /Users/ether/.cabal/logs/build.log
 -- build-log:
 remote-build-reporting: anonymous
 -- report-planning-failure: False

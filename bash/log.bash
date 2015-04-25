@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# a simple function that log the caller name and all its parameter
+# a simple function that log to stdout the caller name and all its parameters
 function log {
     local function_name='cli'
     if [ -n "${FUNCNAME[1]}" ]; then

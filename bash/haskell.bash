@@ -1,14 +1,10 @@
 # cabal default directory
 # should not be used, sandboxes are less problematic
-cabal=~/.cabal
-if [ -d "$cabal" ]; then
-    export PATH="$cabal/bin:$PATH"
-fi
-unset cabal
+safe_prepend_to_path ~/.cabal/bin
 
 # return whether or not the actual directory has a cabal sandbox configuration
 function sandboxed {
-    local -r cabal_sandbox_config="cabal.sandbox.config"
+    local -r cabal_sandbox_config=cabal.sandbox.config
     [ -f "$cabal_sandbox_config" ]
 }
 
@@ -27,6 +23,7 @@ function activate_default_sandbox {
         log "needs the path to Haskell sandbox as a parameter"
         return 1
     fi
+
     # where the sandbox is stored
     local -r config_directory=$1
     # test if $config_directory exists
@@ -36,7 +33,7 @@ function activate_default_sandbox {
     fi
 
     # our haskell directory
-    local -r haskell_directory="$config_directory/haskell"
+    local -r haskell_directory=$config_directory/haskell
     # test if $haskell_directory directory exists
     if [ ! -d "$haskell_directory" ]; then
         # create it
@@ -66,7 +63,7 @@ function activate_default_sandbox {
     fi
 
     # add the default sandbox to the PATH
-    export PATH="$haskell_directory/.cabal-sandbox/bin:$PATH"
+    safe_prepend_to_path "$haskell_directory/.cabal-sandbox/bin"
     # check local sandboxes too
-    export PATH="./.cabal-sandbox/bin:$PATH"
+    prepend_to_path ./.cabal-sandbox/bin
 }

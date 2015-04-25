@@ -2,6 +2,7 @@
 
 # require virtualenvwrapper (install it via pip)
 
+# disable the custom prompt setup by virtualenv
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # source virtualenvwrapper script
@@ -12,12 +13,13 @@ function source_script_venv {
     fi
 
     # virtualenvwrapper.sh path
-    local -r virtualenvwrapper="`which virtualenvwrapper.sh`"
+    local -r virtualenvwrapper=$(which virtualenvwrapper.sh)
     # test if virtualenvwrapper is installed
     if [ ! -f "$virtualenvwrapper" ]; then
         log "'virtualenvwrapper.sh' script was not found."
         return 1
     fi
+
     # source it
     . "$virtualenvwrapper" && return 0
 
@@ -45,11 +47,11 @@ function deactivate_current_venv {
         local -r venv=$(current_venv)
 
         # if we do not have the deactivate function
-        if [ "`type -t deactivate`" != 'function' ]; then
+        if [ "$(type -t deactivate)" != 'function' ]; then
             # source the virtualenvwrapper script to continue deactivation
             source_script_venv
             # something failed, source_script_venv() already log failures
-            if [ $? -ne 0 ]; then return 1; fi
+            [ $? -ne 0 ] && return 1
 
             # re-work on the venv to be able to deactivate it
             workon "$venv"
@@ -61,8 +63,8 @@ function deactivate_current_venv {
             fi
         fi
 
-        # deactivate it
-        log "currently using venv '$venv', deactivating it."
+        # deactivate it, too verbose over time
+        #log "currently using venv '$venv', deactivating it."
         deactivate && return 0
     else
         # no need to signal an error for now
@@ -79,6 +81,7 @@ function activate_default_venv {
         log "needs the path to Python venvs as a parameter"
         return 1
     fi
+
     # where the vens are stored
     local -r config_directory=$1
     # test if $config_directory exists
@@ -91,9 +94,9 @@ function activate_default_venv {
     deactivate_current_venv
 
     # our python directory
-    local -r python_directory="$config_directory/python"
+    local -r python_directory=$config_directory/python
     # where to store the venvs
-    WORKON_HOME="$python_directory/venvs"
+    WORKON_HOME=$python_directory/venvs
     # test if $WORKON_HOME directory exists
     if [ ! -d "$WORKON_HOME" ]; then
         # create it
@@ -105,8 +108,9 @@ function activate_default_venv {
             return 1
         fi
     fi
+
     # we may have some python scripts here
-    export PYTHONPATH="$python_directory"
+    export PYTHONPATH=$python_directory
 
     # source virtualenvwrapper.sh
     export WORKON_HOME
@@ -115,7 +119,7 @@ function activate_default_venv {
     [ $? -ne 0 ] && return 1
 
     # this function creates and uses $default_venv
-    default_venv='stuff'
+    default_venv=stuff
     # test if $default_venv exists
     lsvirtualenv -b 2> "$null" | grep "$default_venv" >& "$null"
     if [ $? -eq 0 ]; then

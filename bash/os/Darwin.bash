@@ -3,35 +3,24 @@
 # some Mac OS X specific stuff
 
 # where some stuff should be stored
-data_mount='/Volumes/Data'
-data_disk='/dev/disk2'
+data_mount=/Volumes/Data
+data_disk=/dev/disk2
 
 # coreutils via brew
 # findutils (xargs) via brew, need --with-default-names
-coreutils='/usr/local/opt/coreutils'
-if [ -d "$coreutils" ]; then
-    export PATH="$coreutils/libexec/gnubin:$PATH"
-    export MANPATH="$coreutils/libexec/gnuman:$MANPATH"
-fi
-unset coreutils
+safe_prepend_to_path /usr/local/opt/coreutils/libexec/gnubin
+safe_prepend_to_manpath /usr/local/opt/coreutils/libexec/gnuman
 
 # sed via brew
-sed='/usr/local/opt/gnu-sed'
-if [ -d "$sed" ]; then
-    export PATH="$sed/libexec/gnubin:$PATH"
-    export MANPATH="$sed/libexec/gnuman:$MANPATH"
-fi
-unset sed
+safe_prepend_to_path /usr/local/opt/gnu-sed/libexec/gnubin
+safe_prepend_to_manpath /usr/local/opt/gnu-sed/libexec/gnuman
 
 # cross compiler binaries
-cross="$data_mount/documents/cross-compilers"
-if [ -d "$cross" ]; then
-    export PATH="$cross/bin:$PATH"
-    export MANPATH="$cross/share/man:$MANPATH"
-fi
-unset cross
+safe_prepend_to_path "$data_mount/documents/cross-compilers/bin"
+safe_prepend_to_manpath "$data_mount/documents/cross-compilers/share/man"
 
-HOMEBREW_TEMP="$data_mount/tmp"
+# $HOMEBREW_TEMP must be set if Homebrew directory's is on a separate partition
+HOMEBREW_TEMP=$data_mount/tmp
 if [ -d "$HOMEBREW_TEMP" ]; then
     export HOMEBREW_TEMP
 else
@@ -47,7 +36,7 @@ if [ $? -eq 0 ]; then
     activate_default_sandbox "$config_directory"
 
     # if brew is a file, overwrite it with this function to handle venvs
-    if [ $? -eq 0 ] && [ "`type -t brew`" = 'file' ]; then
+    if [ $? -eq 0 ] && [ "$(type -t brew)" = 'file' ]; then
         # brew can not work in a venv
         function brew {
             deactivate_current_venv

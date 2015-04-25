@@ -22,3 +22,4 @@ if [ -d "$build" ]; then
 fi
 
 activate_default_venv "$config_directory"
+activate_default_sandbox "$config_directory"

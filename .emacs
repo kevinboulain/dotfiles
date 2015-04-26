@@ -1,25 +1,6 @@
 ; some modules to load
 (add-to-list 'load-path "~/.emacs.d/modules/")
 
-; helper function
-(defun dirname (file)
-  (file-name-directory (directory-file-name file))
-)
-
-; pattern match against files
-(defun glob (path regexp)
-  (if (file-readable-p path)
-    (directory-files path t regexp)
-    ('())
-  )
-)
-
-; get the last pattern match against files (useful for version ordering)
-(defun glob-last (path regexp)
-  ; last return something on which we must do a car...
-  (car (last (glob path regexp)))
-)
-
 ; get the os type, replace gnu/linux by linux
 (defvar os (replace-regexp-in-string "gnu/" "" (prin1-to-string system-type)))
 

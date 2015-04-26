@@ -4,6 +4,6 @@
 [submodule ".emacs.d/monokai"]
 	path = .emacs.d/monokai
 	url = https://github.com/oneKelvinSmith/monokai-emacs.git
-[submodule ".emacs.d/haskell"]
-	path = .emacs.d/haskell
+[submodule ".emacs.d/haskell-mode"]
+	path = .emacs.d/haskell-mode
 	url = https://github.com/haskell/haskell-mode.git

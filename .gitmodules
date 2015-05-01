@@ -7,3 +7,6 @@
 [submodule ".emacs.d/haskell-mode"]
 	path = .emacs.d/haskell-mode
 	url = https://github.com/haskell/haskell-mode.git
+[submodule ".emacs.d/idris-mode"]
+	path = .emacs.d/idris-mode
+	url = https://github.com/idris-hackers/idris-mode.git

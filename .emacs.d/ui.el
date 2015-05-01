@@ -5,21 +5,23 @@
   (load-theme 'monokai t)
 
   ; show lines numbers, see http://www.emacswiki.org/LineNumbers
-  (require 'linum)
-  (setq linum-format "%d ") ; add a blank space after the line number
-  (global-linum-mode 1)
+  (when (require 'linum nil t)
+    (setq linum-format "%d ") ; add a blank space after the line number
+    (global-linum-mode 1)
+  )
 )
 
 ; whitespace module
-(require 'whitespace)
-(setq whitespace-line-column 80) ; highlight 80+ columns, this is the default
-(setq whitespace-style
-  '(face ; visual impact
-    lines-tail trailing empty ; everything that have too much blank
-    ;tabs tab-mark spaces space-mark ; show tabs and spaces with faces
-  )
-) ; C-h v whitespace-style to display possibilites
-(global-whitespace-mode t) ; activate module
+(when (require 'whitespace nil t)
+  (setq whitespace-line-column 80) ; highlight 80+ columns, this is the default
+  (setq whitespace-style
+    '(face ; visual impact
+      lines-tail trailing empty ; everything that have too much blank
+      ;tabs tab-mark spaces space-mark ; show tabs and spaces with faces
+    )
+  ) ; C-h v whitespace-style to display possibilites
+  (global-whitespace-mode t) ; activate module
+)
 
 ; show pointer's current column and line
 (setq line-number-mode t)

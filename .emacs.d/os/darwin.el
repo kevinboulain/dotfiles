@@ -1,3 +1,6 @@
+; some modules to load
+(add-to-list 'load-path "~/.emacs.d/os/darwin/")
+
 ; (turn-on-pbcopy) done via terminal-init-xterm-hook, from the modules directory
 (require 'pbcopy)
 

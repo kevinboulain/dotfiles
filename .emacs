@@ -1,6 +1,3 @@
-; some modules to load
-(add-to-list 'load-path "~/.emacs.d/modules/")
-
 ; get the os type, replace gnu/linux by linux
 (defvar os (replace-regexp-in-string "gnu/" "" (prin1-to-string system-type)))
 

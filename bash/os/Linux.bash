@@ -23,3 +23,5 @@
 
 activate_default_venv "$config_directory"
 activate_default_sandbox "$config_directory"
+
+safe_prepend_to_path ~/build/bin

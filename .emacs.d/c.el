@@ -1,8 +1,16 @@
 ; cscope module
-(add-to-list 'load-path "~/.emacs.d/xcscope/")
-(require 'xcscope)
-; activate module
-(cscope-setup)
+
+(defvar xcscope "~/.emacs.d/xcscope/")
+
+; test if the submodule exists
+(when (file-readable-p xcscope)
+  (add-to-list 'load-path xcscope)
+
+  ; activate module
+  (require 'xcscope)
+  (cscope-setup)
+
+)
 
 ; c mode indentation
 (setq c-basic-offset default-tab-width)

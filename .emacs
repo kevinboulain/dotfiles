@@ -3,7 +3,14 @@
 
 ; lisp magic here, should learn why ` & , force evaluation of os variable
 (defvar el-files
-  `("ui" "general" "c" "haskell" "idris" ,(concat "os/" os))
+  `("ui"
+    "general"
+    "tab"
+    "c"
+    "haskell"
+    "idris"
+    ,(concat "os/" os)
+  )
 )
 
 ; iterate over the list of file and load each one

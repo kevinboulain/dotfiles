@@ -8,3 +8,6 @@
 (setq backup-directory-alist `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 (setq auto-save-list-file-prefix temporary-file-directory)
+
+; 'commander' interface for dired
+(setq dired-dwim-target t)

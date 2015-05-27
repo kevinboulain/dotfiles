@@ -16,13 +16,15 @@ null=/dev/null
 bash_directory=$config_directory/bash
 
 # source some 'extensions'
+# todo: prompt should be last: its preprend a test $? to $PROMPT_COMMAND
 declare -a bash_files=(\
     helpers \
     log \
     path man \
-    prompt history \
+    history \
     haskell python \
     "os/$(uname)" \
+    prompt
 )
 for name in "${bash_files[@]}"; do
     script=$bash_directory/$name.bash

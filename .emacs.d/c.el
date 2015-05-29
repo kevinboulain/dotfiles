@@ -9,8 +9,7 @@
   ; activate module
   (require 'xcscope)
   (cscope-setup)
-
 )
 
 ; c mode indentation
-(setq c-basic-offset default-tab-width)
+;(setq c-basic-offset tab-width)

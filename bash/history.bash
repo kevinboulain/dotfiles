@@ -7,4 +7,4 @@ HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 
 # http://unix.stackexchange.com/a/18443
-prepend_prompt_command 'history -n; history -w; history -c; history -r'
+append_prompt_command 'history -n; history -w; history -c; history -r'

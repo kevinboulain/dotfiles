@@ -3,12 +3,23 @@
 # commands executed at each command
 function prepend_prompt_command {
     if [ $# -ne 1 ] || [ -z "$1" ]; then
-        log "needs a string of commands to append to '\$PROMPT_COMMAND'"
+        log "needs a string of commands to prepend to '\$PROMPT_COMMAND'"
         return 1
     fi
 
     local -r commands=$1
     prepend_to_var PROMPT_COMMAND ';' "$commands"
+}
+
+# commands executed at each command
+function append_prompt_command {
+    if [ $# -ne 1 ] || [ -z "$1" ]; then
+        log "needs a string of commands to append to '\$PROMPT_COMMAND'"
+        return 1
+    fi
+
+    local -r commands=$1
+    append_to_var PROMPT_COMMAND ';' "$commands"
 }
 
 # some escape codes

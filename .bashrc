@@ -21,10 +21,9 @@ declare -a bash_files=(\
     helpers \
     log \
     path man \
-    history \
+    prompt history \
     haskell python \
     "os/$(uname)" \
-    prompt
 )
 for name in "${bash_files[@]}"; do
     script=$bash_directory/$name.bash

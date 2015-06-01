@@ -55,6 +55,8 @@ function prompt_config {
     fi
 }
 
+# on Mac OS, $PROMPT_COMMAND is with the function update_terminal_cwd
+export PROMPT_COMMAND=
 prepend_prompt_command prompt_config
 
 # prompt, \[\]: allow readline to correctly calculate prompt size

@@ -5,6 +5,8 @@
 (defvar el-files
   `("ui"
     "general"
+    "dash"
+    "flycheck"
     "tab"
     "c"
     "haskell"

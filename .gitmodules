@@ -13,3 +13,9 @@
 [submodule ".emacs.d/smart-tab"]
 	path = .emacs.d/smart-tab
 	url = https://github.com/genehack/smart-tab.git
+[submodule ".emacs.d/flycheck"]
+	path = .emacs.d/flycheck
+	url = https://github.com/flycheck/flycheck.git
+[submodule ".emacs.d/dash"]
+	path = .emacs.d/dash
+	url = https://github.com/magnars/dash.el.git

@@ -8,7 +8,7 @@
     "dash"
     "flycheck"
     "tab"
-    "c"
+    "xcscope"
     "haskell"
     "idris"
     ,(concat "os/" os)

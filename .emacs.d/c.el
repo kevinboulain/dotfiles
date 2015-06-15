@@ -7,8 +7,9 @@
   (add-to-list 'load-path xcscope)
 
   ; activate module
-  (require 'xcscope)
-  (cscope-setup)
+  (when (require 'xcscope nil t)
+    (cscope-setup)
+  )
 )
 
 ; c mode indentation

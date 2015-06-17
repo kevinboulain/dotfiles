@@ -43,3 +43,18 @@
 (global-set-key (kbd "ESC <right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "ESC <down>") 'shrink-window)
 (global-set-key (kbd "ESC <up>") 'enlarge-window)
+
+; toggle window dedication, todo: key binding
+(defun toggle-window-dedicated ()
+  (interactive)
+  (message
+    (if (let (window (get-buffer-window (current-buffer)))
+          (set-window-dedicated-p window (not (window-dedicated-p window))))
+      "Window '%s' is dedicated"
+      "Window '%s' is normal")
+    (current-buffer)
+  )
+)
+
+; disallow emacs from opening new pop up windows
+(setq pop-up-windows nil)

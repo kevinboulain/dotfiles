@@ -11,6 +11,3 @@
     (cscope-setup)
   )
 )
-
-; c mode indentation
-;(setq c-basic-offset tab-width)

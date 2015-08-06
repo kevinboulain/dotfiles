@@ -1,5 +1,5 @@
 ; tab size
-(setq tab-width 2)
+(setq-default tab-width 2)
 
 ; indent with spaces only
 (setq-default indent-tabs-mode nil)

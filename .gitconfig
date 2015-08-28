@@ -8,6 +8,7 @@
   # %C(auto) may not work on older git version
   lg = log --graph --date=short --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an, %ad)%Creset'
   ft = fetch --all --tags --prune
+  fp = format-patch -M -C --find-copies-harder --stdout
 [core]
   pager = less -R
 #[merge]

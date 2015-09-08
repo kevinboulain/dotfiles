@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # prepend a variable to another variable
+# note that the variable is exported
 function prepend_to_var {
     if [ $# -ne 3 ] || [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
         log "needs three parameters"
@@ -18,6 +19,7 @@ function prepend_to_var {
 }
 
 # append a variable to another variable
+# note that the variable is exported
 function append_to_var {
     if [ $# -ne 3 ] || [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
         log "needs three parameters"

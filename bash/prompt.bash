@@ -60,4 +60,4 @@ export PROMPT_COMMAND=
 prepend_prompt_command prompt_config
 
 # prompt, \[\]: allow readline to correctly calculate prompt size
-PS1='$(echo -en "$prompt_languages")\h:\W \[$(echo -ne $prompt_color)\]\$\[$(echo -ne $esc)\] '
+PS1='$(echo -ne "$prompt_languages")\h:\W \[$(echo -ne $prompt_color)\]\$\[$(echo -ne $esc)\] '

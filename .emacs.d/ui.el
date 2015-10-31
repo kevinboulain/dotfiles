@@ -2,7 +2,9 @@
 (when (>= emacs-major-version 24)
   ; monokai theme
   (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai/")
-  (load-theme 'monokai t)
+  (when (member 'monokai (custom-available-themes))
+    (load-theme 'monokai t)
+  )
 
   ; show lines numbers, see http://www.emacswiki.org/LineNumbers
   (when (require 'linum nil t)

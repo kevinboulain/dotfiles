@@ -46,6 +46,8 @@
 (global-set-key (kbd "ESC <down>") 'shrink-window)
 (global-set-key (kbd "ESC <up>") 'enlarge-window)
 
+(global-set-key (kbd "C-<delete>") 'c-hungry-delete-forward)
+
 ; toggle window dedication
 (defun toggle-window-dedicated ()
   (interactive)

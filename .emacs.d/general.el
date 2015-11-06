@@ -11,3 +11,6 @@
 
 ; 'commander' interface for dired
 (setq dired-dwim-target t)
+
+; annoying questions 'yes' or 'no'
+(defalias 'yes-or-no-p 'y-or-n-p)

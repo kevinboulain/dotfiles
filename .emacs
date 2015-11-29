@@ -11,6 +11,7 @@
     "xcscope"
     "haskell"
     "idris"
+    "rust"
     "c"
     ,(concat "os/" os)
   )

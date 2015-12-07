@@ -25,3 +25,6 @@
 [submodule ".emacs.d/flycheck-rust"]
 	path = .emacs.d/flycheck-rust
 	url = https://github.com/flycheck/flycheck-rust.git
+[submodule ".emacs.d/seq"]
+	path = .emacs.d/seq
+	url = https://github.com/NicolasPetton/seq.el.git

@@ -10,6 +10,7 @@
   ; require:
   ;   let-alist or emacs 25 (bundled with it)
   ;   dash
+  ;   seq (submodule added for 0.25+)
   (when (require 'flycheck nil t)
     (add-hook 'after-init-hook #'global-flycheck-mode)
 

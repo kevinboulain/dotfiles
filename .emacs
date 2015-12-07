@@ -6,6 +6,7 @@
   `("ui"
     "general"
     "dash"
+    "seq"
     "flycheck"
     "tab"
     "xcscope"

@@ -22,3 +22,6 @@
 [submodule ".emacs.d/rust-mode"]
 	path = .emacs.d/rust-mode
 	url = https://github.com/rust-lang/rust-mode.git
+[submodule ".emacs.d/flycheck-rust"]
+	path = .emacs.d/flycheck-rust
+	url = https://github.com/flycheck/flycheck-rust.git

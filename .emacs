@@ -1,3 +1,7 @@
+; mess with the garbage collector settings to make loading faster
+(defconst gc-cons-threshold-backup gc-cons-threshold)
+(setq gc-cons-threshold 10000000)
+
 ; get the os type, replace gnu/linux by linux
 (defvar os (replace-regexp-in-string "gnu/" "" (prin1-to-string system-type)))
 
@@ -26,3 +30,6 @@
   )
   (setq el-files (cdr el-files))
 )
+
+; restore the garbage collector settings
+(setq gc-cons-threshold gc-cons-threshold-backup)

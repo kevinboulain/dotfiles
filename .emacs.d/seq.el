@@ -1,6 +1,6 @@
 ; seq module
 
-(defvar seq "~/.emacs.d/seq/")
+(defconst seq "~/.emacs.d/seq/")
 
 ; test if the submodule exists
 (when (file-readable-p seq)

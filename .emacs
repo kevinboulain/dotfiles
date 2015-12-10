@@ -24,7 +24,7 @@
 
 ; iterate over the list of file and load each one
 (while el-files
-  (setq el-file (concat "~/.emacs.d/" (concat (car el-files) ".el")))
+  (defconst el-file (concat "~/.emacs.d/" (concat (car el-files) ".el")))
   (when (file-readable-p el-file)
     (load el-file)
   )

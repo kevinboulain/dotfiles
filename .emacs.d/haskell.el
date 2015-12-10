@@ -1,6 +1,6 @@
 ; haskell mode setup
 
-(defvar haskell-mode "~/.emacs.d/haskell-mode/")
+(defconst haskell-mode "~/.emacs.d/haskell-mode/")
 
 ; test if the submodule exists
 (when (file-readable-p haskell-mode)

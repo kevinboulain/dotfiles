@@ -1,6 +1,6 @@
 ; flycheck module
 
-(defvar flycheck "~/.emacs.d/flycheck/")
+(defconst flycheck "~/.emacs.d/flycheck/")
 
 ; test if the submodule exists
 (when (file-readable-p flycheck)

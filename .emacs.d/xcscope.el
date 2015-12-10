@@ -1,6 +1,6 @@
 ; cscope module
 
-(defvar xcscope "~/.emacs.d/xcscope/")
+(defconst xcscope "~/.emacs.d/xcscope/")
 
 ; test if the submodule exists
 (when (file-readable-p xcscope)

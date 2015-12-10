@@ -1,6 +1,6 @@
 ; tab completion
 
-(defvar smart-tab "~/.emacs.d/smart-tab/")
+(defconst smart-tab "~/.emacs.d/smart-tab/")
 
 ; test if the submodule exists
 (when (file-readable-p smart-tab)

@@ -1,6 +1,6 @@
 ; dash module
 
-(defvar dash "~/.emacs.d/dash/")
+(defconst dash "~/.emacs.d/dash/")
 
 ; test if the submodule exists
 (when (file-readable-p dash)

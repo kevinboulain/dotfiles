@@ -1,6 +1,6 @@
 ; rust mode setup
 
-(defvar rust-mode "~/.emacs.d/rust-mode/")
+(defconst rust-mode "~/.emacs.d/rust-mode/")
 
 ; test if the submodule exists
 (when (file-readable-p rust-mode)
@@ -13,7 +13,7 @@
 )
 
 ; flycheck rust mode (cargo project handling)
-(defvar flycheck-rust "~/.emacs.d/flycheck-rust/")
+(defconst flycheck-rust "~/.emacs.d/flycheck-rust/")
 
 ; test if the submodule exists
 (when (file-readable-p flycheck-rust)

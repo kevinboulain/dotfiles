@@ -107,7 +107,7 @@ def call(function=None, level='debug'):
         except Exception as exception:
             # log that the function has raised an exception
             log_function(what='raise', value=exception)
-            raise exception
+            raise
 
         # log that the function has returned
         log_function(what='return', value=value)

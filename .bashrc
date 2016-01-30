@@ -25,6 +25,7 @@ declare -a bash_config_files=(
     helpers
     path man
     prompt history
+    lua
     haskell python
     "os/$(uname)"
 )

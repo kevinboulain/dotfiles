@@ -17,6 +17,7 @@
     "haskell"
     "idris"
     "rust"
+    "lua"
     "c"
     ,(concat "os/" os)
   )

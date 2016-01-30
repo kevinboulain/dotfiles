@@ -28,3 +28,6 @@
 [submodule ".emacs.d/seq"]
 	path = .emacs.d/seq
 	url = https://github.com/NicolasPetton/seq.el.git
+[submodule ".emacs.d/lua-mode"]
+	path = .emacs.d/lua-mode
+	url = https://github.com/immerrr/lua-mode.git

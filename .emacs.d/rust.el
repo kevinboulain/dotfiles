@@ -8,7 +8,7 @@
   (add-to-list 'load-path rust-mode)
 
   (when (require 'rust-mode nil t)
-    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+    (add-to-list 'auto-mode-alist '("\\.rs$" . rust-mode))
   )
 )
 

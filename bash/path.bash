@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export PATH='/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
+export PATH='/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin'
 
 # add the passed directory to $PATH
 function prepend_to_path {

@@ -9,6 +9,7 @@ alias l=ls
 
 # some options
 shopt -s extglob # ls +!(boo*|?key*)
+complete -r
 
 # handy variables, may be used in some sub scripts!
 null=/dev/null

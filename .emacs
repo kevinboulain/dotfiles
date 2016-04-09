@@ -7,10 +7,10 @@
 
 ; lisp magic here, should learn why ` & , force evaluation of os variable
 (defvar el-files
-  `("ui"
-    "general"
-    "dash"
+  `("dash"
     "seq"
+    "ui"
+    "general"
     "flycheck"
     "tab"
     "xcscope"

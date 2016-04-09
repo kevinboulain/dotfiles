@@ -31,3 +31,6 @@
 [submodule ".emacs.d/lua-mode"]
 	path = .emacs.d/lua
 	url = https://github.com/immerrr/lua-mode.git
+[submodule ".emacs.d/hlinum"]
+	path = .emacs.d/hlinum
+	url = https://github.com/tom-tan/hlinum-mode.git

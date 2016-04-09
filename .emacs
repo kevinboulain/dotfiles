@@ -10,6 +10,7 @@
   `("dash"
     "seq"
     "ui"
+    "linum"
     "general"
     "flycheck"
     "tab"

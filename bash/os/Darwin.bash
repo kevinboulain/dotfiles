@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # some Mac OS X specific stuff
 
 # where some stuff should be stored

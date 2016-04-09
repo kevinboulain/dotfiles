@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # commands executed at each command
 function prepend_prompt_command {
     if [ $# -ne 1 ] || [ -z "$1" ]; then

@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # require virtualenvwrapper (install it via pip)
 
 # disable the custom prompt setup by virtualenv

@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # prepend a variable to another variable
 # note that the variable is exported
 function prepend_to_var {

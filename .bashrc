@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # some global variables that may influence
 export EDITOR=emacs
 export PAGER=less

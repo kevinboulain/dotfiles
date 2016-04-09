@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # some notes:
 # ncurses for emacs24-4
 # LIBS=-lncurses ./configure --prefix=/home/ether/build/ --without-x LDFLAGS=-L/home/ether/build/lib/

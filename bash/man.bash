@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 export MANPATH=$(man --path)
 
 # add the passed directory to $MANPATH if it exists

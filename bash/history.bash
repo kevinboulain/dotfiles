@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # ignore duplicates in history
 export HISTCONTROL=ignoredups:erasedups
 

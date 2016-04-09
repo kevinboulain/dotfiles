@@ -5,10 +5,10 @@
 	path = .emacs.d/monokai
 	url = https://github.com/oneKelvinSmith/monokai-emacs.git
 [submodule ".emacs.d/haskell-mode"]
-	path = .emacs.d/haskell-mode
+	path = .emacs.d/haskell
 	url = https://github.com/haskell/haskell-mode.git
 [submodule ".emacs.d/idris-mode"]
-	path = .emacs.d/idris-mode
+	path = .emacs.d/idris
 	url = https://github.com/idris-hackers/idris-mode.git
 [submodule ".emacs.d/smart-tab"]
 	path = .emacs.d/smart-tab
@@ -20,7 +20,7 @@
 	path = .emacs.d/dash
 	url = https://github.com/magnars/dash.el.git
 [submodule ".emacs.d/rust-mode"]
-	path = .emacs.d/rust-mode
+	path = .emacs.d/rust
 	url = https://github.com/rust-lang/rust-mode.git
 [submodule ".emacs.d/flycheck-rust"]
 	path = .emacs.d/flycheck-rust
@@ -29,5 +29,5 @@
 	path = .emacs.d/seq
 	url = https://github.com/NicolasPetton/seq.el.git
 [submodule ".emacs.d/lua-mode"]
-	path = .emacs.d/lua-mode
+	path = .emacs.d/lua
 	url = https://github.com/immerrr/lua-mode.git

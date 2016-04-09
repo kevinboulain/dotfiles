@@ -1,6 +1,6 @@
 ; lua mode setup
 
-(defconst lua-mode "~/.emacs.d/lua-mode/")
+(defconst lua-mode "~/.emacs.d/lua/")
 
 ; test if the submodule exists
 (when (file-readable-p lua-mode)

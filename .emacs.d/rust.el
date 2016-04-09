@@ -1,6 +1,6 @@
 ; rust mode setup
 
-(defconst rust-mode "~/.emacs.d/rust-mode/")
+(defconst rust-mode "~/.emacs.d/rust/")
 
 ; test if the submodule exists
 (when (file-readable-p rust-mode)

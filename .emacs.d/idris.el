@@ -1,6 +1,6 @@
 ; idris mode setup
 
-(defconst idris-mode "~/.emacs.d/idris-mode/")
+(defconst idris-mode "~/.emacs.d/idris/")
 
 ; test if the submodule exists
 (when (file-readable-p idris-mode)

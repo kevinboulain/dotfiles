@@ -7,6 +7,7 @@ alias l=ls
 
 # some options
 shopt -s extglob # ls +!(boo*|?key*)
+shopt -s checkwinsize # if not activated, will mess up the cli
 complete -r
 
 # handy variables, may be used in some sub scripts!

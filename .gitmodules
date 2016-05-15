@@ -10,9 +10,6 @@
 [submodule ".emacs.d/idris-mode"]
 	path = .emacs.d/idris
 	url = https://github.com/idris-hackers/idris-mode.git
-[submodule ".emacs.d/smart-tab"]
-	path = .emacs.d/smart-tab
-	url = https://github.com/genehack/smart-tab.git
 [submodule ".emacs.d/flycheck"]
 	path = .emacs.d/flycheck
 	url = https://github.com/flycheck/flycheck.git

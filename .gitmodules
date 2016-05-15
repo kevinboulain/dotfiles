@@ -34,3 +34,9 @@
 [submodule ".emacs.d/company"]
 	path = .emacs.d/company
 	url = https://github.com/company-mode/company-mode.git
+[submodule ".emacs.d/racer"]
+	path = .emacs.d/racer
+	url = https://github.com/racer-rust/emacs-racer.git
+[submodule ".emacs.d/s"]
+	path = .emacs.d/s
+	url = https://github.com/magnars/s.el.git

@@ -10,6 +10,7 @@
   `(; some dependencies
     "dash"
     "seq"
+    "s"
     ; general configuration
     "ui"
     "linum"

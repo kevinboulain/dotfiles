@@ -13,6 +13,7 @@
     "linum"
     "general"
     "flycheck"
+    "company"
     "tab"
     "xcscope"
     "haskell"

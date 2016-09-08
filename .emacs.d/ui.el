@@ -60,3 +60,6 @@
 
 ; default keybindings for windmove: shift + arrows
 (windmove-default-keybindings)
+
+; show matching parenthesis
+(show-paren-mode 1)

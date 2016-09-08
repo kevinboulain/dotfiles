@@ -1,12 +1,6 @@
 ; some modules to load
 (add-to-list 'load-path "~/.emacs.d/os/darwin/")
 
-; (turn-on-pbcopy) done via terminal-init-xterm-hook, from the modules directory
-(require 'pbcopy)
-
-; enable gud (lldb debugger in emacs mode), works out of the box on Mac OS X
-(require 'gud)
-
 ; mouse support, for now not really useful?
 (unless window-system
   ; mouse module

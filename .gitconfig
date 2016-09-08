@@ -12,8 +12,8 @@
   fp = format-patch -M -C --find-copies-harder --stdout
 [core]
 # pager = less
-  pager = less -R
-#[merge]
+# pager = less -R
+[merge]
 # conflictStyle = diff3
 [push]
   default = simple

@@ -1,5 +1,5 @@
 if hash less >& "$null"; then
-    PAGER='less -R'
+    PAGER='less -r'
 elif hash most >& "$null"; then
     PAGER=most
 fi

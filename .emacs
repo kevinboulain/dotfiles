@@ -23,6 +23,7 @@
     "rust"
     "lua"
     "c"
+    "spellcheck"
     ,(concat "os/" os)
   )
 )

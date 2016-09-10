@@ -18,3 +18,5 @@ function brew {
     [ -n "$VIRTUAL_ENV" ] && deactivate
     /usr/local/bin/brew "$@"
 }
+
+export LC_ALL=en_US.UTF-8

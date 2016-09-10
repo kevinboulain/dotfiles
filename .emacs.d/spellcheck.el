@@ -10,10 +10,14 @@
     ; Wrong type argument: stringp, nil
     ; if hunspell isn't able to find a default dictionary based on the locale
     ; fix the locale so that hunspell can find a default dictionary:
-    ; export LC_ALL="en_US.utf8"
+    ; export LC_ALL="en_US.UTF-8"
     ; use hunspell -D to check hunspell's environment
     (ispell-set-spellchecker-params)
     (ispell-hunspell-add-multi-dic "fr-moderne,en_GB")
   )
+  (add-hook 'text-mode-hook 'flyspell-mode)
   (add-hook 'text-mode-hook 'flyspell-buffer)
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  ; (add-hook 'text-mode-hook 'ispell-buffer)
+  ; (add-hook 'prog-mode-hook 'ispell-comments-and-strings)
 )

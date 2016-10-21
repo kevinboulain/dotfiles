@@ -9,7 +9,7 @@
     (progn
       (with-eval-after-load "ispell"
         (setq ispell-program-name spellchecker)
-        (setq ispell-dictionary "fr-moderne,en_GB")
+        (setq ispell-dictionary "fr_FR,en_GB")
         ; the following may crash with:
         ; Wrong type argument: stringp, nil
         ; if hunspell isn't able to find a default dictionary based on the locale
@@ -17,7 +17,7 @@
         ; export LC_ALL="en_US.UTF-8"
         ; use hunspell -D to check hunspell's environment
         (ispell-set-spellchecker-params)
-        (ispell-hunspell-add-multi-dic "fr-moderne,en_GB")
+        (ispell-hunspell-add-multi-dic "fr_FR,en_GB")
       )
       (add-hook 'text-mode-hook 'flyspell-mode)
       (add-hook 'text-mode-hook 'flyspell-buffer)

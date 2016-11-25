@@ -63,3 +63,6 @@
 
 ; show matching parenthesis
 (show-paren-mode 1)
+
+; split horizontally by default
+(setq split-width-threshold 1)

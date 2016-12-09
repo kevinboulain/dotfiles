@@ -38,3 +38,5 @@
     )
   )
 )
+
+(global-hl-line-mode) ; highlight the line containing the cursor

@@ -11,10 +11,10 @@
         (setq ispell-program-name spellchecker)
         (setq ispell-dictionary "fr_FR,en_GB")
         ; the following may crash with:
-        ; Wrong type argument: stringp, nil
-        ; if hunspell isn't able to find a default dictionary based on the locale
-        ; fix the locale so that hunspell can find a default dictionary:
-        ; export LC_ALL="en_US.UTF-8"
+        ;   Wrong type argument: stringp, nil
+        ; if hunspell isn't able to find dictionaries
+        ;   export LC_ALL=en_US.UTF-8
+        ;   export DICPATH=~/Library/Spelling
         ; use hunspell -D to check hunspell's environment
         (ispell-set-spellchecker-params)
         (ispell-hunspell-add-multi-dic "fr_FR,en_GB")

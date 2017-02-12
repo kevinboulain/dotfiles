@@ -1,12 +1,23 @@
 ; idris mode setup
 
+; idris-mode dependency
+(defconst prop-menu "~/.emacs.d/prop-menu/")
+
+(when (file-readable-p prop-menu)
+  (add-to-list 'load-path prop-menu)
+
+  (when (require 'prop-menu nil t)
+  )
+)
+
 (defconst idris-mode "~/.emacs.d/idris/")
 
-; test if the submodule exists
 (when (file-readable-p idris-mode)
-  ; add it to load path
   (add-to-list 'load-path idris-mode)
 
-  (when (require 'idris-mode nil t)
+  (if (featurep 'prop-menu)
+    (when (require 'idris-mode nil t)
+    )
+    (message "Could not load idris-mode: missing dependencies")
   )
 )

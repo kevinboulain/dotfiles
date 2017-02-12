@@ -40,3 +40,6 @@
 [submodule ".emacs.d/s"]
 	path = .emacs.d/s
 	url = https://github.com/magnars/s.el.git
+[submodule ".emacs.d/prop-menu"]
+	path = .emacs.d/prop-menu
+	url = https://github.com/david-christiansen/prop-menu-el.git

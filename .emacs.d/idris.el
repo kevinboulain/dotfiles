@@ -17,6 +17,8 @@
 
   (if (featurep 'prop-menu)
     (when (require 'idris-mode nil t)
+      ; disable startup animation
+      (setq idris-repl-banner-functions nil)
     )
     (message "Could not load idris-mode: missing dependencies")
   )

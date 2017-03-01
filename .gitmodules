@@ -49,3 +49,6 @@
 [submodule ".emacs.d/zenburn"]
 	path = .emacs.d/zenburn
 	url = https://github.com/bbatsov/zenburn-emacs.git
+[submodule ".emacs.d/tao"]
+	path = .emacs.d/tao
+	url = https://github.com/11111000000/tao-theme-emacs.git

@@ -2,16 +2,19 @@
 (when (>= emacs-major-version 24)
   ; monokai
   (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai/")
-
   ; zenburn
   (add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn/")
-  (defvar zenburn-override-colors-alist '(
+  (defconst zenburn-override-colors-alist '(
     ("zenburn-bg" . "#1F1F1F")
   ))
+  ; tao
+  (defconst tao-theme "~/.emacs.d/tao/")
+  (add-to-list 'custom-theme-load-path tao-theme)
 
   (cond ; stop at the first available theme
     ((member 'monokai (custom-available-themes)) (load-theme 'monokai t))
     ((member 'zenburn (custom-available-themes)) (load-theme 'zenburn t))
+    ((member 'tao-yin (custom-available-themes)) (add-to-list 'load-path tao-theme) (load-theme 'tao-yin t))
   )
 )
 

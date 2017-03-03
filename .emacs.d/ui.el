@@ -12,7 +12,8 @@
   (setq whitespace-line-column 80) ; highlight 80+ columns, this is the default
   (setq whitespace-style
     '(face ; visual impact
-      lines-tail trailing empty ; everything that have too much blank
+      trailing empty ; everything that have too much blank
+      lines-tail ; highlight lines with more than whitespace-line-column columns
       ;tabs tab-mark spaces space-mark ; show tabs and spaces with faces
     )
   ) ; C-h v whitespace-style to display possibilites

@@ -42,13 +42,13 @@
   ;   s
   ;   dash
   ;   company
+  ;   rust
   (if (and (featurep 's)
            (featurep 'dash)
-           (featurep 'company))
+           (featurep 'company)
+           (featurep 'rust-mode))
     (when (require 'racer nil t)
-      ; if rust-mode is loaded, also load racer
-      (when (featurep 'rust-mode)
-        (add-hook 'rust-mode-hook 'racer-mode))
+      (add-hook 'rust-mode-hook 'racer-mode)
       ; if $PATH and $RUST_SRC_PATH are not set, use the following
       ; (setq racer-cmd "<path-to-racer-srcdir>/target/release/racer")
       ; (setq racer-rust-src-path "<path-to-rust-srcdir>/src/")

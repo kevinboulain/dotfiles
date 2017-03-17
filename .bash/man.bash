@@ -1,1 +1,3 @@
-export MANPATH=$(man --path)
+if hash man &> /dev/null; then
+  export MANPATH=$(man --path)
+fi

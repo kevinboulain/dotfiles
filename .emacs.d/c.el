@@ -12,3 +12,19 @@
   ; from the docs
   ; (global-set-key [C-M-tab] 'clang-format-region)
 )
+
+(defconst cmake-ide (concat user-emacs-directory "cmake-ide"))
+
+(when (file-readable-p cmake-ide)
+  (add-to-list 'load-path cmake-ide)
+
+  (if (featurep 'seq)
+    (when (require 'cmake-ide nil t)
+      ; may cause problems if CMakeLists.txt change
+      ; (setq cmake-ide-build-pool-use-persistent-naming t)
+      ; the other variables doesn't seem to work properly...
+      (cmake-ide-setup)
+    )
+    (message "Could not load cmake-ide: missing dependencies")
+  )
+)

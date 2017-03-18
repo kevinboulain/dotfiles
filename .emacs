@@ -11,6 +11,7 @@
     "dash"
     "seq"
     "s"
+    "levenshtein" ; https://www.emacswiki.org/emacs/levenshtein.el
     ; general configuration
     "ui"
     "linum"

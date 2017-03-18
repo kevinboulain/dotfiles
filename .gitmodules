@@ -52,3 +52,6 @@
 [submodule ".emacs.d/theme/tao"]
 	path = .emacs.d/theme/tao
 	url = https://github.com/11111000000/tao-theme-emacs.git
+[submodule ".emacs.d/cmake-ide"]
+	path = .emacs.d/cmake-ide
+	url = https://github.com/atilaneves/cmake-ide.git

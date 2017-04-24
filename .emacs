@@ -24,6 +24,7 @@
     "lua"
     "c"
     "spellcheck"
+    "htmlize"
     ,(concat "os/" os)
   )
 )

@@ -43,3 +43,6 @@
 [submodule ".emacs.d/prop-menu"]
 	path = .emacs.d/prop-menu
 	url = https://github.com/david-christiansen/prop-menu-el.git
+[submodule ".emacs.d/htmlize"]
+	path = .emacs.d/htmlize
+	url = https://github.com/hniksic/emacs-htmlize.git

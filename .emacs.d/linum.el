@@ -1,5 +1,3 @@
-; linum module
-
 ; emacs 24 specific stuff
 (when (>= emacs-major-version 24)
   ; show lines numbers, see http://www.emacswiki.org/LineNumbers

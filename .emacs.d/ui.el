@@ -30,17 +30,7 @@
 ; remove the \ for a wrapped line
 (set-display-table-slot standard-display-table 'wrap ?\ )
 
-; show time
-; emacs does not refresh the screen for %S
-;(setq display-time-format "%H:%M %d/%m/%Y")
-;(display-time-mode 1)
-
-; window resizing, use ESC \d+ to repeat
-;(global-set-key (kbd "ESC <left>") 'shrink-window-horizontally)
-;(global-set-key (kbd "ESC <right>") 'enlarge-window-horizontally)
-;(global-set-key (kbd "ESC <down>") 'shrink-window)
-;(global-set-key (kbd "ESC <up>") 'enlarge-window)
-
+; fast deletion
 (global-set-key (kbd "C-<delete>") 'c-hungry-delete-forward)
 
 ; toggle window dedication

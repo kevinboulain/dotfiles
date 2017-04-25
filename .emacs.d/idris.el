@@ -1,5 +1,3 @@
-; idris mode setup
-
 ; idris-mode dependency
 (defconst prop-menu "~/.emacs.d/prop-menu/")
 

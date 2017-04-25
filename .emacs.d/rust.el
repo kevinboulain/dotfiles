@@ -1,10 +1,6 @@
-; rust mode setup
-
 (defconst rust-mode "~/.emacs.d/rust/")
 
-; test if the submodule exists
 (when (file-readable-p rust-mode)
-  ; add it to load path
   (add-to-list 'load-path rust-mode)
 
   (when (require 'rust-mode nil t)
@@ -15,15 +11,12 @@
 ; flycheck rust mode (cargo project handling)
 (defconst flycheck-rust "~/.emacs.d/flycheck-rust/")
 
-; test if the submodule exists
 (when (file-readable-p flycheck-rust)
-  ; add it to load path
   (add-to-list 'load-path flycheck-rust)
 
   (if (featurep 'flycheck)
     (when (require 'flycheck-rust nil t)
-      ; add a flycheck hook
-      (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)
+      (add-hook 'flycheck-mode-hook 'flycheck-rust-setup) ; add a flycheck hook
     )
     (message "Could not load flycheck-rust: missing dependencies")
   )
@@ -32,13 +25,10 @@
 ; racer mode (rust code completion)
 (defconst racer "~/.emacs.d/racer/")
 
-; test if the submodule exists
 (when (file-readable-p racer)
-  ; add it to load path
   (add-to-list 'load-path racer)
 
-  ; activate module
-  ; require:
+  ; requirements:
   ;   s
   ;   dash
   ;   company

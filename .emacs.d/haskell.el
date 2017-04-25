@@ -1,10 +1,6 @@
-; haskell mode setup
-
 (defconst haskell-mode "~/.emacs.d/haskell/")
 
-; test if the submodule exists
 (when (file-readable-p haskell-mode)
-  ; add it to load path
   (add-to-list 'load-path haskell-mode)
 
   ; test if can load haskell-mode-autoloads.el

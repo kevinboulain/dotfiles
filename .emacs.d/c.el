@@ -1,5 +1,3 @@
-; cc-mode configuration
-
 (when (require 'cc-mode nil t)
   (add-hook 'c-mode-common-hook
     (lambda ()

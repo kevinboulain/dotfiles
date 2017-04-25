@@ -1,9 +1,17 @@
 ; emacs 24 specific stuff
 (when (>= emacs-major-version 24)
-  ; monokai theme
+  ; monokai
   (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai/")
-  (when (member 'monokai (custom-available-themes))
-    (load-theme 'monokai t)
+
+  ; zenburn
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn/")
+  (defvar zenburn-override-colors-alist '(
+    ("zenburn-bg" . "#1F1F1F")
+  ))
+
+  (cond ; stop at the first available theme
+    ((member 'monokai (custom-available-themes)) (load-theme 'monokai t))
+    ((member 'zenburn (custom-available-themes)) (load-theme 'zenburn t))
   )
 )
 

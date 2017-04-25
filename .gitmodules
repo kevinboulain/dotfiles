@@ -46,3 +46,6 @@
 [submodule ".emacs.d/htmlize"]
 	path = .emacs.d/htmlize
 	url = https://github.com/hniksic/emacs-htmlize.git
+[submodule ".emacs.d/zenburn"]
+	path = .emacs.d/zenburn
+	url = https://github.com/bbatsov/zenburn-emacs.git

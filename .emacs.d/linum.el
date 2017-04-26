@@ -25,7 +25,7 @@
   )
 
   ; wrapping mode for linum, highlight the cursor's line number
-  (defconst hlinum "~/.emacs.d/hlinum/")
+  (defconst hlinum (concat user-emacs-directory "hlinum"))
 
   ; test if the submodule exists
   (when (file-readable-p hlinum)

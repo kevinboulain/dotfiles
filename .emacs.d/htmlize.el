@@ -1,4 +1,4 @@
-(defconst htmlize "~/.emacs.d/htmlize/")
+(defconst htmlize (concat user-emacs-directory "htmlize"))
 
 (when (file-readable-p htmlize)
   (add-to-list 'load-path htmlize)

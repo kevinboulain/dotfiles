@@ -3,10 +3,10 @@
 (setq gc-cons-threshold 10000000)
 
 ; get the os type, replace gnu/linux by linux
-(defvar os (replace-regexp-in-string "gnu/" "" (prin1-to-string system-type)))
+(defconst os (replace-regexp-in-string "gnu/" "" (prin1-to-string system-type)))
 
 ; lisp magic here, should learn why ` & , force evaluation of os variable
-(defvar el-files
+(defconst el-files
   `(; some dependencies
     "dash"
     "seq"
@@ -29,13 +29,15 @@
   )
 )
 
+; set the location of the .emacs.d directory
+(setq user-emacs-directory (concat (file-name-directory (file-truename "~/.emacs")) ".emacs.d/"))
+
 ; iterate over the list of file and load each one
-(while el-files
-  (defconst el-file (concat "~/.emacs.d/" (concat (car el-files) ".el")))
+(dolist (el-file el-files)
+  (defconst el-file (concat user-emacs-directory el-file ".el"))
   (when (file-readable-p el-file)
     (load el-file)
   )
-  (setq el-files (cdr el-files))
 )
 
 ; restore the garbage collector settings

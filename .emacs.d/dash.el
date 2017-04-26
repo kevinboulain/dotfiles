@@ -1,4 +1,4 @@
-(defconst dash "~/.emacs.d/dash/")
+(defconst dash (concat user-emacs-directory "dash"))
 
 (when (file-readable-p dash)
   (add-to-list 'load-path dash)

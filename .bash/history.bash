@@ -5,7 +5,7 @@ HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 
 # specific history for each spawned shell
-history_directory=~/.bash_history.d
+declare -r history_directory=~/.bash_history.d
 HISTFILE=$history_directory/$(date -u +%Y/%m/%d)/$(date -u +%H:%M:%S)_$(hostname)_$$
 
 # remove history limitations

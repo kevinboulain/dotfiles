@@ -1,6 +1,3 @@
-; some modules to load
-(add-to-list 'load-path "~/.emacs.d/os/darwin/")
-
 ; mouse support, for now not really useful?
 (unless window-system
   ; mouse module

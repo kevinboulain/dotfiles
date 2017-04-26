@@ -1,4 +1,4 @@
-(defconst rust-mode "~/.emacs.d/rust/")
+(defconst rust-mode (concat user-emacs-directory "rust"))
 
 (when (file-readable-p rust-mode)
   (add-to-list 'load-path rust-mode)
@@ -9,7 +9,7 @@
 )
 
 ; flycheck rust mode (cargo project handling)
-(defconst flycheck-rust "~/.emacs.d/flycheck-rust/")
+(defconst flycheck-rust (concat user-emacs-directory "flycheck-rust"))
 
 (when (file-readable-p flycheck-rust)
   (add-to-list 'load-path flycheck-rust)
@@ -23,7 +23,7 @@
 )
 
 ; racer mode (rust code completion)
-(defconst racer "~/.emacs.d/racer/")
+(defconst racer (concat user-emacs-directory "racer"))
 
 (when (file-readable-p racer)
   (add-to-list 'load-path racer)

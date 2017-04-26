@@ -1,4 +1,4 @@
-(defconst lua-mode "~/.emacs.d/lua/")
+(defconst lua-mode (concat user-emacs-directory "lua"))
 
 (when (file-readable-p lua-mode)
   (add-to-list 'load-path lua-mode)

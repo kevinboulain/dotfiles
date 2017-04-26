@@ -1,4 +1,4 @@
-(defconst company "~/.emacs.d/company/")
+(defconst company (concat user-emacs-directory "company"))
 
 (when (file-readable-p company)
   (add-to-list 'load-path company)

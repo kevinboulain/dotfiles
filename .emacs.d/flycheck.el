@@ -1,4 +1,4 @@
-(defconst flycheck "~/.emacs.d/flycheck/")
+(defconst flycheck (concat user-emacs-directory "flycheck"))
 
 (when (file-readable-p flycheck)
   (add-to-list 'load-path flycheck)

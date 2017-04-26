@@ -1,4 +1,4 @@
-(defconst haskell-mode "~/.emacs.d/haskell/")
+(defconst haskell-mode (concat user-emacs-directory "haskell"))
 
 (when (file-readable-p haskell-mode)
   (add-to-list 'load-path haskell-mode)

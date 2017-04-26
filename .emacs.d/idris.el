@@ -1,5 +1,5 @@
 ; idris-mode dependency
-(defconst prop-menu "~/.emacs.d/prop-menu/")
+(defconst prop-menu (concat user-emacs-directory "prop-menu"))
 
 (when (file-readable-p prop-menu)
   (add-to-list 'load-path prop-menu)
@@ -8,7 +8,7 @@
   )
 )
 
-(defconst idris-mode "~/.emacs.d/idris/")
+(defconst idris-mode (concat user-emacs-directory "idris"))
 
 (when (file-readable-p idris-mode)
   (add-to-list 'load-path idris-mode)

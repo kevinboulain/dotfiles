@@ -1,8 +1,8 @@
 [submodule ".emacs.d/xcscope"]
 	path = .emacs.d/xcscope
 	url = https://github.com/dkogan/xcscope.el.git
-[submodule ".emacs.d/monokai"]
-	path = .emacs.d/monokai
+[submodule ".emacs.d/theme/monokai"]
+	path = .emacs.d/theme/monokai
 	url = https://github.com/oneKelvinSmith/monokai-emacs.git
 [submodule ".emacs.d/haskell-mode"]
 	path = .emacs.d/haskell
@@ -46,9 +46,9 @@
 [submodule ".emacs.d/htmlize"]
 	path = .emacs.d/htmlize
 	url = https://github.com/hniksic/emacs-htmlize.git
-[submodule ".emacs.d/zenburn"]
-	path = .emacs.d/zenburn
+[submodule ".emacs.d/theme/zenburn"]
+	path = .emacs.d/theme/zenburn
 	url = https://github.com/bbatsov/zenburn-emacs.git
-[submodule ".emacs.d/tao"]
-	path = .emacs.d/tao
+[submodule ".emacs.d/theme/tao"]
+	path = .emacs.d/theme/tao
 	url = https://github.com/11111000000/tao-theme-emacs.git

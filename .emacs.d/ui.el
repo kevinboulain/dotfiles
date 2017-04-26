@@ -1,14 +1,14 @@
 ; emacs 24 specific stuff
 (when (>= emacs-major-version 24)
   ; monokai
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai/")
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/theme/monokai/")
   ; zenburn
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn/")
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/theme/zenburn/")
   (defconst zenburn-override-colors-alist '(
     ("zenburn-bg" . "#1F1F1F")
   ))
   ; tao
-  (defconst tao-theme "~/.emacs.d/tao/")
+  (defconst tao-theme "~/.emacs.d/theme/tao/")
   (add-to-list 'custom-theme-load-path tao-theme)
 
   (cond ; stop at the first available theme

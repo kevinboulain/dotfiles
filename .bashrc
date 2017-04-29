@@ -8,7 +8,15 @@ declare -r null=/dev/null
 
 # find where this script is located, should work as long as it's only sourced
 # by bash that give a complete path for ~/.bashrc
-config_directory=$(dirname $(readlink "${BASH_SOURCE[0]}"))
+# note that readlink hasn't the -f option on OS X
+config_directory=$(
+    # cd into the symlink directory
+    # cd into the directory of the file pointed by the (possibly relative) symlink
+    # get actual path
+    cd "$(dirname "${BASH_SOURCE[0]}")" \
+    && cd "$(dirname "$(readlink "${BASH_SOURCE[0]}")")" \
+    && pwd
+)
 # bash sub scripts directory
 bash_config_directory=$config_directory/.bash
 

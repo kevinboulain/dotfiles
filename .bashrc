@@ -27,6 +27,7 @@ declare -a bash_config_files=(
     prompt history
     lua
     "os/$(uname)"
+    personal
 )
 
 for name in "${bash_config_files[@]}"; do

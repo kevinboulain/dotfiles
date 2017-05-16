@@ -26,6 +26,7 @@
     "spellcheck"
     "htmlize"
     ,(concat "os/" os)
+    "personal"
   )
 )
 

@@ -43,6 +43,8 @@ ln -s dotfiles/.tmux.conf
 
 You may want to edit `.bash/os/*.bash` for your specific use.
 
+Note that if it exists, `.bash/personal.bash` is loaded last but is ignored by git.
+
 #### Installation
 
 Symlink the configuration files for the login and non-login shell.
@@ -62,10 +64,13 @@ ln -s dotfiles/.bashrc
  - for `htmlize` (useful for pretty code exports), use `htmlize-buffer` or set the mark two times
    by using `C-SPC` and move the point to delimit the region then use `htmlize-region`
  - for `flyspell`, install `hunspell` and some dictionaries (see `.emacs.d/spellcheck.el`),
-   once the mode is enabled, use `M-$` to correct an highlighted word
-   ([ispell documentation](https://www.gnu.org/software/emacs/manual/html_node/emacs/Spelling.html))
+   once the mode is enabled, use `M-$` to correct an highlighted word ([ispell documentation])
 
 You may want to edit `.emacs.d/os/*.el` for your specific use.
+
+Note that if it exists, `.emacs.d/personal.el` is loaded last but is ignored by git.
+
+[ispell documentation]: https://www.gnu.org/software/emacs/manual/html_node/emacs/Spelling.html
 
 #### Installation
 

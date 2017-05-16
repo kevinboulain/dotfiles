@@ -11,3 +11,8 @@
     )
   )
 )
+
+(when (require 'clang-format nil t)
+  ; from the docs
+  ; (global-set-key [C-M-tab] 'clang-format-region)
+)

@@ -1,3 +1,5 @@
+(global-hl-line-mode) ; highlight the line containing the cursor
+
 ; emacs 24 specific stuff
 (when (>= emacs-major-version 24)
   ; show lines numbers, see http://www.emacswiki.org/LineNumbers
@@ -31,10 +33,18 @@
   (when (file-readable-p hlinum)
     (add-to-list 'load-path hlinum)
 
-    (when (require 'hlinum nil t)
-      (hlinum-activate)
+    (if (and (featurep 'hl-line)
+             (featurep 'linum))
+      (when (require 'hlinum nil t)
+        ; make the faces used by hlinum match both linum and hl-line
+        ; is there a cleaner way?
+        (set-face-attribute 'linum-highlight-face nil
+          :foreground (face-attribute 'linum :foreground)
+          :background (face-attribute 'hl-line :background)
+        )
+        (hlinum-activate)
+      )
     )
+    (message "Could not load hlinum: missing dependencies")
   )
 )
-
-(global-hl-line-mode) ; highlight the line containing the cursor

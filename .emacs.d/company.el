@@ -8,10 +8,10 @@
     ; dabbrev complete case sensitive
     (setq company-dabbrev-downcase nil)
     ; bind shit+tab on company complete
-    (global-set-key (kbd "<backtab>") 'company-complete)
+    ; (global-set-key (kbd "<backtab>") 'company-complete)
     ; no delay before showing completion
     (setq company-idle-delay 0)
     ; start completing after the first typed character
-    (setq company-minimum-prefix-length 1)
+    (setq company-minimum-prefix-length 2)
   )
 )

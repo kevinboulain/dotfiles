@@ -13,7 +13,8 @@ declare -r history_directory=~/.bash_history.d
 HISTFILE=$history_directory/$(date -u +%Y/%m/%d)/$(date -u +%H:%M:%S)_$(hostname)_$$
 
 # remove history limitations
-unset HISTSIZE HISTFILESIZE
+HISTSIZE=-1
+HISTFILESIZE=-1
 
 # append each command to its corresponding history file
 history_subdirectory=$(dirname "$HISTFILE")

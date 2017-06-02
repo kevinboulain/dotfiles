@@ -2,6 +2,9 @@ HISTCONTROL=ignoredups # ignore duplicates in history
 HISTCONTROL+=:erasedups # remove duplicates from history
 HISTCONTROL+=:ignorespace # don't store lines beginning with spaces in history
 
+# date format for 'history'
+HISTTIMEFORMAT='%F %T '
+
 # append to history, do not overwrite it
 shopt -s histappend
 

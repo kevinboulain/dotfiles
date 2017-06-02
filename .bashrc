@@ -3,7 +3,12 @@ set -u
 # some options
 shopt -s extglob # ls +!(boo*|?key*)
 shopt -s checkwinsize # if not activated, will mess up the cli
+shopt -s cdspell # cd correct typos
+shopt -s direxpand # allow bash to edit directories during tab completion (useful with dirspell)
+shopt -s dirspell # fix typos on directories during tab completion
+shopt -s no_empty_cmd_completion # disable tab completion on empty line
 complete -r # no completion
+set -o emacs # emacs mode
 
 # handy variables, may be used in some sub scripts!
 declare -r null=/dev/null

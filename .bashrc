@@ -1,3 +1,5 @@
+set -u
+
 # some options
 shopt -s extglob # ls +!(boo*|?key*)
 shopt -s checkwinsize # if not activated, will mess up the cli
@@ -13,9 +15,9 @@ config_directory=$(
     # cd into the symlink directory
     # cd into the directory of the file pointed by the (possibly relative) symlink
     # get actual path
-    cd "$(dirname "${BASH_SOURCE[0]}")" \
-    && cd "$(dirname "$(readlink "${BASH_SOURCE[0]}")")" \
-    && pwd
+    cd "$(dirname "${BASH_SOURCE[0]}")" &&
+    cd "$(dirname "$(readlink "${BASH_SOURCE[0]}")")" &&
+    pwd
 )
 # bash sub scripts directory
 bash_config_directory=$config_directory/.bash
@@ -35,4 +37,6 @@ for name in "${bash_config_files[@]}"; do
     [ -f "$script" ] && . "$script"
 done
 
-unset config_directory bash_config_files bash_config_directory script
+unset config_directory bash_config_files bash_config_directory script name
+
+set +u

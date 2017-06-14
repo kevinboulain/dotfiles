@@ -20,7 +20,7 @@ HISTFILESIZE=-1
 history_subdirectory=$(dirname "$HISTFILE")
 [ -d "$history_subdirectory" ] || mkdir -p "$history_subdirectory"
 unset history_subdirectory
-PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -a'
+PROMPT_COMMAND=${PROMPT_COMMAND+$PROMPT_COMMAND;}'history -a'
 
 function hist {
     if hash ag >& "$null"; then

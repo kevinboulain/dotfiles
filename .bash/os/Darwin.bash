@@ -4,7 +4,7 @@
 function finder_show_all {
     local -r old_value=$(defaults read com.apple.finder AppleShowAllFiles 2> "$null")
     local new_value
-    if [ "${old_value:-false}" = false ]; then
+    if [ "${old_value-false}" = false ]; then
         new_value=true
     else
         new_value=false

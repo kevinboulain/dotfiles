@@ -14,7 +14,7 @@ function prompt_config {
 }
 
 # on OS X, $PROMPT_COMMAND may use the function update_terminal_cwd
-PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}prompt_config
+PROMPT_COMMAND=${PROMPT_COMMAND+$PROMPT_COMMAND;}prompt_config
 
 # \[\] allow readline to correctly calculate string size
 PS1='\h:\W \[$(echo -ne $prompt_color)\]\$\[$(echo -ne $esc)\] '

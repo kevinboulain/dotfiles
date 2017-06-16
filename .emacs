@@ -25,6 +25,7 @@
     "c"
     "spellcheck"
     "htmlize"
+    "shell"
     ,(concat "os/" os)
     "personal"
   )

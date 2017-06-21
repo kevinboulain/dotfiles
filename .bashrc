@@ -20,8 +20,8 @@ config_directory=$(
     # cd into the symlink directory
     # cd into the directory of the file pointed by the (possibly relative) symlink
     # get actual path
-    cd "$(dirname "${BASH_SOURCE[0]}")" &&
-    cd "$(dirname "$(readlink "${BASH_SOURCE[0]}")")" &&
+    cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null &&
+    cd "$(dirname "$(readlink "${BASH_SOURCE[0]}")")" > /dev/null &&
     pwd
 )
 # bash sub scripts directory

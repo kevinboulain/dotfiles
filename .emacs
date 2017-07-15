@@ -18,7 +18,6 @@
     "general"
     "company"
     "flycheck"
-    "xcscope"
     "haskell"
     "idris"
     "rust"

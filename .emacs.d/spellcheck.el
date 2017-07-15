@@ -19,9 +19,10 @@
         (ispell-set-spellchecker-params)
         (ispell-hunspell-add-multi-dic "fr_FR,en_GB")
       )
+      ; it significantly slows down emacs, so no prog-mode-hook for now
       (add-hook 'text-mode-hook 'flyspell-mode)
       (add-hook 'text-mode-hook 'flyspell-buffer)
-      (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+      ; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
       ; (add-hook 'text-mode-hook 'ispell-buffer)
       ; (add-hook 'prog-mode-hook 'ispell-comments-and-strings)
     )

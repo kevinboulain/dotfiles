@@ -1,7 +1,7 @@
 if hash less >& "$null"; then
-    PAGER='less -r'
+  PAGER='less -r'
 elif hash most >& "$null"; then
-    PAGER=most
+  PAGER=most
 fi
 
 export PAGER

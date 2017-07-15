@@ -6,11 +6,11 @@ declare -r blue="\033[34m"
 declare -r esc="\033[0m"
 
 function prompt_config {
-    if [ $? -eq 0 ]; then
-        prompt_color=$cyan
-    else
-        prompt_color=$red
-    fi
+  if [ $? -eq 0 ]; then
+    prompt_color=$cyan
+  else
+    prompt_color=$red
+  fi
 }
 
 # on OS X, $PROMPT_COMMAND may use the function update_terminal_cwd

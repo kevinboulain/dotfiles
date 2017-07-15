@@ -23,9 +23,9 @@ unset history_subdirectory
 PROMPT_COMMAND=${PROMPT_COMMAND+$PROMPT_COMMAND;}'history -a'
 
 function hist {
-    if hash ag >& "$null"; then
-        ag "$@" "$history_directory"
-    else
-        grep -r "$@" "$history_directory"
-    fi
+  if hash ag >& "$null"; then
+    ag "$@" "$history_directory"
+  else
+    grep -r "$@" "$history_directory"
+  fi
 }

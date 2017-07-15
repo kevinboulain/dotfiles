@@ -1,9 +1,9 @@
 if hash emacs >& "$null"; then
-    EDITOR=emacs
+  EDITOR=emacs
 elif hash mg >& "$null"; then
-    EDITOR=mg
+  EDITOR=mg
 elif hash nano >& "$null"; then
-    EDITOR=nano
+  EDITOR=nano
 fi
 
 export EDITOR

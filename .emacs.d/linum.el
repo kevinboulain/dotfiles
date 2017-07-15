@@ -44,7 +44,7 @@
         )
         (hlinum-activate)
       )
+      (message "Could not load hlinum: missing dependencies")
     )
-    (message "Could not load hlinum: missing dependencies")
   )
 )

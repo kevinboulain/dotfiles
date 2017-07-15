@@ -55,3 +55,6 @@
 [submodule ".emacs.d/cmake-ide"]
 	path = .emacs.d/cmake-ide
 	url = https://github.com/atilaneves/cmake-ide.git
+[submodule ".emacs.d/rtags"]
+	path = .emacs.d/rtags
+	url = https://github.com/Andersbakken/rtags.git

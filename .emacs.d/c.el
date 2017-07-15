@@ -13,6 +13,16 @@
   ; (global-set-key [C-M-tab] 'clang-format-region)
 )
 
+(defconst rtags (concat user-emacs-directory "rtags/src"))
+
+(when (file-readable-p rtags)
+  (add-to-list 'load-path rtags)
+
+  (when (require 'rtags nil t)
+    ; note: rtags also provides flycheck-rtags and company-rtags, require them?
+  )
+)
+
 (defconst cmake-ide (concat user-emacs-directory "cmake-ide"))
 
 (when (file-readable-p cmake-ide)

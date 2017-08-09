@@ -14,3 +14,6 @@
 
 ; annoying questions 'yes' or 'no'
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+; disable source control handling
+(setq vc-handled-backends nil)

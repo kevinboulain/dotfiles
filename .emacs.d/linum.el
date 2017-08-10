@@ -23,7 +23,7 @@
       )
     )
     ; (setq linum-format "%d ") ; add a blank space after the line number
-    (global-linum-mode 1)
+    (global-linum-mode t)
   )
 
   ; wrapping mode for linum, highlight the cursor's line number

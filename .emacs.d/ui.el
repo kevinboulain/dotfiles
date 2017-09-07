@@ -73,4 +73,5 @@
 (when (require 'ido nil t)
   (setq ido-enable-flex-matching t)
   (ido-mode t)
+  (setq ido-auto-merge-work-directories-length -1) ; disable annoying directory search
 )

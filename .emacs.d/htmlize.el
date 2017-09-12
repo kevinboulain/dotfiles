@@ -12,7 +12,7 @@
       ; disable current line highlighting (both a function and a variable)
       (when (bound-and-true-p global-hl-line-mode) (global-hl-line-mode -1))
       ; disable line numbering (the format adds a an empty column)
-      (when (bound-and-true-p linum-mode) (global-linum-mode 0))
+      (when (bound-and-true-p nlinum-mode) (global-nlinum-mode 0))
       ; (sit-for 3) ; allow to see the changes made to the buffer
     ))
     ; use the Iosevka font if available (ligatures may be nice for displayed code)

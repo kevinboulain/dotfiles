@@ -25,9 +25,6 @@
 [submodule ".emacs.d/lua-mode"]
 	path = .emacs.d/lua
 	url = https://github.com/immerrr/lua-mode.git
-[submodule ".emacs.d/hlinum"]
-	path = .emacs.d/hlinum
-	url = https://github.com/tom-tan/hlinum-mode.git
 [submodule ".emacs.d/company"]
 	path = .emacs.d/company
 	url = https://github.com/company-mode/company-mode.git
@@ -55,3 +52,6 @@
 [submodule ".emacs.d/rtags"]
 	path = .emacs.d/rtags
 	url = https://github.com/Andersbakken/rtags.git
+[submodule ".emacs.d/nlinum"]
+	path = .emacs.d/nlinum
+	url = https://github.com/emacsmirror/nlinum.git

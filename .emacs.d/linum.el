@@ -1,50 +1,32 @@
 (global-hl-line-mode) ; highlight the line containing the cursor
 
-; emacs 24 specific stuff
-(when (>= emacs-major-version 24)
-  ; show lines numbers, see http://www.emacswiki.org/LineNumbers
-  (when (require 'linum nil t)
-    (add-hook 'linum-before-numbering-hook
-      (lambda () ; make line counting more efficient
-        (setq-local linum-format-fmt
-          (let ; fix the numbering issue that move the buffer to the right every new digit
-            ((w (length (number-to-string (count-lines (point-min) (point-max))))))
-            (concat "%" (number-to-string w) "d")
-          )
-        )
-      )
-    )
-    (setq linum-format
-      (lambda (line)
-        (concat
-          (propertize (format linum-format-fmt line) 'face 'linum)
-          (propertize " " 'face 'linum)
-        )
-      )
-    )
-    ; (setq linum-format "%d ") ; add a blank space after the line number
-    (global-linum-mode t)
-  )
+(when (>= emacs-major-version 24) ; nlinum requires linum which is available in emacs 24
+  ; show lines numbers
+  (defconst nlinum (concat user-emacs-directory "nlinum"))
 
-  ; wrapping mode for linum, highlight the cursor's line number
-  (defconst hlinum (concat user-emacs-directory "hlinum"))
+  (when (file-readable-p nlinum)
+    (add-to-list 'load-path nlinum)
 
-  ; test if the submodule exists
-  (when (file-readable-p hlinum)
-    (add-to-list 'load-path hlinum)
+    (when (require 'nlinum nil t)
+      ; avoid the right horizontal scroll on each new digit (slow and ridiculous for long files)
+      ; (add-hook 'nlinum-mode-hook
+      ;   (lambda ()
+      ;     (setq-local nlinum-format
+      ;       (let ; fix the numbering issue that move the buffer to the right every new digit
+      ;         ((w (length (number-to-string (count-lines (point-min) (point-max))))))
+      ;         (concat "%" (number-to-string w) "d ")
+      ;       )
+      ;     )
+      ;   )
+      ; )
 
-    (if (and (featurep 'hl-line)
-             (featurep 'linum))
-      (when (require 'hlinum nil t)
-        ; make the faces used by hlinum match both linum and hl-line
-        ; is there a cleaner way?
-        (set-face-attribute 'linum-highlight-face nil
-          :foreground (face-attribute 'linum :foreground)
-          :background (face-attribute 'hl-line :background)
-        )
-        (hlinum-activate)
-      )
-      (message "Could not load hlinum: missing dependencies")
+      (set-face-attribute 'nlinum-current-line nil
+        :foreground (face-attribute 'linum :foreground)
+        :background (face-attribute 'hl-line :background)
+      ) ; highlight the margin with the same line highlighting
+      (setq nlinum-format "%d ")
+      (setq nlinum-highlight-current-line t)
+      (global-nlinum-mode t)
     )
   )
 )

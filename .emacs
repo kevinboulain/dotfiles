@@ -26,6 +26,7 @@
     "spellcheck"
     "htmlize"
     "shell"
+    "irc"
     ,(concat "os/" os)
     "personal"
   )

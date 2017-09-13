@@ -55,3 +55,6 @@
 [submodule ".emacs.d/nlinum"]
 	path = .emacs.d/nlinum
 	url = https://github.com/emacsmirror/nlinum.git
+[submodule ".emacs.d/circe"]
+	path = .emacs.d/circe
+	url = https://github.com/jorgenschaefer/circe.git

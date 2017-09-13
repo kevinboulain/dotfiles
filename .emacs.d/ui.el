@@ -59,3 +59,6 @@
   (ido-mode t)
   (setq ido-auto-merge-work-directories-length -1) ; disable annoying directory search
 )
+
+; don't show the 'GNU Emacs' buffer
+(setq inhibit-startup-screen t)

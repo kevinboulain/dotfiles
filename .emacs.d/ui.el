@@ -28,9 +28,6 @@
 ; remove the \ for a wrapped line
 (set-display-table-slot standard-display-table 'wrap ?\ )
 
-; fast deletion
-(global-set-key (kbd "C-<delete>") 'c-hungry-delete-forward)
-
 ; toggle window dedication
 (defun toggle-window-dedicated ()
   (interactive)

@@ -58,3 +58,6 @@
 [submodule ".emacs.d/circe"]
 	path = .emacs.d/circe
 	url = https://github.com/jorgenschaefer/circe.git
+[submodule ".emacs.d/ethan-wspace"]
+	path = .emacs.d/ethan-wspace
+	url = https://github.com/glasserc/ethan-wspace.git

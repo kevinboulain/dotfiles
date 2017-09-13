@@ -18,20 +18,6 @@
   )
 )
 
-; whitespace module
-(when (require 'whitespace nil t)
-  (setq whitespace-line-column 80) ; highlight 80+ columns, this is the default
-  (setq whitespace-style
-    '(face ; visual impact
-      trailing empty ; everything that has too much blank
-      ; lines-tail ; highlight lines with more than whitespace-line-column columns
-      ; tabs spaces ; show tabs and spaces with faces
-      ; tab-mark space-mark ; show tabs and spaces with markers
-    )
-  ) ; C-h v whitespace-style to display possibilites
-  (global-whitespace-mode t) ; activate module
-)
-
 ; show pointer's current column and line
 (setq line-number-mode t)
 (setq column-number-mode t)

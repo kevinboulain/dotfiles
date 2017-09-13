@@ -27,6 +27,7 @@
     "htmlize"
     "shell"
     "irc"
+    "whitespace"
     ,(concat "os/" os)
     "personal"
   )

@@ -25,7 +25,8 @@
     '(face ; visual impact
       trailing empty ; everything that has too much blank
       ; lines-tail ; highlight lines with more than whitespace-line-column columns
-      ; tabs tab-mark spaces space-mark ; show tabs and spaces with faces
+      ; tabs spaces ; show tabs and spaces with faces
+      ; tab-mark space-mark ; show tabs and spaces with markers
     )
   ) ; C-h v whitespace-style to display possibilites
   (global-whitespace-mode t) ; activate module

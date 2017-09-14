@@ -46,3 +46,4 @@
 
 ; restore the garbage collector settings
 (setq gc-cons-threshold gc-cons-threshold-backup)
+(makunbound 'gc-cons-threshold-backup)

@@ -21,8 +21,8 @@
       ; )
 
       (set-face-attribute 'nlinum-current-line nil
-        :foreground (face-attribute 'linum :foreground)
-        :background (face-attribute 'hl-line :background)
+        :foreground (face-attribute 'linum :foreground nil t)
+        :background (face-attribute 'hl-line :background nil t)
       ) ; highlight the margin with the same line highlighting
       (setq nlinum-format "%d ")
       (setq nlinum-highlight-current-line t)

@@ -17,7 +17,7 @@ These configuration files are mainly focused on terminal use.
 
 #### Settings
 
- - light theming
+ - theming matching Emacs's `zenburn` theme
  - the prefix key is set to `C-]` as `C-b` is usually reserved to move backward
  - on OS X, install `reattach-to-user-namespace` to correctly handle graphic programs
 
@@ -59,12 +59,14 @@ ln -s dotfiles/.bashrc
 #### Settings
 
  - `*~` files are stored in `temporary-file-directory`
- - you may wish to tweak highlighting of white spaces, see `.emacs.d/ui.el`
  - `flycheck` may emit warnings or errors in your buffers if you have some linters available
  - for `htmlize` (useful for pretty code exports), use `htmlize-buffer` or set the mark two times
    by using `C-SPC` and move the point to delimit the region then use `htmlize-region`
  - for `flyspell`, install `hunspell` and some dictionaries (see `.emacs.d/spellcheck.el`),
    once the mode is enabled, use `M-$` to correct an highlighted word ([ispell documentation])
+ - IRC is available via `circe`
+ - `ido` is enabled, don't forget `C-f` to fallback on the standard `find-file` and `C-s` & `C-r`
+   for cycling between matches
 
 You may want to edit `.emacs.d/os/*.el` for your specific use.
 

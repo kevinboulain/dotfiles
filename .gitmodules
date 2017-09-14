@@ -61,3 +61,6 @@
 [submodule ".emacs.d/ethan-wspace"]
 	path = .emacs.d/ethan-wspace
 	url = https://github.com/glasserc/ethan-wspace.git
+[submodule ".emacs.d/which-key"]
+	path = .emacs.d/which-key
+	url = https://github.com/justbur/emacs-which-key.git

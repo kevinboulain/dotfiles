@@ -28,6 +28,7 @@
     "shell"
     "irc"
     "whitespace"
+    "which-key"
     ,(concat "os/" os)
     "personal"
   )

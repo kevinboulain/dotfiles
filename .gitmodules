@@ -64,3 +64,6 @@
 [submodule ".emacs.d/which-key"]
 	path = .emacs.d/which-key
 	url = https://github.com/justbur/emacs-which-key.git
+[submodule ".emacs.d/rainbow-delimiters"]
+	path = .emacs.d/rainbow-delimiters
+	url = https://github.com/Fanael/rainbow-delimiters.git

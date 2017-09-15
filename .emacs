@@ -29,6 +29,7 @@
     "irc"
     "whitespace"
     "which-key"
+    "rainbow-delimiters"
     ,(concat "os/" os)
     "personal"
   )

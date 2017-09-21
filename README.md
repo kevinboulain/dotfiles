@@ -65,8 +65,7 @@ ln -s dotfiles/.bashrc
  - for `flyspell`, install `hunspell` and some dictionaries (see `.emacs.d/spellcheck.el`),
    once the mode is enabled, use `M-$` to correct an highlighted word ([ispell documentation])
  - IRC is available via `circe`
- - `ido` is enabled, don't forget `C-f` to fallback on the standard `find-file` and `C-s` & `C-r`
-   for cycling between matches
+ - `ido` is enabled, don't forget `C-f` to fallback on the standard `find-file`, `C-s` & `C-r` for cycling between matches and `C-l` to refresh the current directory
 
 You may want to edit `.emacs.d/os/*.el` for your specific use.
 

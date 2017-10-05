@@ -1,3 +1,4 @@
+; on debian, dictionaries are available via hunspell-* packages
 ; http://extensions.libreoffice.org/extension-center/dictionnaires-francais
 ; http://extensions.libreoffice.org/extension-center/english-dictionaries
 ; http://emacs.stackexchange.com/a/21379

@@ -30,6 +30,7 @@
     "whitespace"
     "which-key"
     "rainbow-delimiters"
+    "po"
     ,(concat "os/" os)
     "personal"
   )

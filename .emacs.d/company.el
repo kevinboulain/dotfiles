@@ -13,5 +13,7 @@
     (setq company-idle-delay 0)
     ; start completing after the first typed character
     (setq company-minimum-prefix-length 2)
+    ; alignment
+    (setq company-tooltip-align-annotations t)
   )
 )

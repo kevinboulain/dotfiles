@@ -11,11 +11,12 @@
     "dash"
     "seq"
     "s"
+    "f"
     "levenshtein" ; https://www.emacswiki.org/emacs/levenshtein.el
     ; general configuration
     "ui"
-    "linum"
     "general"
+    "linum"
     "company"
     "flycheck"
     "haskell"

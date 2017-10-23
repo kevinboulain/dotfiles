@@ -5,6 +5,7 @@
 
   (when (require 'rust-mode nil t)
     (add-to-list 'auto-mode-alist '("\\.rs$" . rust-mode))
+    (setq rust-indent-offset tab-width)
   )
 )
 
@@ -29,13 +30,15 @@
   (add-to-list 'load-path racer)
 
   ; requirements:
-  ;   s
-  ;   dash
   ;   company
+  ;   dash
+  ;   f
+  ;   s
   ;   rust
-  (if (and (featurep 's)
+  (if (and (featurep 'company)
            (featurep 'dash)
-           (featurep 'company)
+           (featurep 'f)
+           (featurep 's)
            (featurep 'rust-mode))
     (when (require 'racer nil t)
       (add-hook 'rust-mode-hook 'racer-mode)

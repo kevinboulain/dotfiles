@@ -67,3 +67,6 @@
 [submodule ".emacs.d/rainbow-delimiters"]
 	path = .emacs.d/rainbow-delimiters
 	url = https://github.com/Fanael/rainbow-delimiters.git
+[submodule ".emacs.d/f"]
+	path = .emacs.d/f
+	url = https://github.com/rejeep/f.el.git

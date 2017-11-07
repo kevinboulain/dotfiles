@@ -62,3 +62,12 @@
 
 ; don't show the 'GNU Emacs' buffer
 (setq inhibit-startup-screen t)
+
+; mouse support
+(unless window-system
+  (when (require 'mouse nil t)
+    (xterm-mouse-mode t)
+    (global-set-key [mouse-4] (lambda () (interactive) (scroll-down 1)))
+    (global-set-key [mouse-5] (lambda () (interactive) (scroll-up 1)))
+  )
+)

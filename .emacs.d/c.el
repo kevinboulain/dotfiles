@@ -31,7 +31,7 @@
   (if (featurep 'seq)
     (when (require 'cmake-ide nil t)
       ; may cause problems if CMakeLists.txt change
-      ; (setq cmake-ide-build-pool-use-persistent-naming t)
+      (setq cmake-ide-build-pool-use-persistent-naming t)
       ; the other variables doesn't seem to work properly...
       (cmake-ide-setup)
     )

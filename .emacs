@@ -32,6 +32,7 @@
     "which-key"
     "rainbow-delimiters"
     "po"
+    "avy"
     ,(concat "os/" os)
     "personal"
   )

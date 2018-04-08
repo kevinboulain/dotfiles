@@ -42,7 +42,7 @@
 (global-set-key (kbd "C-!") 'toggle-window-dedicated)
 
 ; disallow emacs from opening new pop up windows
-(setq pop-up-windows nil)
+; (setq pop-up-windows nil)
 
 ; default keybindings for windmove: shift + arrows
 (windmove-default-keybindings)

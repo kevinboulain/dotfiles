@@ -33,6 +33,7 @@
     "rainbow-delimiters"
     "po"
     "avy"
+    "agda"
     ,(concat "os/" os)
     "personal"
   )

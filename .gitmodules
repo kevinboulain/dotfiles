@@ -73,3 +73,18 @@
 [submodule ".emacs.d/avy"]
 	path = .emacs.d/avy
 	url = https://github.com/abo-abo/avy.git
+[submodule ".emacs.d/slack"]
+	path = .emacs.d/slack
+	url = https://github.com/yuya373/emacs-slack.git
+[submodule ".emacs.d/oauth2"]
+	path = .emacs.d/oauth2
+	url = https://github.com/emacsmirror/oauth2.git
+[submodule ".emacs.d/request"]
+	path = .emacs.d/request
+	url = https://github.com/tkf/emacs-request.git
+[submodule ".emacs.d/websocket"]
+	path = .emacs.d/websocket
+	url = https://github.com/ahyatt/emacs-websocket.git
+[submodule ".emacs.d/alert"]
+	path = .emacs.d/alert
+	url = https://github.com/jwiegley/alert.git

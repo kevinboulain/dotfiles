@@ -34,6 +34,7 @@
     "po"
     "avy"
     "agda"
+    "slack"
     ,(concat "os/" os)
     "personal"
   )

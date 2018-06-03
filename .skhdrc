@@ -1,0 +1,51 @@
+# on macOS, I set cmd + arrows/numbers to switch desktops in system preferences
+# I use rcmd here so there is little chance of conflict (for example cmd - f is
+# used by many applications)
+
+rcmd - return : osascript -e 'if application "iTerm" is running then'  \
+                         -e '  tell application "iTerm"'              \
+                         -e '     create window with default profile' \
+                         -e '  end tell'                              \
+                         -e 'else'                                    \
+                         -e '  activate application "iTerm"'          \
+                         -e 'end if'
+
+# focus window
+rcmd - b : chunkc tiling::window --focus west
+rcmd - n : chunkc tiling::window --focus south
+rcmd - p : chunkc tiling::window --focus north
+rcmd - f : chunkc tiling::window --focus east
+rcmd - c : chunkc tiling::window --focus next
+rcmd + shift - c : chunkc tiling::window --focus prev
+
+# swap window
+rcmd + shift - b : chunkc tiling::window --swap west
+rcmd + shift - n : chunkc tiling::window --swap south
+rcmd + shift - p : chunkc tiling::window --swap north
+rcmd + shift - f : chunkc tiling::window --swap east
+
+# set insertion point for focused container
+rcmd + ctrl - space : chunkc tiling::window --use-insertion-point cancel
+rcmd + ctrl - b : chunkc tiling::window --use-insertion-point west
+rcmd + ctrl - n : chunkc tiling::window --use-insertion-point south
+rcmd + ctrl - p : chunkc tiling::window --use-insertion-point north
+rcmd + ctrl - f : chunkc tiling::window --use-insertion-point east
+
+# float / unfloat window and center on screen
+rcmd + shift - space : chunkc tiling::window --toggle float; \
+                       chunkc tiling::window --grid-layout 4:4:1:1:2:2
+
+# change layout of desktop
+rcmd - m : if [ "$(chunkc tiling::query --desktop mode)" = bsp ]; then chunkc tiling::desktop --layout monocle; else chunkc tiling::desktop --layout bsp; fi
+
+# increase region size
+rcmd + alt - b : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
+rcmd + alt - n : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
+rcmd + alt - p : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
+rcmd + alt - f : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
+
+# decrease region size
+rcmd + alt + shift - b : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
+rcmd + alt + shift - n : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
+rcmd + alt + shift - p : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
+rcmd + alt + shift - f : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east

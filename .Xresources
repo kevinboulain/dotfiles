@@ -1,0 +1,6 @@
+xterm*scrollBar: false
+xterm*saveLines: 32768
+xterm*termName: xterm-256color
+! alt/meta key issues
+xterm*eightBitInput: false
+xterm*eightBitOutput: true

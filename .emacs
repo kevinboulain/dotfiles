@@ -24,6 +24,7 @@
     "linum"
     "lsp"
     "lua"
+    "markdown"
     "python"
     "rainbow-delimiters"
     "rust"

@@ -9,7 +9,6 @@
     "general"
     ;; some stuff that should be put first
     "zenburn" ; to setup faces
-    "flycheck" ; to download dash so cmake-ide doesn't crash
     ;; other modules
     "agda"
     "avy"
@@ -17,6 +16,7 @@
     "circe"
     "company"
     "ethan-wspace"
+    "flycheck"
     "gettext"
     "htmlize"
     "idris"

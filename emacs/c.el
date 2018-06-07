@@ -12,14 +12,8 @@
   ;; (global-set-key [C-M-tab] 'clang-format-region)
   )
 
-;; TODO: check for {company,flycheck}-rtags
-(use-package rtags
+(use-package lsp-clangd
   :ensure t
-  :quelpa ((rtags :fetcher github :repo "Andersbakken/rtags")))
-
-(use-package cmake-ide
-  :ensure t
-  :quelpa ((cmake-ide :fetcher github :repo "atilaneves/cmake-ide"))
-  :config
-  (setq cmake-ide-build-pool-use-persistent-naming t)
-  (cmake-ide-setup))
+  :quelpa ((lsp-clangd :fetcher github :repo "emacs-lsp/lsp-clangd"))
+  :hook ((c-mode . lsp-clangd-c-enable)
+         (c++-mode . lsp-clangd-c++-enable)))

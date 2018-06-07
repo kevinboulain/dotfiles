@@ -20,3 +20,6 @@
   ui = auto
 [format]
   pretty = fuller
+[include]
+  # so I can locally override some settings
+  path = ~/.gitconfig.override

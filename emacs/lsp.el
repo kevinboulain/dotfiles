@@ -11,4 +11,7 @@
   :ensure t
   :quelpa ((company-lsp :fetcher github :repo "tigersoldier/company-lsp"))
   :config
-  (push 'company-lsp company-backends))
+  (push 'company-lsp company-backends)
+  ;; requires yasnippet, used to complete arguments
+  ;; may need to setup some functions, see company-lsp--fallback-snippet
+  (setq company-lsp-enable-snippet t))

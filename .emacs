@@ -32,6 +32,7 @@
     "shell"
     "slack"
     "which-key"
+    "yasnippet"
     ;; personal configuration
     "personal"
     ))

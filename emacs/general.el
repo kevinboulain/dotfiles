@@ -22,6 +22,10 @@
 (setq line-number-mode t)
 (setq column-number-mode t)
 
+;; recursive minibuffer
+(setq enable-recursive-minibuffers t)
+(minibuffer-depth-indicate-mode 1)
+
 ;; remove the menu (f10)
 (menu-bar-mode -1)
 

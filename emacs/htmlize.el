@@ -27,7 +27,7 @@
       }
       pre {
         font-family: Iosevka;
-        font-size: 12px;
+        font-size: 10pt;
       }
     </style>
 "

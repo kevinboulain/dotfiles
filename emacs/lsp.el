@@ -5,7 +5,10 @@
 (use-package lsp-ui
   :ensure t
   :quelpa ((lsp-ui :fetcher github :repo "emacs-lsp/lsp-ui"))
-  :hook (lsp-mode . lsp-ui-mode))
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  ;; avoid showing duplicate symbols or it can quickly grow on multiple lines
+  (setq lsp-ui-sideline-ignore-duplicate t))
 
 (use-package company-lsp
   :ensure t

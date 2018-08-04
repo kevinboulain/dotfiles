@@ -1,16 +1,19 @@
-; on Debian, dictionaries are available via hunspell-* packages
-; http://extensions.libreoffice.org/extension-center/dictionnaires-francais
-; http://extensions.libreoffice.org/extension-center/english-dictionaries
-; http://emacs.stackexchange.com/a/21379
+;; on Debian, dictionaries are available via hunspell-* packages
+;; else, retrieve .aff & .dic files here:
+;;  - en_*: http://wordlist.aspell.net/dicts/
+;;  - fr-*: https://www.dicollecte.org/download.php?prj=fr
+;;
+;; http://emacs.stackexchange.com/a/21379
 
 (defconst spellchecker "hunspell")
+(defconst languages "fr-toutesvariantes,en_US")
 
 (when (>= emacs-major-version 25)
   (if (executable-find spellchecker)
       (progn
         (with-eval-after-load "ispell"
           (setq ispell-program-name spellchecker)
-          (setq ispell-dictionary "fr_FR,en_GB")
+          (setq ispell-dictionary languages)
           ;; the following may crash with:
           ;;   Wrong type argument: stringp, nil
           ;; if hunspell isn't able to find dictionaries
@@ -18,7 +21,7 @@
           ;;   export DICPATH=~/Library/Spelling
           ;; use hunspell -D to check hunspell's environment
           (ispell-set-spellchecker-params)
-          (ispell-hunspell-add-multi-dic "fr_FR,en_GB"))
+          (ispell-hunspell-add-multi-dic languages))
         ;; it significantly slows down emacs, so no prog-mode-hook for now
         (add-hook 'text-mode-hook 'flyspell-mode)
         (add-hook 'text-mode-hook 'flyspell-buffer)

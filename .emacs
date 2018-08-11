@@ -15,6 +15,7 @@
     "c"
     "circe"
     "company"
+    "dart"
     "ethan-wspace"
     "flycheck"
     "gettext"

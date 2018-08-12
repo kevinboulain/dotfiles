@@ -1,6 +1,9 @@
+;; http://www.randomsample.de/profile-dotemacs.el is nice
+;; but requires to unroll the loop below
+
 ;; mess with the garbage collector settings to make loading faster
 (defconst gc-cons-threshold-backup gc-cons-threshold)
-(setq gc-cons-threshold 10000000)
+(setq gc-cons-threshold (* 100 1024 1024))
 
 (defconst el-files
   `(;; some dependencies

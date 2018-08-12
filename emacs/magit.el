@@ -6,4 +6,5 @@
 
 (use-package magit
   :ensure t
+  :defer t
   :quelpa ((magit :fetcher github :repo "magit/magit" :files ("lisp/*.el"))))

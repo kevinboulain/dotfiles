@@ -48,8 +48,9 @@
 (dolist (el-file el-files)
   (defconst el-file (concat user-emacs-directory el-file ".el"))
   (message el-file)
-  (when (file-readable-p el-file)
-    (load el-file)))
+  (if (file-readable-p el-file)
+      (load el-file)
+    (message (format "Unable to load file: %s" el-file))))
 
 ;; restore the garbage collector settings
 (setq gc-cons-threshold gc-cons-threshold-backup)

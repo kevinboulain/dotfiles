@@ -12,8 +12,10 @@
   ;; (global-set-key [C-M-tab] 'clang-format-region)
   )
 
-(use-package lsp-clangd
+;; you'll need to build cquery, but it seems better than lsp-clangd
+;; https://github.com/cquery-project/cquery/wiki/Emacs
+(use-package cquery
   :ensure t
-  :quelpa ((lsp-clangd :fetcher github :repo "emacs-lsp/lsp-clangd"))
-  :hook ((c-mode . lsp-clangd-c-enable)
-         (c++-mode . lsp-clangd-c++-enable)))
+  :quelpa ((cquery :fetcher github :repo "cquery-project/emacs-cquery"))
+  :hook ((c-mode . lsp-cquery-enable)
+         (c++-mode . lsp-cquery-enable)))

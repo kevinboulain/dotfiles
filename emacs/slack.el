@@ -16,6 +16,16 @@
   :quelpa ((slack :fetcher github :repo "yuya373/emacs-slack"))
   :hook (slack-mode . (lambda () (setq-local right-margin-width 5)))
   :config
+  ;; the lazy way is to search the network tab for '_x_id' & 'xoxs-'
+  ;; it's probably better to create an application
+  ;; (slack-register-team
+  ;;   :name "team"
+  ;;   :default t
+  ;;   :client-id "_x_id"
+  ;;   :client-secret "account's password"
+  ;;   :token "xoxs-"
+  ;;   :full-and-display-names t
+  ;; )
   ;; timestamp setup
   (setq lui-time-stamp-format "%H:%M")
   (setq lui-time-stamp-position 'right-margin))

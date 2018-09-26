@@ -2,6 +2,14 @@
 
 set -eux
 
+if false; then  # zenburn
+  mode_line_buffer_id_foreground=0xfff0dfaf
+  mode_line_foreground=0xff8fb28f
+else # tao
+  mode_line_buffer_id_foreground=0xfffafafa
+  mode_line_foreground=0xfff1f1f1
+fi
+
 chunkc core::log_file /tmp/chunkwm.log
 exec &>> /tmp/chunkwm.log
 
@@ -37,10 +45,10 @@ chunkc set mouse_move_window \"fn 1\"
 chunkc set mouse_resize_window \"fn 2\"
 chunkc set mouse_motion_interval 35
 
-chunkc set preselect_border_color 0xfff0dfaf
+chunkc set preselect_border_color "$mode_line_buffer_id_foreground"
 chunkc set preselect_border_width 1
 
-chunkc set focused_border_color 0xff8fb28f
+chunkc set focused_border_color "$mode_line_foreground"
 chunkc set focused_border_width 1
 chunkc set focused_border_radius 0
 chunkc set focused_border_skip_floating 0

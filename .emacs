@@ -11,7 +11,9 @@
     ;; general configuration
     "general"
     ;; some stuff that should be put first
-    "zenburn" ; to setup faces
+    ;; like themes, so they can setup faces early to be used by other modules
+    ;; "zenburn"
+    "tao"
     ;; other modules
     "agda"
     "avy"

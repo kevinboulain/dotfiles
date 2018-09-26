@@ -20,6 +20,7 @@
     "company"
     "dart"
     "ethan-wspace"
+    "feebleline"
     "flycheck"
     "gettext"
     "htmlize"

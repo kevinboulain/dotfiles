@@ -11,4 +11,4 @@
                       :background (face-attribute 'hl-line :background nil t))
   (setq nlinum-format "%d ")
   (setq nlinum-highlight-current-line t)
-  (global-nlinum-mode t))
+  (global-nlinum-mode 1))

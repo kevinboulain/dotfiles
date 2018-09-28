@@ -1,6 +1,5 @@
 (use-package dart-mode
-  :ensure t
-  :quelpa ((dart-mode :fetcher github :repo "bradyt/dart-mode"))
+  :straight (:host github :repo "bradyt/dart-mode")
   :hook (;; flycheck isn't enabled automatically otherwise
          (dart-mode . flycheck-mode)
          ;; pub global activate dart_language_server

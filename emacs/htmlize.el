@@ -1,6 +1,5 @@
 (use-package htmlize
-  :ensure t
-  :quelpa ((htmlize :fetcher github :repo "hniksic/emacs-htmlize"))
+  :straight (:host github :repo "hniksic/emacs-htmlize")
   :hook ((htmlize-before . (lambda ()
                              ;; disable some modes that may influence rendering
                              ;; the original buffer is protected, no need to restore

@@ -7,7 +7,7 @@
 
 (defconst el-files
   `(;; some dependencies
-    "quelpa"
+    "straight"
     ;; general configuration
     "general"
     ;; some stuff that should be put first

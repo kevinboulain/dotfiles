@@ -15,7 +15,6 @@
 ;; you'll need to build cquery, but it seems better than lsp-clangd
 ;; https://github.com/cquery-project/cquery/wiki/Emacs
 (use-package cquery
-  :ensure t
-  :quelpa ((cquery :fetcher github :repo "cquery-project/emacs-cquery"))
+  :straight (:host github :repo "cquery-project/emacs-cquery")
   :hook ((c-mode . lsp-cquery-enable)
          (c++-mode . lsp-cquery-enable)))

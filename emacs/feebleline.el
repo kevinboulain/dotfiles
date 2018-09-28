@@ -1,7 +1,6 @@
 ;; see also https://github.com/11111000000/taoline, by the creator of tao-theme
 (use-package feebleline
-  :ensure t
-  :quelpa ((feebleline :fetcher github :repo "tautologyclub/feebleline"))
+  :straight (:host github :repo "tautologyclub/feebleline")
   :config
   ;; mainly from feebleline.el, but more minimalistic
   (setq feebleline-mode-line-text

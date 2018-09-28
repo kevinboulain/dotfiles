@@ -1,3 +1,2 @@
 (use-package markdown-mode
-  :ensure t
-  :quelpa ((markdown-mode :fetcher github :repo "jrblevin/markdown-mode")))
+  :straight (:host github :repo "jrblevin/markdown-mode"))

@@ -2,8 +2,7 @@
 (global-hl-line-mode)
 
 (use-package nlinum
-  :ensure t
-  :quelpa ((nlinum :fetcher github :repo "emacsmirror/nlinum"))
+  :straight (:host github :repo "emacsmirror/nlinum")
   :config
   ;; highlight the margin with the same line highlighting
   (set-face-attribute 'nlinum-current-line nil ; replace with :custom-face?

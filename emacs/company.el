@@ -1,6 +1,5 @@
 (use-package company
-  :ensure t
-  :quelpa ((company :fetcher github :repo "company-mode/company-mode"))
+  :straight (:host github :repo "company-mode/company-mode")
   :hook (after-init . global-company-mode)
   :config
   ;; dabbrev complete case sensitive

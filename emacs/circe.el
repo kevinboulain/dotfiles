@@ -1,7 +1,6 @@
 (use-package circe
-  :ensure t
   :defer t
-  :quelpa ((circe :fetcher github :repo "jorgenschaefer/circe"))
+  :straight (:host github :repo "jorgenschaefer/circe")
   :hook (circe-mode . (lambda () (setq-local right-margin-width 5)))
   :config
   ;; colorize nicks

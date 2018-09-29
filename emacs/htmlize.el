@@ -1,3 +1,5 @@
+(use-package s :defer t) ; for s-suffix? below
+
 (use-package htmlize
   :straight (:host github :repo "hniksic/emacs-htmlize")
   :hook ((htmlize-before . (lambda ()
@@ -14,6 +16,7 @@
                              ;; (sit-for 3) ; allow to see the changes made to the buffer
                              ))
          (htmlize-before . (lambda ()
+                             (require 's)
                              ;; use the Iosevka font if available (ligatures may be nice for displayed code)
                              ;; requires fontconfig, works on Linux and macOS
                              ;; use %{=unparse} format to see all options

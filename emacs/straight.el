@@ -1,3 +1,5 @@
+(setq straight-repository-branch "develop")
+
 ;; automatically install straight
 (defvar bootstrap-version)
 (let ((bootstrap-file

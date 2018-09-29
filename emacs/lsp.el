@@ -1,4 +1,5 @@
 (use-package lsp-mode
+  :defer t
   :straight (:host github :repo "emacs-lsp/lsp-mode"))
 
 (use-package lsp-ui

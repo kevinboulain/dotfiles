@@ -1,4 +1,5 @@
 (use-package rust-mode
+  :defer t
   :straight (:host github :repo "rust-lang/rust-mode")
   :config
   (add-to-list 'auto-mode-alist '("\\.rs$" . rust-mode))

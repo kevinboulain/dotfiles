@@ -1,6 +1,7 @@
 (use-package s :defer t) ; for s-suffix? below
 
 (use-package htmlize
+  :defer t
   :straight (:host github :repo "hniksic/emacs-htmlize")
   :hook ((htmlize-before . (lambda ()
                              ;; disable some modes that may influence rendering

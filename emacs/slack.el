@@ -12,6 +12,7 @@
   (defvar url-http-method ()))
 
 (use-package slack
+  :defer t
   :straight (:host github :repo "yuya373/emacs-slack")
   :hook (slack-mode . (lambda () (setq-local right-margin-width 5)))
   :config

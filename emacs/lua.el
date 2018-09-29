@@ -1,4 +1,5 @@
 (use-package lua-mode
+  :defer t
   :straight (:host github :repo "immerrr/lua-mode")
   :config
   (autoload 'lua-mode "lua-mode" "Lua editing mode." t)

@@ -41,6 +41,7 @@
 (l "htmlize")
 (l "idris")
 (l "ispell")
+(l "ivy")
 (l "linum")
 (l "lsp")
 (l "lua")

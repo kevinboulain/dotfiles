@@ -41,13 +41,6 @@
 ;; split horizontally by default
 (setq split-width-threshold 1)
 
-;; enable better buffer/file completion
-(when (require 'ido nil t)
-  (setq ido-enable-flex-matching t)
-  (ido-mode t)
-  ;; disable annoying directory search
-  (setq ido-auto-merge-work-directories-length -1))
-
 ;; don't show the 'GNU Emacs' buffer
 (setq inhibit-startup-screen t)
 

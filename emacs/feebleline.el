@@ -1,10 +1,20 @@
+(use-package dash :defer t) ; for -keep below
+
 ;; see also https://github.com/11111000000/taoline, by the creator of tao-theme
 (use-package feebleline
   :straight (:host github :repo "tautologyclub/feebleline")
   :config
   ;; mainly from feebleline.el, but more minimalistic
+  ;; note there is a timer, so not everything will be instantaneously refreshed
   (setq feebleline-mode-line-text
-        '(("%s" ((if (buffer-file-name)
+        '(("%s" ((let ((indicator (string-join
+                                   (-keep (lambda (pair) (when (car pair) (cdr pair)))
+                                          (list (cons (bound-and-true-p line-number-mode) (format-mode-line "%l"))
+                                                (cons (bound-and-true-p column-number-mode) (number-to-string (current-column)))))
+                                   ",")))
+                   (if (> (length indicator) 0) (concat indicator " ") "")))
+           (face feebleline-linum-face))
+          ("%s" ((if (buffer-file-name)
                      (replace-regexp-in-string
                       feebleline--home-dir "~"
                       (file-name-directory (buffer-file-name)))

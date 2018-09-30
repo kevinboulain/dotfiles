@@ -42,7 +42,7 @@
 (l "idris")
 (l "ispell")
 (l "ivy")
-(l "linum")
+;; (l "linum")
 (l "lsp")
 (l "lua")
 (l "markdown")

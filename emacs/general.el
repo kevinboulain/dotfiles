@@ -19,8 +19,8 @@
 (setq vc-handled-backends nil)
 
 ;; show pointer's current column and line
-(setq line-number-mode t)
-(setq column-number-mode t)
+(line-number-mode 1)
+(column-number-mode 1)
 
 ;; recursive minibuffer
 (setq enable-recursive-minibuffers t)
@@ -50,3 +50,6 @@
     (xterm-mouse-mode t)
     (global-set-key [mouse-4] (lambda () (interactive) (scroll-down 1)))
     (global-set-key [mouse-5] (lambda () (interactive) (scroll-up 1)))))
+
+;; highlight the line containing the cursor
+(global-hl-line-mode)

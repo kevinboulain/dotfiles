@@ -1,6 +1,3 @@
-;; highlight the line containing the cursor
-(global-hl-line-mode)
-
 (use-package nlinum
   :straight (:host github :repo "emacsmirror/nlinum")
   :config

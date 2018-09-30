@@ -44,4 +44,25 @@
                                      tracking-buffers) ; for each buffer
                              " "))
               "")))))
-  (feebleline-mode 1))
+  ;; enable feebleline
+  (feebleline-mode 1)
+  ;; but still allow mode line in some cases for readability
+  ;; https://emacs.stackexchange.com/questions/30513/making-a-variable-window-local
+  ;; https://github.com/tautologyclub/feebleline/issues/24
+  (add-hook 'window-configuration-change-hook
+            (lambda ()
+              (when (bound-and-true-p feebleline-mode)
+                (walk-windows (lambda (window) ; reset the mode line of each buffer
+                                (with-current-buffer (window-buffer window)
+                                  (setq mode-line-format nil)))
+                              0) ; don't include minibuffer
+                (walk-windows (lambda (window) ; and set the mode line when necessary
+                                (with-current-buffer (window-buffer window)
+                                  ;; {frame,window}-edges functions return (x1 y1 x2 y2)
+                                  ;; then check if the current buffer (which may be displayed on mutltiple windows)
+                                  ;; doesn't sit on top of the minibuffer
+                                  ;; this isn't perfect but unfortunately, the mode-line-format is buffer-local
+                                  (when (/= (nth 1 (window-edges (minibuffer-window)))
+                                            (nth 3 (window-edges window)))
+                                    (setq mode-line-format "%-"))))
+                              0))))) ; don't include minibuffer

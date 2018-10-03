@@ -29,6 +29,7 @@
 
 ;; other modules
 (l "agda")
+(l "auto-dim-other-buffers")
 (l "avy")
 (l "c")
 (l "circe")

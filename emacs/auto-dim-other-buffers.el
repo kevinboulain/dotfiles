@@ -1,6 +1,13 @@
-(require 'color)
+;;; auto-dim-other-buffers.el --- auto-dim-other-buffers.el setup.
 
-(defun dim-color (rgb percent)
+;;; Commentary:
+
+;;; Slightly dim the inactive buffers.
+
+;;; Code:
+
+(defun ether--dim-color (rgb percent)
+  "Dim the RGB color expressed in the format #rrggbb by PERCENT."
   ;; looks like there is no color-hex-to-rgb
   (let ((r (/ (float (string-to-number (substring rgb 1 3) 16)) (float 255)))
         (g (/ (float (string-to-number (substring rgb 3 5) 16)) (float 255)))
@@ -16,5 +23,7 @@
   :hook (after-init . auto-dim-other-buffers-mode)
   :config
   (set-face-attribute 'auto-dim-other-buffers-face nil
-                      ;; :foreground (dim-color (face-attribute 'default :foreground nil t) 5)
-                      :background (dim-color (face-attribute 'default :background nil t) 5)))
+                      ;; :foreground (ether--dim-color (face-attribute 'default :foreground nil t) 5)
+                      :background (ether--dim-color (face-attribute 'default :background nil t) 5)))
+
+;;; auto-dim-other-buffers.el ends here

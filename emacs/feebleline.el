@@ -1,4 +1,13 @@
-(use-package dash :defer t) ; for -keep below
+;;; feebleline.el --- Unintrusive mode-line.
+
+;;; Commentary:
+
+;;; Completely disable the standard mode-line and show a minimalistic
+;;; replacement in the minibuffer when it's idle.
+
+;;; Code:
+
+(use-package dash :defer t) ; for -keep
 
 ;; see also https://github.com/11111000000/taoline, by the creator of tao-theme
 (use-package feebleline
@@ -66,3 +75,5 @@
                                             (nth 3 (window-edges window)))
                                     (setq mode-line-format "%-"))))
                               0))))) ; don't include minibuffer
+
+;;; feebleline.el ends here

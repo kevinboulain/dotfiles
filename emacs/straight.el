@@ -1,3 +1,13 @@
+;;; straight.el --- Straight setup.
+
+;;; Commentary:
+
+;;; An alternative to `package'.
+;;; Chosen over Quelpa because it doesn't keep two copies of the installed
+;;; package (the source and the build) and as such, ease modifications.
+
+;;; Code:
+
 (setq straight-repository-branch "develop")
 
 ;; automatically install straight
@@ -16,3 +26,5 @@
 
 ;; install use-package
 (straight-use-package 'use-package)
+
+;;; straight.el ends here

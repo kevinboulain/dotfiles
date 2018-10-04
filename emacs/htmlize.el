@@ -1,4 +1,17 @@
-(use-package s :defer t) ; for s-suffix? below
+;;; htmlize.el --- Render an HTML version of a buffer.
+
+;;; Commentary:
+
+;;; Useful for sharing properly rendered code.
+;;;
+;;; Use M-x htmlize-buffer.
+;;;
+;;; Or C-SPC two times then move the point to the end of the region then
+;;; M-x htmlize-region (so you don't render the region selection overlay).
+
+;;; Code:
+
+(use-package s :defer t) ; for s-suffix?
 
 (use-package htmlize
   :defer t
@@ -38,3 +51,5 @@
     </style>
 "
                                                                  (base64-encode-string (with-temp-buffer (insert-file-contents path) (buffer-string)) t)))))))))
+
+;;; htmlize.el ends here

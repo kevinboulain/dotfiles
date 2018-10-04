@@ -1,3 +1,9 @@
+;;; lsp.el --- Language Server Protocol setup.
+
+;;; Commentary:
+
+;;; Code:
+
 (use-package lsp-mode
   :defer t
   :straight (:host github :repo "emacs-lsp/lsp-mode"))
@@ -16,3 +22,5 @@
   ;; requires yasnippet, used to complete arguments
   ;; may need to setup some functions, see company-lsp--fallback-snippet
   (setq company-lsp-enable-snippet t))
+
+;;; lsp.el ends here

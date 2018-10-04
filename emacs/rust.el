@@ -1,3 +1,9 @@
+;;; rust.el --- Rust language support.
+
+;;; Commentary:
+
+;;; Code:
+
 (use-package rust-mode
   :defer t
   :straight (:host github :repo "rust-lang/rust-mode")
@@ -12,3 +18,5 @@
 (use-package lsp-rust
   :straight (:host github :repo "emacs-lsp/lsp-rust")
   :hook (rust-mode . lsp-rust-enable))
+
+;;; rust.el ends here

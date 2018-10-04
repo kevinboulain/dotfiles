@@ -1,12 +1,13 @@
+;;; c.el --- C language support.
+
+;;; Commentary:
+
+;;; Code:
+
 (when (require 'cc-mode nil t)
-  (setq c-basic-offset tab-width)
-  (setq c-default-style "k&r")
-  (c-set-offset 'arglist-intro '+)
-  (c-set-offset 'arglist-close 0)
-  (c-set-offset 'case-label '+)
-  ;; (c-toggle-auto-state 1)
-  ;; (c-toggle-hungry-state 1)
-  )
+  (c-set-offset 'case-label '+) ; indent case in switch
+  (setq c-basic-offset tab-width
+        c-default-style "k&r"))
 
 (when (require 'clang-format nil t)
   ;; (global-set-key [C-M-tab] 'clang-format-region)
@@ -21,5 +22,8 @@
 
 ;; straight not supporting shallow clones,
 ;; use a mirror instead of the official cmake repository
+;; mainly for cmake-help*
 (use-package cmake-mode
   :straight (:host github :repo "emacsmirror/cmake-mode"))
+
+;;; c.el ends here

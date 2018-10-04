@@ -1,48 +1,50 @@
-;; tab size
-(setq-default tab-width 2)
+;;; general.el --- General Emacs setup.
 
-;; indent with spaces only
-(setq-default indent-tabs-mode nil)
+;;; Commentary:
+
+;;; Configure builtin stuff.
+
+;;; Code:
+
+;; indentation
+(setq-default tab-width 2 ; tab size
+              indent-tabs-mode nil) ; indent with spaces only
 
 ;; set the directories for backups, autosaves and sessions
-(setq backup-directory-alist `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-(setq auto-save-list-file-prefix temporary-file-directory)
+(setq backup-directory-alist `((".*" . ,temporary-file-directory))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+      auto-save-list-file-prefix temporary-file-directory)
 
-;; 'commander' interface for dired
-(setq dired-dwim-target t)
+(setq dired-dwim-target t) ; 'commander' interface for dired
 
-;; annoying questions 'yes' or 'no'
-(defalias 'yes-or-no-p 'y-or-n-p)
+(defalias 'yes-or-no-p 'y-or-n-p) ; annoying questions 'yes' or 'no'
 
-;; disable source control handling
-(setq vc-handled-backends nil)
+(setq vc-handled-backends nil) ; disable source control handling
 
-;; show pointer's current column and line
-(line-number-mode 1)
-(column-number-mode 1)
+;; better pointer reporting
+(line-number-mode 1) ; show line number in the mode-line
+(column-number-mode 1) ; show column number in the mode-line
+(global-hl-line-mode) ; highlight the line containing the cursor
 
 ;; recursive minibuffer
 (setq enable-recursive-minibuffers t)
 (minibuffer-depth-indicate-mode 1)
 
-;; remove the menu (f10)
-(menu-bar-mode -1)
+(menu-bar-mode -1) ; remove the menu (f10)
 
-;; remove the \ for a wrapped line
-(set-display-table-slot standard-display-table 'wrap ?\ )
+(set-display-table-slot standard-display-table 'wrap ?\ ) ; remove the \ for a wrapped line
 
-;; default keybindings for windmove: shift + arrows
-(windmove-default-keybindings)
+(windmove-default-keybindings) ; default keybindings for windmove: shift + arrows
 
-;; show matching parenthesis
-(show-paren-mode 1)
+(show-paren-mode 1) ; show matching parenthesis
 
-;; split horizontally by default
-(setq split-width-threshold 1)
+(setq split-width-threshold 1) ; split horizontally by default
 
-;; don't show the 'GNU Emacs' buffer
-(setq inhibit-startup-screen t)
+(setq inhibit-startup-screen t) ; don't show the 'GNU Emacs' buffer
+;; to avoid displaying the 'For information about GNU Emacs...' in the minibuffer
+;; inhibit-startup-echo-area-message must be hardcoded in the init file to your username...
+
+(setq load-prefer-newer t) ; always prefer newer source files
 
 ;; mouse support
 (unless window-system
@@ -51,5 +53,4 @@
     (global-set-key [mouse-4] (lambda () (interactive) (scroll-down 1)))
     (global-set-key [mouse-5] (lambda () (interactive) (scroll-up 1)))))
 
-;; highlight the line containing the cursor
-(global-hl-line-mode)
+;;; general.el ends here

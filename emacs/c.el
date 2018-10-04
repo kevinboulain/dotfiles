@@ -18,3 +18,8 @@
   :straight (:host github :repo "cquery-project/emacs-cquery")
   :hook ((c-mode . lsp-cquery-enable)
          (c++-mode . lsp-cquery-enable)))
+
+;; straight not supporting shallow clones,
+;; use a mirror instead of the official cmake repository
+(use-package cmake-mode
+  :straight (:host github :repo "emacsmirror/cmake-mode"))

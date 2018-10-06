@@ -1,0 +1,332 @@
+#+title: Personal Bash configuration
+
+# GitHub's parser doesn't handle [[][==]]
+
+* Table of Contents :toc_3:
+- [[#foreword][Foreword]]
+- [[#behavior-change][Behavior change]]
+  - [[#globbing][Globbing]]
+  - [[#completion][Completion]]
+  - [[#input][Input]]
+  - [[#terminal-handling][Terminal handling]]
+  - [[#history][History]]
+- [[#unnoteworthy-configurations][Unnoteworthy configurations]]
+  - [[#prompt][Prompt]]
+  - [[#aliases][Aliases]]
+  - [[#editor][EDITOR]]
+  - [[#manpath][MANPATH]]
+  - [[#pager][PAGER]]
+  - [[#path][PATH]]
+- [[#os-specific][OS-specific]]
+  - [[#macos][macOS]]
+    - [[#homebrew][Homebrew]]
+    - [[#other][Other]]
+- [[#tips-and-tricks][Tips and tricks]]
+- [[#afterword][Afterword]]
+
+* Foreword
+
+Enable undefined variables reporting to rapidly isolate problems:
+#+begin_src shell
+set -u
+#+end_src
+
+* Behavior change
+
+** Globbing
+
+[[https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pattern-Matching][extglob]]
+is better explained by Bash's manual. In short, it extends pattern matching
+and allows some nice things like =!(file)= meaning /all but this file/.
+
+#+begin_src shell
+shopt -s extglob
+#+end_src
+
+** Completion
+
+Allow Bash to edit the readline buffer during completions (see =dirspell=,
+it will also replace variables by their value):
+#+begin_src shell
+shopt -s direxpand
+#+end_src
+
+Allow Bash to correct typos:
+#+begin_src shell
+shopt -s dirspell # fix names during tab completion, requires direxpand
+shopt -s cdspell # cd will try to correct an invalid name, displaying it
+#+end_src
+
+And disable useless completion on empty line:
+#+begin_src shell
+shopt -s no_empty_cmd_completion
+#+end_src
+
+I also like to disable the programmable completion altogether as it
+will hinder actual tab completion most of the time:
+#+begin_src shell
+complete -r
+#+end_src
+
+** Input
+
+For good measure, make sure readline is Emacs mode:
+#+begin_src shell
+set -o emacs
+#+end_src
+
+** Terminal handling
+
+It's better to always recheck for the terminal size, as it may avoid
+garbling the input method:
+#+begin_src shell
+shopt -s checkwinsize
+#+end_src
+
+** History
+
+Proper history handling is important, but the default configuration is quite
+inappropriate and often lead to data loss: an exiting Bash instance may
+overwrite the history of other instances. Fortunately it's easy to fix:
+#+begin_src shell
+shopt -s histappend
+#+end_src
+
+By default, 500 lines of history are remembered, let's tell Bash we don't want
+any limitations:
+#+begin_src shell
+HISTSIZE=-1
+HISTFILESIZE=-1
+#+end_src
+
+However, we may still want to have a maintainable history file, so
+splitting it by session seems to be a good idea:
+#+begin_src shell
+declare -r history_directory=~/.bash_history.d
+HISTFILE=$history_directory/$(date -u +%Y/%m/%d)/$(date -u +%H:%M:%S)_$(hostname)_$$
+history_subdirectory=$(dirname "$HISTFILE")
+[ -d "$history_subdirectory" ] || mkdir -p "$history_subdirectory"
+unset history_subdirectory
+#+end_src
+
+We may still lose data if the shell is abruptly terminated,
+so tell Bash to append any new history line immediately:
+#+begin_src shell
+PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -a'
+#+end_src
+
+It may be nice to be able to quickly search in all these files, since this
+setup won't load them at the beginning of a new session (I like to start
+fresh):
+#+begin_src shell
+hist() {
+  if hash ag &> /dev/null; then
+    ag "$@" "$history_directory"
+  else
+    grep -r "$@" "$history_directory"
+  fi
+}
+declare -rfx hist
+#+end_src
+
+Show the date of commands:
+#+begin_src shell
+HISTTIMEFORMAT='%F %T '
+#+end_src
+
+Finally, tweak history handling to avoid redundant information and ease
+sensitive information hiding:
+#+begin_src shell
+HISTCONTROL=ignoredups # ignore duplicates
+HISTCONTROL+=:erasedups # remove duplicates
+HISTCONTROL+=:ignorespace # don't store lines beginning with spaces
+#+end_src
+
+* Unnoteworthy configurations
+
+** Prompt
+
+I prefer a clean and concise prompt, mine only tells which host I'm on,
+in which directory and if last command resulted in an error (exit code wasn't
+zero).
+
+But first, let's define some termcaps:
+#+begin_src shell
+# it's totally fine to not check for termcaps availability here
+# as it will simply output an empty string
+declare -r foreground_red=$(tput setaf 1)
+declare -r foreground_cyan=$(tput setaf 6)
+declare -r reset=$(tput sgr0)
+#+end_src
+
+Then, let's run an handler after each command input to grab the exit code
+(it's important to make it first):
+#+begin_src shell
+prompt_config() {
+  if [ $? -eq 0 ]; then
+    prompt_color=$foreground_cyan
+  else
+    prompt_color=$foreground_red
+  fi
+}
+declare -rfx prompt_config
+
+# on OS X, $PROMPT_COMMAND may use the function update_terminal_cwd
+# to display the current directory in the window's decoration
+PROMPT_COMMAND=prompt_config${PROMPT_COMMAND:+;$PROMPT_COMMAND}
+#+end_src
+
+And finally customize the prompt itself:
+#+begin_src shell
+# \[\] allow readline to correctly calculate the string's size
+PS1='\h:\W \[$(printf -- "%s" "$prompt_color")\]\$\[$(printf -- "%s" "$reset")\] '
+#+end_src
+
+** Aliases
+
+I don't like aliases as they are often abused where functions should be used.
+However, they are fine to correct recurrent typos or really small commands:
+#+begin_src shell
+alias l=ls
+#+end_src
+
+** EDITOR
+
+Nothing special, only in order of preference:
+#+begin_src shell
+if hash emacs &> /dev/null; then
+  EDITOR=emacs
+elif hash mg &> /dev/null; then
+  EDITOR=mg
+elif hash nano &> /dev/null; then
+  EDITOR=nano
+fi
+
+export EDITOR
+#+end_src
+
+** MANPATH
+
+#+begin_src shell
+if hash man &> /dev/null; then
+  export MANPATH=$(man --path)
+fi
+#+end_src
+
+** PAGER
+
+Nothing special, only in order of preference:
+#+begin_src shell
+if hash less &> /dev/null; then
+  PAGER='less -r'
+elif hash most &> /dev/null; then
+  PAGER=most
+fi
+
+export PAGER
+#+end_src
+
+** PATH
+
+Make sure the =PATH= doesn't contain redundant directories and orders it so
+that I can override the system directories easily:
+#+begin_src shell
+order_path() {
+  local -a path
+  IFS=: read -r -a paths <<< "$PATH"
+  local -A unique_paths
+  PATH=
+  local path
+  # standard locations comes after any user-defined $PATH
+  for path in ~/.pub-cache/bin ~/.cargo/bin /{,usr/{,local/}}{bin,sbin} "${paths[@]}"; do
+    # if path exists and if it isn't already in path, prepend it
+    if [ -d "$path" ] && [ -z "${unique_paths[$path]+_}" ]; then
+      unique_paths[$path]=_
+      PATH=$path${PATH+:$PATH}
+    fi
+  done
+  export PATH
+}
+declare -rfx order_path
+#+end_src
+
+Apply it:
+#+begin_src shell
+order_path
+#+end_src
+
+* OS-specific
+
+** macOS
+
+This configuration is only interesting to have on macOS, so let's guard other
+OSes against it:
+#+begin_src shell
+if [ "$(uname)" = Darwin ]; then
+#+end_src
+
+*** Homebrew
+
+First things first, let's opt-out of [[https://brew.sh/][Homebrew]]
+analytics...
+#+begin_src shell
+  export HOMEBREW_NO_ANALYTICS=1
+#+end_src
+
+I also prefer to not install applications system-wide:
+#+begin_src shell
+  export HOMEBREW_CASK_OPTS='--appdir=~/Applications'
+#+end_src
+
+And since Homebrew has trouble in virtual environments, let's deactivate
+them when invoked:
+#+begin_src shell
+  brew() {
+    [ -n "$VIRTUAL_ENV" ] && deactivate
+    command brew "$@"
+  }
+  declare -rfx brew
+#+end_src
+
+*** Other
+
+A small shortcut to display hidden files:
+#+begin_src shell
+  finder_show_all() {
+    local value=$(defaults read com.apple.finder AppleShowAllFiles 2> /dev/null)
+    if [ "${value:-false}" = false ]; then
+      value=true
+    else
+      value=false
+    fi
+    defaults write com.apple.finder AppleShowAllFiles "$value" && killall Finder
+  }
+  declare -rfx finder_show_all
+#+end_src
+
+Tell [[https://hunspell.github.io/][Hunspell]] where to find dictionaries:
+#+begin_src shell
+  export DICPATH=~/Library/Spelling
+#+end_src
+
+Finally, make macOS's environment be sane when SSH'ing to other OSes:
+#+begin_src shell
+  export LC_ALL=en_US.UTF-8
+#+end_src
+
+#+begin_src shell
+fi
+#+end_src
+
+* Tips and tricks
+
+- did you know about =CDPATH=?
+
+* Afterword
+
+Unfortunately, many scripts don't properly use parameter expansion, so revert
+what we did in the [[#foreword][foreword]] (and for the day-to-day CLI usage,
+it may be a bit too verbose):
+#+begin_src shell
+set +u
+#+end_src

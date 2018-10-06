@@ -24,51 +24,14 @@
     (when (not (load base-file t t)) ; automatically byte-compiling those files doesn't seem worth it
       (message (format "Unable to load %s{%s}" base-file (string-join load-suffixes ","))))))
 
-;; use http://www.randomsample.de/profile-dotemacs.el to show where
-;; most emacs-init-time is spent (that's why everything is unrolled below)
+;; use http://www.randomsample.de/profile-dotemacs.el to show where most
+;; emacs-init-time is spent (that's why everything should be unrolled below)
 ;; see also https://github.com/dholm/benchmark-init-el for a more precise
 ;; but incomplete report (as it has to loaded via the package manager)
 
-;; hard dependencies
-(ether--load "straight")
-
-;; general configuration
-(ether--load "general") ; setup global emacs parameters
-
-;; themes, so they can setup faces to be used by other modules
-(ether--load "theme")
-(load-theme 'tao-yin t)
-
-;; should be installed early
-(ether--load "magit") ; for feebleline, which tries to require it at load time
-
-;; other modules
-(ether--load "agda")
-;; (ether--load "auto-dim-other-buffers")
-(ether--load "avy")
-(ether--load "c")
-(ether--load "circe")
-(ether--load "company")
-(ether--load "dart")
-(ether--load "ethan-wspace")
-(ether--load "feebleline")
-(ether--load "flycheck")
-(ether--load "gettext")
-(ether--load "htmlize")
-(ether--load "idris")
-(ether--load "ispell")
-(ether--load "ivy")
-;; (ether--load "linum")
-(ether--load "lsp")
-(ether--load "lua")
-(ether--load "markdown")
-(ether--load "python")
-(ether--load "rainbow-delimiters")
-(ether--load "rust")
-(ether--load "shell")
-(ether--load "slack")
-(ether--load "which-key")
-(ether--load "yasnippet")
+;; the whole configuration is documented in the readme.org file
+(require 'org)
+(org-babel-load-file (concat user-emacs-directory "readme.org"))
 
 ;; optional personal configuration
 (ether--load "personal")

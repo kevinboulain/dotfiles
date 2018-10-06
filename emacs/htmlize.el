@@ -8,14 +8,34 @@
 ;;;
 ;;; Or C-SPC two times then move the point to the end of the region then
 ;;; M-x htmlize-region (so you don't render the region selection overlay).
+;;;
+;;; Or even emacs --htmlize path/to/file which will output path/to/file.html.
 
 ;;; Code:
 
 (use-package s :defer t) ; for s-suffix?
 
+(defun ether--htmlize-file (switch)
+  "`htmlize-file' seems to have some issues, here is a simpler one."
+  (ignore switch)
+  (condition-case out
+      (progn
+        (require 'htmlize)
+        (let* ((source (pop command-line-args-left))
+               (destination (htmlize-make-file-name (file-name-nondirectory source))))
+          (find-file-existing source)
+          (with-current-buffer (htmlize-buffer-1)
+            (write-region (point-min) (point-max) destination))
+          (kill-emacs 0)))
+    (error (progn
+             (princ out) ; looks like we can't really use external-debugging-output
+             (kill-emacs 1)))))
+
 (use-package htmlize
   :defer t
   :straight (:host github :repo "hniksic/emacs-htmlize")
+  :init
+  (add-to-list 'command-switch-alist '("--htmlize" . ether--htmlize-file))
   :hook ((htmlize-before . (lambda ()
                              ;; disable some modes that may influence rendering
                              ;; the original buffer is protected, no need to restore

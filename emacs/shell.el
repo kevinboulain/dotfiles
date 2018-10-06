@@ -4,7 +4,6 @@
 
 ;;; Code:
 
-(when (require 'sh-script nil t)
-  (setq sh-basic-offset tab-width))
+(setq sh-basic-offset tab-width)
 
 ;;; shell.el ends here

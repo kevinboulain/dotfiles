@@ -26,6 +26,8 @@
 
 ;; use http://www.randomsample.de/profile-dotemacs.el to show where
 ;; most emacs-init-time is spent (that's why everything is unrolled below)
+;; see also https://github.com/dholm/benchmark-init-el for a more precise
+;; but incomplete report (as it has to loaded via the package manager)
 
 ;; hard dependencies
 (ether--load "straight")

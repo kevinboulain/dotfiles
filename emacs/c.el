@@ -4,10 +4,9 @@
 
 ;;; Code:
 
-(when (require 'cc-mode nil t)
-  (c-set-offset 'case-label '+) ; indent case in switch
-  (setq c-basic-offset tab-width
-        c-default-style "k&r"))
+(c-set-offset 'case-label '+) ; indent case in switch
+(setq c-basic-offset tab-width
+      c-default-style "k&r")
 
 (when (require 'clang-format nil t)
   ;; (global-set-key [C-M-tab] 'clang-format-region)

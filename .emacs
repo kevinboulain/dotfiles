@@ -16,7 +16,7 @@
 (setq user-emacs-directory (concat (file-name-directory (file-truename "~/.emacs")) "emacs/"))
 
 ;; redirect annoying customize stuff to another file
-(setq custom-file (concat user-emacs-directory "custom.el"))
+(setq custom-file (locate-user-emacs-file "custom.el"))
 
 ;; let Emacs know I trust `user-emacs-directory''s .dir-locals.el
 ;; so it doesn't ask me each time I modify it
@@ -34,9 +34,9 @@ Instead of relying on `org-babel-load-file' (which may overwrite lentic),
 reimplement a safer logic here, for the details, see:
 https://github.com/phillord/lentic/issues/54#issuecomment-429106163"
   (let* ((filename-org (concat name ".org"))
-         (path-org (concat user-emacs-directory filename-org))
+         (path-org (locate-user-emacs-file filename-org))
          (temporary-path-org (concat temporary-file-directory name ".el"))
-         (path-base (concat user-emacs-directory name)))
+         (path-base (locate-user-emacs-file name)))
     (if (file-readable-p path-org) ; fallbacking may load the lentic file...
         (progn
           (when (file-newer-than-file-p path-org temporary-path-org)

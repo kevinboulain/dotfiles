@@ -67,7 +67,9 @@ I'll also use
 [[https://github.com/jwiegley/use-package][use-package]] which seems to give
 a better structure to Emacs' configuration.
 #+begin_src emacs-lisp
-(straight-use-package 'use-package)
+(straight-use-package `(use-package :host github :repo "jwiegley/use-package"))
+
+(require 'bind-key) ; use-package comes with way to define keybindings
 #+end_src
 
 * Built-in & general setup
@@ -127,8 +129,8 @@ scrolling may move the point:
 (unless window-system
   (when (require 'mouse nil t)
     (xterm-mouse-mode t) ; that seems a bit too hard-coded
-    (global-set-key [mouse-4] (lambda () (interactive) (scroll-down 1)))
-    (global-set-key [mouse-5] (lambda () (interactive) (scroll-up 1)))))
+    (bind-keys ([mouse-4] . (lambda () (interactive) (scroll-down 1)))
+               ([mouse-5] . (lambda () (interactive) (scroll-up 1))))))
 #+end_src
 
 Some window-related configuration:
@@ -201,15 +203,17 @@ to provide completion:
 (use-package company
   :straight (:host github :repo "company-mode/company-mode")
   :hook (after-init . global-company-mode)
+  :bind
+  (:map company-active-map
+        ;; by default company use arrows, making me switch from these two
+        ;; they can still be used and C-g will kill the popup
+        ("C-p" . company-select-previous-or-abort)
+        ("C-n" . company-select-next-or-abort))
   :config
   (setq company-dabbrev-downcase nil ; dabbrev complete case sensitive
         company-idle-delay 0 ; no delay before showing completion
         company-minimum-prefix-length 2 ; start completing rapidly
-        company-tooltip-align-annotations t) ; align annotations to the right
-  ;; by default company use arrows, making me switch from these two
-  ;; they can still be used and C-g will kill the popup
-  (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
-  (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort))
+        company-tooltip-align-annotations t)) ; align annotations to the right
 #+end_src
 
 There is the built-in Ido, but it requires to be extended by multiple
@@ -235,10 +239,11 @@ By default, use =C-M-j= to force an input not present in completions
   :hook (after-init . ivy-mode)
   :init
   (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy))) ; similar to ido-enable-flex-matching
-  :config
-  ;; ido style selection
-  (define-key ivy-minibuffer-map (kbd "C-j") #'ivy-immediate-done)
-  (define-key ivy-minibuffer-map (kbd "RET") #'ivy-alt-done))
+  :bind
+  (:map ivy-minibuffer-map
+        ;; ido style selection
+        ("C-j" . ivy-immediate-done)
+        ("RET" . ivy-alt-done)))
 #+end_src
 
 ** White spaces handling
@@ -297,15 +302,14 @@ The index appears in the top left corner.
 #+begin_src emacs-lisp
 (use-package avy
   :straight (:host github :repo "abo-abo/avy")
-  :config
-  (global-set-key (kbd "C-o") 'avy-goto-word-or-subword-1)) ; override open-line default binding
+  :bind (("C-o" . 'avy-goto-word-or-subword-1))) ; override open-line default binding
 
 ;; despite the name, it's avy-based
 (use-package ace-window
   :straight (:host github :repo "abo-abo/ace-window")
+  :bind (("M-o" . 'ace-window)) ; override facemenu default binding
   :config
-  (setq aw-background nil) ; don't remove colors
-  (global-set-key (kbd "M-o") 'ace-window)) ; override facemenu default binding
+  (setq aw-background nil)) ; don't remove colors
 #+end_src
 
 ** Lighter mode-line

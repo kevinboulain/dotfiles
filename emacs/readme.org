@@ -80,8 +80,9 @@ a possibly out of date =.elc= file:
 (setq load-prefer-newer t)
 #+end_src
 
-And that it should dump a stack trace (as it makes reporting easier):
-#+begin_src emacs-lisp
+And that it should dump a stack trace (as it makes reporting easier,
+disabled for now as too many operations will emit a trace):
+#+begin_src
 (setq debug-on-error t)
 #+end_src
 

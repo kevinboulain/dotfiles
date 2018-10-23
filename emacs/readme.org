@@ -871,6 +871,20 @@ sometimes used as a dependency.
   :straight (:host github :repo "magit/magit"))
 #+end_src
 
+Not strictly related to Git but still building on it for most of the default
+features, Projectile allows to quickly jump between files of a repository:
+
+#+begin_src emacs-lisp
+(use-package projectile
+  :hook (after-init . projectile-mode)
+  :straight (:host github :repo "bbatsov/projectile")
+  :bind (:map projectile-mode-map ("C-c p" . projectile-command-map))
+  :config
+  (setq projectile-completion-system 'ivy)) ; instead of using ido
+#+end_src
+
+You should probably set =projectile-project-search-path=.
+
 *** Templates
 
 [[https://github.com/joaotavora/yasnippet][YASnippet]] is a template system,

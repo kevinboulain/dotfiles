@@ -4,7 +4,8 @@ super + Return
 
 # program launcher
 super + @space
-  dmenu_run -nb '#2b2b2b' -nf '#5f7f5f' -sb '#2f2f2f' -sf '#f0dfaf' -fn 'Iosevka-8:style=Regular'
+  dmenu_run -nb '#050505' -nf '#f1f1f1' -sb '#050505' -sf '#fafafa' -fn 'Iosevka Term-8:style=Regular' # tao
+  # dmenu_run -nb '#2b2b2b' -nf '#5f7f5f' -sb '#2f2f2f' -sf '#f0dfaf' -fn 'Iosevka-8:style=Regular' # zenburn
 
 # make sxhkd reload its configuration files:
 super + Escape

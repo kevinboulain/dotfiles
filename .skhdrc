@@ -36,7 +36,7 @@ rcmd + shift - space : chunkc tiling::window --toggle float; \
                        chunkc tiling::window --grid-layout 4:4:1:1:2:2
 
 # change layout of desktop
-rcmd - m : if [ "$(chunkc tiling::query --desktop mode)" = bsp ]; then chunkc tiling::desktop --layout monocle; else chunkc tiling::desktop --layout bsp; fi
+rcmd - m : chunkc tiling::desktop --toggle offset; if [ "$(chunkc tiling::query --desktop mode)" = bsp ]; then chunkc tiling::desktop --layout monocle; else chunkc tiling::desktop --layout bsp; fi
 
 # increase region size
 rcmd + alt - b : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west

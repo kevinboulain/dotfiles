@@ -851,6 +851,7 @@ can correctly handle all of Bash's tricks.
 
 #+begin_src emacs-lisp
 (setq sh-basic-offset tab-width)
+(add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; disable the annoying heredoc EOF completion
 #+end_src
 ** Other
 

@@ -290,20 +290,6 @@ them when invoked:
 
 *** Other
 
-A small shortcut to display hidden files:
-#+begin_src shell
-  finder_show_all() {
-    local value=$(defaults read com.apple.finder AppleShowAllFiles 2> /dev/null)
-    if [ "${value:-false}" = false ]; then
-      value=true
-    else
-      value=false
-    fi
-    defaults write com.apple.finder AppleShowAllFiles "$value" && killall Finder
-  }
-  declare -rfx finder_show_all
-#+end_src
-
 Tell [[https://hunspell.github.io/][Hunspell]] where to find dictionaries:
 #+begin_src shell
   export DICPATH=~/Library/Spelling

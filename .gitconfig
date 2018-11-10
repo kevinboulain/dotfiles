@@ -33,3 +33,6 @@
   default = nothing
 [rebase]
   missingCommitsCheck = warn
+[credential]
+  # avoid storing credentials (Homebrew's git config --system credential.helper is set to osxkeychain)
+  helper =

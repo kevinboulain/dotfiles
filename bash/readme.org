@@ -152,11 +152,14 @@ zero).
 
 But first, let's define some termcaps:
 #+begin_src shell
-# it's totally fine to not check for termcaps availability here
-# as it will simply output an empty string
-declare -r foreground_red=$(tput setaf 1)
-declare -r foreground_cyan=$(tput setaf 6)
-declare -r reset=$(tput sgr0)
+if hash tput &> /dev/null; then
+  # it's totally fine to not check for termcaps availability here
+  # as it will simply result in an empty string
+  foreground_red=$(tput setaf 1)
+  foreground_cyan=$(tput setaf 6)
+  reset=$(tput sgr0)
+fi
+declare -r foreground_red foreground_cyan reset
 #+end_src
 
 Then, let's run an handler after each command input to grab the exit code

@@ -453,7 +453,7 @@ emacs --htmlize path/to/file # which will output path/to/file.html
             (write-region (point-min) (point-max) destination))
           (kill-emacs 0)))
     (error (progn
-             (princ out) ; looks like we can't really use external-debugging-output
+             (princ out #' external-debugging-output) ; may not be shown due to termcaps, use a redirection
              (kill-emacs 1)))))
 
 (use-package htmlize

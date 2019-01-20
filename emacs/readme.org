@@ -175,6 +175,8 @@ another one:
 (use-package tao-yin-theme
   :defer t
   :straight (tao-theme :host github :repo "11111000000/tao-theme-emacs")
+  :init
+  (setq tao-theme-use-sepia nil) ; original behavior
   :config
   ;; override the mode-line{,-inactive} faces to match vertical-border
   (dolist (face '(mode-line mode-line-inactive))

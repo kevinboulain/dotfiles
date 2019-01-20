@@ -4,3 +4,8 @@ xterm*termName: xterm-256color
 ! alt/meta key issues
 xterm*eightBitInput: false
 xterm*eightBitOutput: true
+! styling
+xterm*faceName: Iosevka ! Term
+xterm*faceSize: 8
+xterm*background:black
+xterm*foreground:white

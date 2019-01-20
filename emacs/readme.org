@@ -693,15 +693,18 @@ produce a (sometimes complex) language-specific configuration.
 #+begin_src emacs-lisp
 (use-package lsp-mode
   :defer t
-  :straight (:host github :repo "emacs-lsp/lsp-mode"))
+  :commands lsp
+  :straight (:host github :repo "emacs-lsp/lsp-mode")
+  :init (setq lsp-auto-guess-root t))
 
 (use-package lsp-ui
+  :commands lsp-ui-mode
   :straight (:host github :repo "emacs-lsp/lsp-ui")
-  :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq lsp-ui-sideline-ignore-duplicate t)) ; duplicate symbols can quickly grow on multiple lines
 
 (use-package company-lsp
+  :commands company-lsp
   :straight (:host github :repo "tigersoldier/company-lsp")
   :config
   (push 'company-lsp company-backends)
@@ -748,8 +751,9 @@ LSP configuration of
 ;; https://github.com/cquery-project/cquery/wiki/Emacs
 (use-package cquery
   :straight (:host github :repo "cquery-project/emacs-cquery")
-  :hook ((c-mode . lsp-cquery-enable)
-         (c++-mode . lsp-cquery-enable)))
+  :init (require 'cl)) ; cl-find-if aliased to find-if
+
+(add-hook 'c-mode-hook #'lsp)
 #+end_src
 
 Previously I tried XCscope, cmake-ide, RTags, clangd, etc.
@@ -788,12 +792,7 @@ pub global activate dart_language_server
 (use-package dart-mode
   :straight (:host github :repo "bradyt/dart-mode")
   :hook ((dart-mode . flycheck-mode) ; flycheck isn't enabled automatically otherwise
-         (dart-mode . (lambda ()
-                        (when (require 'lsp-mode nil t)
-                          (lsp-define-stdio-client lsp-dart "dart"
-                                                   (lambda () default-directory)
-                                                   '("dart_language_server"))
-                          (lsp-dart-enable))))))
+         (dart-mode . lsp)))
 #+end_src
 
 ** [[https://www.idris-lang.org/][Idris]]
@@ -813,7 +812,11 @@ etc.
 
 You'll need to install the language server with:
 #+begin_src shell
-pip install python-language-server[all]
+pip install -U python-language-server[all]
+#+end_src
+
+#+begin_src emacs-lisp
+(add-hook 'python-mode-hook #'lsp)
 #+end_src
 
 Flycheck should automatically use the installed linters, like
@@ -821,18 +824,13 @@ Flycheck should automatically use the installed linters, like
 [[https://github.com/flycheck/flycheck/pull/1486][issue]]
 isn't fixed yet).
 
-#+begin_src emacs-lisp
-(use-package lsp-python
-  :straight (:host github :repo "emacs-lsp/lsp-python")
-  :hook (python-mode . lsp-python-enable))
-#+end_src
-
 ** [[https://www.rust-lang.org/][Rust]]
 
 #+begin_src emacs-lisp
 (use-package rust-mode
   :defer t
   :straight (:host github :repo "rust-lang/rust-mode")
+  :hook ((rust-mode . lsp))
   :config
   (add-to-list 'auto-mode-alist '("\\.rs$" . rust-mode))
   (setq rust-indent-offset tab-width))
@@ -840,10 +838,6 @@ isn't fixed yet).
 (use-package flycheck-rust
   :straight (:host github :repo "flycheck/flycheck-rust")
   :hook (flycheck-mode . flycheck-rust-setup))
-
-(use-package lsp-rust
-  :straight (:host github :repo "emacs-lsp/lsp-rust")
-  :hook (rust-mode . lsp-rust-enable))
 #+end_src
 
 ** Shell

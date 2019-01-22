@@ -871,6 +871,7 @@ sometimes used as a dependency.
 (use-package yasnippet
   :straight (:host github :repo "joaotavora/yasnippet")
   :config
+  (setq yas-verbosity 0)
   (yas-global-mode 1))
 #+end_src
 

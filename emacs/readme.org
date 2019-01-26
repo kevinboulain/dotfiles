@@ -810,10 +810,19 @@ etc.
 
 ** [[https://www.python.org/][Python]]
 
-You'll need to install the language server with:
+You'll need to install
+[[https://github.com/palantir/python-language-server][Palantir's language server]]
+with:
 #+begin_src shell
 pip install -U python-language-server[all]
 #+end_src
+
+There is also
+[[https://github.com/Microsoft/python-language-server][Microsoft's language server]]
+and
+[[https://github.com/andrew-christianson/lsp-python-ms][this package]]
+which I have not tested yet (Palantir's server is a bit rough around the
+edges at times).
 
 #+begin_src emacs-lisp
 (add-hook 'python-mode-hook #'lsp)

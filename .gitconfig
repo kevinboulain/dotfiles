@@ -36,3 +36,5 @@
 [credential]
   # avoid storing credentials (Homebrew's git config --system credential.helper is set to osxkeychain)
   helper =
+[grep]
+  patternType = perl

@@ -1,4 +1,5 @@
 custom.el
 personal.el
 readme.el
-straight/
+straight/*
+!straight/versions

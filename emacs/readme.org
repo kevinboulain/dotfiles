@@ -267,6 +267,15 @@ Fortunately, [[https://github.com/glasserc/ethan-wspace][ethan-wspace]] aims to 
   (global-ethan-wspace-mode 1))
 #+end_src
 
+It's nice to be able to display all white spaces sometimes and
+=whitespace-mode= is still the best here:
+
+#+begin_src emacs-lisp
+(when (require 'whitespace nil t)
+  ; the default value of whitespace-style and whitespace-line-column seems good enough
+  (global-set-key (kbd "<f12>") 'whitespace-mode))
+#+end_src
+
 ** Delimiters
 
 Most of the time, brackets, parentheses, braces, etc. are paired together.

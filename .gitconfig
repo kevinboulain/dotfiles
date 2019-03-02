@@ -1,6 +1,3 @@
-[user]
-  email = kevinboulain@gmail.com
-  name = Kevin Boulain
 [alias]
   st = status
   # %C(auto) may not work on older git version
@@ -20,8 +17,8 @@
 [format]
   pretty = fuller
 [include]
-  # so I can locally override some settings
-  path = ~/.gitconfig.override
+  # so I can locally override some settings, like user.email & user.name
+  path = ~/.gitconfig.local
 [diff]
   algorithm = patience
   mnemonicPrefix = true

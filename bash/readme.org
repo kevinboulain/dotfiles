@@ -13,6 +13,7 @@
 - [[#unnoteworthy-configurations][Unnoteworthy configurations]]
   - [[#prompt][Prompt]]
   - [[#aliases][Aliases]]
+  - [[#functions][Functions]]
   - [[#editor][EDITOR]]
   - [[#manpath][MANPATH]]
   - [[#pager][PAGER]]
@@ -191,6 +192,22 @@ I don't like aliases as they are often abused where functions should be used.
 However, they are fine to correct recurrent typos or really small commands:
 #+begin_src shell
 alias l=ls
+#+end_src
+
+** Functions
+
+Create some CPU load:
+
+#+begin_src shell
+busy() (
+  trap 'kill $(jobs -p) >& /dev/null' SIGINT SIGQUIT SIGTERM
+  local -i i=${1:-1}
+  while [ $i -gt 0 ]; do
+    while :; do :; done &
+    i=$((i - 1))
+  done
+  wait
+)
 #+end_src
 
 ** EDITOR

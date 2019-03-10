@@ -148,6 +148,8 @@ Other unrelated configurations:
 
 (setq vc-handled-backends nil) ; disable source control handling
 
+(setq sort-fold-case t) ; case-insensitive sort-lines
+
 ;; recursive minibuffer
 (setq enable-recursive-minibuffers t)
 (minibuffer-depth-indicate-mode 1)

@@ -1,0 +1,16 @@
+/*
+ * can't be symlinked
+ *
+ * https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/TextDefaultsBindings.html
+ */
+{
+  "^_" = "undo:";
+  "^j" = "insertNewline:";
+  "^v" = "pageDown:";
+  "~<" = "moveToBeginningOfDocument:";
+  "~>" = "moveToEndOfDocument:";
+  "~b" = "moveWordBackward:";
+  "~d" = "deleteWordForward:";
+  "~f" = "moveWordForward:";
+  "~v" = "pageUp:";
+}

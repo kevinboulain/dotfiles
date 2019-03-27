@@ -28,6 +28,7 @@
   - [[#error-reporting][Error reporting]]
   - [[#agda][Agda]]
   - [[#c][C]]
+  - [[#context][ConTeXt]]
   - [[#dart][Dart]]
   - [[#idris][Idris]]
   - [[#python][Python]]
@@ -789,6 +790,27 @@ To format source code relying on
 (when (require 'clang-format nil t)
   ;; (global-set-key [C-M-tab] 'clang-format-region)
   )
+#+end_src
+
+** [[https://wiki.contextgarden.net/][ConTeXt]]
+
+I currently don't like the existing
+[[https://www.gnu.org/software/auctex/][AUCTeX]] support and the default
+=plain-tex-mode= doesn't fit with ConTeXt, so the setup is rather minimal...
+
+#+begin_src emacs-lisp
+(defconst ether--context-mode-syntax-table
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?% "<" st)
+    (modify-syntax-entry ?\n ">" st)
+    st))
+
+(define-derived-mode ether--context-mode
+  text-mode ; so spell checking works (but it also checks commands...)
+  "ConTeXt"
+  (setq-local comment-start "%"))
+
+(add-to-list 'auto-mode-alist '("\\.tex$" . ether--context-mode))
 #+end_src
 
 ** [[https://www.dartlang.org/][Dart]]

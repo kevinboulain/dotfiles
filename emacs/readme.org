@@ -34,6 +34,7 @@
   - [[#python][Python]]
   - [[#rust][Rust]]
   - [[#shell][Shell]]
+  - [[#yaml][YAML]]
   - [[#other][Other]]
     - [[#git][Git]]
     - [[#templates][Templates]]
@@ -893,6 +894,24 @@ can correctly handle all of Bash's tricks.
 (setq sh-basic-offset tab-width)
 (add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; disable the annoying heredoc EOF completion
 #+end_src
+
+** [[https://yaml.org/][YAML]]
+
+I only want comments to work out of the box.
+
+#+begin_src emacs-lisp
+(defconst ether--yaml-mode-syntax-table
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?# "<" st)
+    (modify-syntax-entry ?\n ">" st)
+    st))
+
+(define-derived-mode ether--yaml-mode fundamental-mode "YAML"
+  (setq-local comment-start "#"))
+
+(add-to-list 'auto-mode-alist '("\\.ya?ml$" . ether--yaml-mode))
+#+end_src
+
 ** Other
 
 *** Git

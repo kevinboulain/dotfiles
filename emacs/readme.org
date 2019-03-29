@@ -31,6 +31,7 @@
   - [[#context][ConTeXt]]
   - [[#dart][Dart]]
   - [[#idris][Idris]]
+  - [[#lua][Lua]]
   - [[#python][Python]]
   - [[#rust][Rust]]
   - [[#shell][Shell]]
@@ -842,6 +843,16 @@ etc.
   :straight (:host github :repo "idris-hackers/idris-mode")
   :config
   (setq idris-repl-banner-functions nil)) ; disable startup animation
+#+end_src
+
+** [[https://www.lua.org/][Lua]]
+
+#+begin_src emacs-lisp
+(use-package lua-mode
+  :defer t
+  :straight (:host github :repo "immerrr/lua-mode")
+  :config
+  (setq lua-indent-level tab-width))
 #+end_src
 
 ** [[https://www.python.org/][Python]]

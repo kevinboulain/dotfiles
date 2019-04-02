@@ -16,7 +16,7 @@
  ("epl" . "78ab7a85c08222cd15582a298a364774e3282ce6")
  ("ethan-wspace" . "e055ee6730c0b03525d32e67511ef6c51e4c29e4")
  ("f.el" . "8191672377816a1975414cc1f116fd3b94b30bd0")
- ("feebleline" . "16f598f224ef52a8d797915787fbb03540cb488e")
+ ("feebleline" . "d1df599254f4c250720ae98dd69dada89535a295")
  ("flx" . "46040d0b096a0340d91235561f27a959a61d0fef")
  ("flycheck" . "407bcd22e41092470ce87816875ef6f597dffc8e")
  ("flycheck-rust" . "f1220ccd9acbdb2556765f49f2f3dcb00dca2970")

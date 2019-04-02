@@ -354,7 +354,7 @@ Join them together as they are already propertized in case of highlight."
 
 ;; see also https://github.com/11111000000/taoline, by the creator of tao-theme
 (use-package feebleline
-  :straight (:host github :repo "tautologyclub/feebleline" :branch "development")
+  :straight (:host github :repo "tautologyclub/feebleline")
   :config
   (setq feebleline-msg-functions
         '((feebleline-line-number :post "")

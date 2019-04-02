@@ -5,6 +5,7 @@
 * Table of Contents :toc_3:
 - [[#foreword][Foreword]]
 - [[#behavior-change][Behavior change]]
+  - [[#system-independence][System independence]]
   - [[#globbing][Globbing]]
   - [[#completion][Completion]]
   - [[#input][Input]]
@@ -34,6 +35,14 @@ set -u
 
 * Behavior change
 
+** System independence
+
+On some systems, =PROMPT_COMMAND= may be set externally and may mess up things.
+
+#+begin_src shell
+PROMPT_COMMAND=
+#+end_src
+
 ** Globbing
 
 [[https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pattern-Matching][extglob]]
@@ -49,12 +58,16 @@ shopt -s extglob
 Allow Bash to edit the readline buffer during completions (see =dirspell=,
 it will also replace variables by their value):
 #+begin_src shell
-shopt -s direxpand
+if [ ${BASH_VERSINFO[0]} -ge 4 ]; then
+  shopt -s direxpand
+fi
 #+end_src
 
 Allow Bash to correct typos:
 #+begin_src shell
-shopt -s dirspell # fix names during tab completion, requires direxpand
+if shopt -q direxpand &> /dev/null; then
+  shopt -s dirspell # fix names during tab completion
+fi
 shopt -s cdspell # cd will try to correct an invalid name, displaying it
 #+end_src
 
@@ -96,8 +109,9 @@ shopt -s histappend
 By default, 500 lines of history are remembered, let's tell Bash we don't want
 any limitations:
 #+begin_src shell
-HISTSIZE=-1
-HISTFILESIZE=-1
+# some versions of Bash don't accept -1
+HISTSIZE=1000000000
+HISTFILESIZE=1000000000
 #+end_src
 
 However, we may still want to have a maintainable history file, so
@@ -111,9 +125,10 @@ unset history_subdirectory
 #+end_src
 
 We may still lose data if the shell is abruptly terminated,
-so tell Bash to append any new history line immediately:
+so tell Bash to write the history immediately:
 #+begin_src shell
-PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -a'
+# there seems to be a bug is some Bash versions where -a does nothing, so rely on the less effective -w
+PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -w'
 #+end_src
 
 It may be nice to be able to quickly search in all these files, since this
@@ -254,14 +269,12 @@ that I can override the system directories easily:
 order_path() {
   local -a path
   IFS=: read -r -a paths <<< "$PATH"
-  local -A unique_paths
   PATH=
   local path
   # standard locations comes after any user-defined $PATH
   for path in ~/.pub-cache/bin ~/.cargo/bin /{,usr/{,local/}}{bin,sbin} "${paths[@]}"; do
     # if path exists and if it hasn't already been seen, prepend it
-    if [ -d "$path" ] && [ -z "${unique_paths[$path]+_}" ]; then
-      unique_paths[$path]=_
+    if [ -d "$path" ] && [[ ! "$PATH" =~ (^|:)"$path"(:|$) ]]; then
       PATH=$path${PATH+:$PATH}
     fi
   done

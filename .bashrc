@@ -13,7 +13,8 @@ config_directory=$(
 bash_config_directory=$config_directory/bash
 
 # the whole configuration is documented in the readme.org file
-. <(sed '/^#+begin_src shell$/,/^#+end_src$/!d;//d' "$bash_config_directory"/readme.org)
+# can't source process substitution in Bash 3
+eval "$(sed '/^#+begin_src shell$/,/^#+end_src$/!d;//d' "$bash_config_directory"/readme.org)"
 
 declare -a bash_files=(personal)
 

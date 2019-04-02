@@ -175,7 +175,7 @@ prompt_config() {
 }
 declare -rfx prompt_config
 
-# on OS X, $PROMPT_COMMAND may use the function update_terminal_cwd
+# on macOS, $PROMPT_COMMAND may use the function update_terminal_cwd
 # to display the current directory in the window's decoration
 PROMPT_COMMAND=prompt_config${PROMPT_COMMAND:+;$PROMPT_COMMAND}
 #+end_src
@@ -200,7 +200,7 @@ Create some CPU load:
 
 #+begin_src shell
 busy() (
-  trap 'kill $(jobs -p) >& /dev/null' SIGINT SIGQUIT SIGTERM
+  trap 'kill $(jobs -p) &> /dev/null' SIGINT SIGQUIT SIGTERM
   local -i i=${1:-1}
   while [ $i -gt 0 ]; do
     while :; do :; done &

@@ -661,7 +661,7 @@ Dictionaries may or may not be provided by your distribution.
 On Debian, dictionaries are available via =hunspell-*= packages, else,
 retrieve =.aff= & =.dic= files here:
 - =en_*=: http://wordlist.aspell.net/dicts/
-- =fr-*=: https://www.dicollecte.org/download.php?prj=fr
+- =fr-*=: https://grammalecte.net/download.php?prj=fr
 
 Setup is a bit tricky:
 #+begin_src emacs-lisp

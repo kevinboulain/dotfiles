@@ -531,8 +531,9 @@ built-in IRC clients.
   (enable-circe-color-nicks)
 
   ;; enable logging, `lui-logging-directory' defaults to ~/.logs
-  (require 'lui-logging)
-  (enable-lui-logging-globally)
+  ;; don't enable it by default for privacy reasons
+  ;; (require 'lui-logging)
+  ;; (enable-lui-logging-globally)
 
   (setq lui-flyspell-p t) ; enable spell checking
 

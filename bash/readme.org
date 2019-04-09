@@ -230,7 +230,7 @@ busy() (
 Nothing special, only in order of preference:
 #+begin_src shell
 if hash emacs &> /dev/null; then
-  EDITOR=emacs
+  EDITOR='emacs -nw'
 elif hash mg &> /dev/null; then
   EDITOR=mg
 elif hash nano &> /dev/null; then

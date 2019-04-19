@@ -392,19 +392,15 @@ Join them together as they are already propertized in case of highlight."
 
 *Disabled for now.*
 
-The built-in =linum= has some performance problems. =nlinum= avoid them:
 #+begin_src
-(use-package nlinum
-  :straight (:host github :repo "emacsmirror/nlinum")
-  :config
-  ;; highlight the margin with the same line highlighting
-  ;; useful with `global-hl-line-mode'
-  (set-face-attribute 'nlinum-current-line nil
-                      :foreground (face-attribute 'linum :foreground nil t)
-                      :background (face-attribute 'hl-line :background nil t))
-  (setq nlinum-format "%d "
-        nlinum-highlight-current-line t)
-  (global-nlinum-mode 1))
+(when (boundp 'display-line-numbers) ; introduced in emacs 26
+  (set-face-attribute 'line-number-current-line nil
+                      ;; highlight the line current line number
+                      :foreground (face-attribute 'font-lock-keyword-face :foreground nil t)
+                      ;; highlight the margin with the same line highlighting
+                      :background (when (bound-and-true-p global-hl-line-mode)
+                                    (face-attribute 'hl-line :background nil t)))
+  (global-display-line-numbers-mode))
 #+end_src
 
 ** Buffer dimming
@@ -505,9 +501,6 @@ emacs --htmlize path/to/file # which will output path/to/file.html
                              (when (bound-and-true-p flycheck-mode) (flycheck-mode))
                              ;; disable current line highlighting (both a function and a variable)
                              (when (bound-and-true-p global-hl-line-mode) (global-hl-line-unhighlight))
-                             ;; disable line numbering (the format adds a an empty column)
-                             ;; don't know why, but simply toggling without the 0 won't work
-                             (when (bound-and-true-p nlinum-mode) (nlinum-mode 0))
                              ;; TODO: lsp stuff
                              ;; (sit-for 3) ; allow to see the changes made to the buffer
                              ))))

@@ -322,12 +322,12 @@ The index appears in the top left corner.
 #+begin_src emacs-lisp
 (use-package avy
   :straight (:host github :repo "abo-abo/avy")
-  :bind (("C-o" . 'avy-goto-word-or-subword-1))) ; override open-line default binding
+  :bind (("C-o" . avy-goto-word-or-subword-1))) ; override open-line default binding
 
 ;; despite the name, it's avy-based
 (use-package ace-window
   :straight (:host github :repo "abo-abo/ace-window")
-  :bind (("M-o" . 'ace-window)) ; override facemenu default binding
+  :bind (("M-o" . ace-window)) ; override facemenu default binding
   :config
   (setq aw-background nil)) ; don't remove colors
 #+end_src
@@ -840,6 +840,8 @@ etc.
 #+end_src
 
 ** [[https://www.lua.org/][Lua]]
+
+Mainly for syntax highlighting and indentation.
 
 #+begin_src emacs-lisp
 (use-package lua-mode

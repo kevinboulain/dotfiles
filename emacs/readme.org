@@ -332,6 +332,14 @@ The index appears in the top left corner.
   (setq aw-background nil)) ; don't remove colors
 #+end_src
 
+And to move regions or lines (Magit-style):
+#+begin_src emacs-lisp
+(use-package move-text
+  :straight (:host github :repo "emacsfodder/move-text")
+  :bind (("M-n" . move-text-down)
+         ("M-p" . move-text-up)))
+#+end_src
+
 ** Lighter mode-line
 
 [[https://github.com/tautologyclub/feebleline][Feebleline]] completely

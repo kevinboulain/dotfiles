@@ -33,6 +33,7 @@
  ("markdown-mode" . "53db08184b84ac2bb0709d3ef4dfbaf97965e0d9")
  ("melpa" . "75d501ae9b64d9aa083f43358881a467a7cd2a04")
  ("monokai-emacs" . "f4ef092129f4a35edaee0a9b2219c17e86309730")
+ ("move-text" . "7cbc941a9150468609010a93c429117da2523903")
  ("pkg-info.el" . "76ba7415480687d05a4353b27fea2ae02b8d9d61")
  ("projectile" . "a6ecae5e8b57874d418f70cc620b97e8157a710b")
  ("prop-menu-el" . "50b102c1c0935fd3e0c465feed7f27d66b21cdf3")

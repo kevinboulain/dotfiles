@@ -118,7 +118,9 @@ However, we may still want to have a maintainable history file, so
 splitting it by session seems to be a good idea:
 #+begin_src shell
 declare -r history_directory=~/.bash_history.d
-HISTFILE=$history_directory/$(date -u +%Y/%m/%d)/$(date -u +%H:%M:%S)_$(hostname)_$$
+# should be read-only to disallow spurious changes during the session
+# (for example, when sourcing again .bashrc)
+declare -r HISTFILE=$history_directory/$(date -u +%Y/%m/%d)/$(date -u +%H:%M:%S)_$(hostname)_$$
 history_subdirectory=$(dirname "$HISTFILE")
 [ -d "$history_subdirectory" ] || mkdir -p "$history_subdirectory"
 unset history_subdirectory

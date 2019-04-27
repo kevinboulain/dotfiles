@@ -58,7 +58,7 @@ shopt -s extglob
 Allow Bash to edit the readline buffer during completions (see =dirspell=,
 it will also replace variables by their value):
 #+begin_src shell
-if [ ${BASH_VERSINFO[0]} -ge 4 ]; then
+if [ ${BASH_VERSINFO[0]} -ge 4 ] && [ ${BASH_VERSINFO[1]} -ge 3 ]; then
   shopt -s direxpand
 fi
 #+end_src
@@ -109,9 +109,10 @@ shopt -s histappend
 By default, 500 lines of history are remembered, let's tell Bash we don't want
 any limitations:
 #+begin_src shell
-# some versions of Bash don't accept -1
-HISTSIZE=1000000000
-HISTFILESIZE=1000000000
+history_size=$((${BASH_VERSINFO[0]} >= 4 && ${BASH_VERSINFO[1]} >= 3 ? -1 : 1000000000))
+HISTSIZE=$history_size
+HISTFILESIZE=$history_size
+unset history_size
 #+end_src
 
 However, we may still want to have a maintainable history file, so

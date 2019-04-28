@@ -18,10 +18,6 @@
 ;; redirect annoying customize stuff to another file
 (setq custom-file (locate-user-emacs-file "custom.el"))
 
-;; let Emacs know I trust `user-emacs-directory''s .dir-locals.el
-;; so it doesn't ask me each time I modify it
-(add-to-list 'safe-local-variable-values '(lentic-init . lentic-org-el-init))
-
 (defun ether--load-warn (path-base)
   "Try to load PATH-BASE (with or without extension) or warn about it."
   (require 'subr-x)

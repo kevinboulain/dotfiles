@@ -1,5 +1,4 @@
-custom.el
-personal.el
-readme.el
-straight/*
-!straight/versions
+/custom.el
+/personal.el
+/straight/*
+!/straight/versions

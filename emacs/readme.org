@@ -353,6 +353,9 @@ Join them together as they are already propertized in case of highlight."
   (when (boundp 'tracking-buffers)
     (string-join tracking-buffers " ")))
 
+(defun ether--feebleline-major-mode ()
+  (string-trim-right (prin1-to-string major-mode) "-mode"))
+
 ;; see also https://github.com/11111000000/taoline, by the creator of tao-theme
 (use-package feebleline
   :straight (:host github :repo "tautologyclub/feebleline")
@@ -360,6 +363,7 @@ Join them together as they are already propertized in case of highlight."
   (setq feebleline-msg-functions
         '((feebleline-line-number :post "")
           (feebleline-column-number :pre ",")
+          (ether--feebleline-major-mode :face feebleline-git-face)
           (feebleline-file-directory :face feebleline-dir-face :post "")
           (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
           (feebleline-file-modified-star :face feebleline-warning-face :post "")
@@ -978,34 +982,16 @@ sometimes used as a dependency.
 
 *** Literal programming
 
-I maintain this file using [[https://github.com/phillord/lentic][lentic]]:
+I started writing this file using
+[[https://github.com/phillord/lentic][lentic]]
+but now use [[https://github.com/polymode/polymode][polymode]]:
 #+begin_src emacs-lisp
-(defun lentic-sh-oset (conf)
-  (lentic-m-oset
-   conf
-   :this-buffer (current-buffer)
-   :comment "# "
-   :comment-stop "#\\\+BEGIN_SRC shell.*"
-   :comment-start "#\\\+END_SRC"))
+(use-package poly-markdown
+  :straight (:host github :repo "polymode/poly-markdown"))
 
-(defun lentic-org-sh-init ()
-  (lentic-sh-oset
-   (lentic-unmatched-uncommented-chunk-configuration
-    "lb-org-to-sh"
-    :lentic-file
-    (concat (file-name-sans-extension (buffer-file-name)) ".sh"))))
+(use-package poly-org
+  :straight (:host github :repo "polymode/poly-org"))
 
-(defun lentic-sh-org-init ()
-  (lentic-org-oset
-   (lentic-unmatched-commented-chunk-configuration
-    "lb-sh-to-org"
-    :lentic-file
-    (concat (file-name-sans-extension (buffer-file-name)) ".org"))))
-
-(use-package lentic
-  :straight (:host github :repo "phillord/lentic")
-  :hook (after-init . global-lentic-mode)
-  :config
-  (add-to-list 'lentic-init-functions 'lentic-org-sh-init)
-  (add-to-list 'lentic-init-functions 'lentic-sh-org-init))
+(use-package poly-rst
+  :straight (:host github :repo "polymode/poly-rst"))
 #+end_src

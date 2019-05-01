@@ -347,13 +347,6 @@ disables the standard mode-line and replaces it with a minimalist version,
 displayed right in the minibuffer when it's idle.
 
 #+begin_src emacs-lisp
-(defun ether--feebleline-git-object ()
-  "Current branch, when Magit is available."
-  (when (and (require 'magit-git nil t)
-             (require 'magit-process nil t))
-    (or (magit-get-current-branch)
-        (magit-rev-parse "--short" "HEAD"))))
-
 (defun ether--feebleline-circe-tracking-buffers ()
   "Circe maintains a list of buffers with activity.
 Join them together as they are already propertized in case of highlight."
@@ -370,7 +363,6 @@ Join them together as they are already propertized in case of highlight."
           (feebleline-file-directory :face feebleline-dir-face :post "")
           (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
           (feebleline-file-modified-star :face feebleline-warning-face :post "")
-          (ether--feebleline-git-object :face feebleline-git-face :pre ":")
           (ether--feebleline-circe-tracking-buffers :face nil :pre " ")))
   ;; enable feebleline
   (feebleline-mode 1)

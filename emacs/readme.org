@@ -32,6 +32,7 @@
   - [[#dart][Dart]]
   - [[#idris][Idris]]
   - [[#lua][Lua]]
+  - [[#openscad][OpenSCAD]]
   - [[#python][Python]]
   - [[#rust][Rust]]
   - [[#shell][Shell]]
@@ -870,6 +871,18 @@ Mainly for syntax highlighting and indentation.
   :straight (:host github :repo "immerrr/lua-mode")
   :config
   (setq lua-indent-level tab-width))
+#+end_src
+
+** [[https://www.openscad.org/][OpenSCAD]]
+
+Mainly for syntax highlighting and indentation.
+
+#+begin_src emacs-lisp
+;; straight not supporting shallow clones,
+;; use a mirror instead of the official OpenSCAD repository
+;; it seems to be lagging a bit behind?
+(use-package scad-mode
+  :straight (:host github :repo "emacsmirror/scad-mode"))
 #+end_src
 
 ** [[https://www.python.org/][Python]]

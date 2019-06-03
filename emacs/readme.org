@@ -727,7 +727,9 @@ produce a (sometimes complex) language-specific configuration.
   :defer t
   :commands lsp
   :straight (:host github :repo "emacs-lsp/lsp-mode")
-  :init (setq lsp-auto-guess-root t))
+  :init (setq lsp-auto-guess-root t)
+  :config
+  (setq lsp-enable-on-type-formatting nil))
 
 (use-package lsp-ui
   :commands lsp-ui-mode

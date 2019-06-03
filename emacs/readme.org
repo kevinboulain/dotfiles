@@ -514,19 +514,36 @@ emacs --htmlize path/to/file # which will output path/to/file.html
 built-in IRC clients.
 
 #+begin_src emacs-lisp
+(setq circe-logging nil) ; small hack to avoid a warning because Circe doesn't expect this variable
+(defun ether--lui-selective-logging ()
+  "When a network in `circe-network-options' set the `:logging' property to
+a truthy value, enable logging for it."
+  ;; see circe-chat-mode and enable-lui-logging-globally
+  (when (plist-get (cdr (assoc (plist-get lui-logging-format-arguments :network)
+                               circe-network-options))
+                   :logging)
+    (enable-lui-logging)))
+
 (use-package circe
   :defer t
   :straight (:host github :repo "jorgenschaefer/circe")
-  :hook (circe-mode . (lambda () (setq-local right-margin-width 5)))
+  :hook ((circe-mode . (lambda () (setq-local right-margin-width 5)))
+         (lui-mode . ether--lui-selective-logging))
   :config
   ;; colorize nicks
   (require 'circe-color-nicks)
   (enable-circe-color-nicks)
 
-  ;; enable logging, `lui-logging-directory' defaults to ~/.logs
+  ;; logging configuration
+  (require 'lui-logging)
+  (setq lui-logging-directory "~/.logs" ; default
+        lui-logging-file-format "irc/{network}/{buffer}.txt"
+        lui-logging-format "[%F %T %Z] {text}")
   ;; don't enable it by default for privacy reasons
-  ;; (require 'lui-logging)
   ;; (enable-lui-logging-globally)
+  ;; make sure there is no display difference between others and me
+  (setq circe-format-self-say circe-format-say
+        circe-format-self-action circe-format-action)
 
   (setq lui-flyspell-p t) ; enable spell checking
 

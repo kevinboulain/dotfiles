@@ -42,7 +42,7 @@
  ("rainbow-delimiters" . "19b93892afa0494ba749c2ca9c154e04447ad778")
  ("rust-mode" . "c62185ae1c6edf0335261f169241eb8ee9713ad5")
  ("s.el" . "03410e6a7a2b11e47e1fea3b7d9899c7df26435e")
- ("scad-mode" . "48111fafef9e4f02ed2f9d3f5701c09d224405a1")
+ ("scad-mode" . "e4596ec95aaab09ed191157748829966382698a2")
  ("seq" . "095fb15a3baa082079799dd36b6caccdb062cb90")
  ("spinner" . "2daa167bec1c7566d662d48613a94453536b524a")
  ("straight.el" . "c78d6946d7479e9b387de4a1278604d8e35fe1c8")

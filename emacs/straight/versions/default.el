@@ -21,6 +21,7 @@
  ("flycheck" . "47174a12fd84a685f36019632838c73b4813b66d")
  ("flycheck-rust" . "a139cd53c5062697e9ed94ad80b803c37d999600")
  ("gnu-elpa-mirror" . "427bfb1e4ee781b14b1a8f62113aa8e34ca287d6")
+ ("go-mode.el" . "120fb911f1d8038f828da85eed8aaad977dabd8c")
  ("ht.el" . "095fde55294bd20dc7f46d614e1b0504e3830cfa")
  ("idris-mode" . "acc8835449475d7cd205aba213fdd3d41c38ba40")
  ("let-alist" . "33e71829e8814cf5f28b6e4291192aafef61b69e")

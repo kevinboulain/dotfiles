@@ -30,6 +30,7 @@
   - [[#c][C]]
   - [[#context][ConTeXt]]
   - [[#dart][Dart]]
+  - [[#go][Go]]
   - [[#idris][Idris]]
   - [[#lua][Lua]]
   - [[#openscad][OpenSCAD]]
@@ -848,6 +849,17 @@ pub global activate dart_language_server
   :straight (:host github :repo "bradyt/dart-mode")
   :hook ((dart-mode . flycheck-mode) ; flycheck isn't enabled automatically otherwise
          (dart-mode . lsp)))
+#+end_src
+
+** [[https://golang.org/][Go]]
+
+#+begin_src emacs-lisp
+(use-package go-mode
+  :defer t
+  :straight (:host github :repo "dominikh/go-mode.el")
+  :config
+  ;; https://github.com/dominikh/go-mode.el/pull/212
+  (modify-syntax-entry ?_  "_" go-mode-syntax-table))
 #+end_src
 
 ** [[https://www.idris-lang.org/][Idris]]

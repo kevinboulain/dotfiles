@@ -16,7 +16,10 @@ bash_config_directory=$config_directory/bash
 # can't source process substitution in Bash 3
 eval "$(sed '/^#+begin_src shell$/,/^#+end_src$/!d;//d' "$bash_config_directory"/readme.org)"
 
-declare -a bash_files=(personal)
+declare -a bash_files=(
+  # optional local configuration
+  local
+)
 
 for name in "${bash_files[@]}"; do
   script=$bash_config_directory/$name.bash

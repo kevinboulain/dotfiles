@@ -48,8 +48,8 @@ https://github.com/phillord/lentic/issues/54#issuecomment-429106163"
 
 ;; the whole configuration is documented in the readme.org file
 (ether--load "readme")
-;; optional personal configuration
-(ether--load "personal")
+;; optional local configuration
+(ether--load "local")
 
 ;; restore the garbage collector settings
 (setq gc-cons-threshold gc-cons-threshold-backup)

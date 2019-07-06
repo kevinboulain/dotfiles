@@ -855,8 +855,8 @@ pub global activate dart_language_server
 
 #+begin_src emacs-lisp
 (use-package go-mode
-  :defer t
   :straight (:host github :repo "dominikh/go-mode.el")
+  :hook (go-mode . lsp)
   :config
   ;; https://github.com/dominikh/go-mode.el/pull/212
   (modify-syntax-entry ?_  "_" go-mode-syntax-table))

@@ -352,8 +352,13 @@ displayed right in the minibuffer when it's idle.
 (defun ether--feebleline-circe-tracking-buffers ()
   "Circe maintains a list of buffers with activity.
 Join them together as they are already propertized in case of highlight."
+  (defun filter (buffer)
+    (text-property-any 0 1 'face 'circe-highlight-nick-face buffer))
   (when (boundp 'tracking-buffers)
-    (string-join tracking-buffers " ")))
+    (string-join (append ; put the highlighted buffers first
+                  (sort (seq-filter #'filter tracking-buffers) 'string-collate-lessp)
+                  (sort (seq-filter (lambda (buffer) (not (filter buffer))) tracking-buffers) 'string-collate-lessp))
+                 " ")))
 
 (defun ether--feebleline-major-mode ()
   (string-trim-right (prin1-to-string major-mode) "-mode"))

@@ -664,7 +664,10 @@ automatically generate a table of contents:
 #+begin_src emacs-lisp
 (use-package markdown-mode
   :defer t
-  :straight (:host github :repo "jrblevin/markdown-mode"))
+  :straight (:host github :repo "jrblevin/markdown-mode")
+  :bind (:map markdown-mode-map ; clear override of move-text
+         ("M-n" . nil)
+         ("M-p" . nil)))
 #+end_src
 ** gettext
 
@@ -1019,7 +1022,9 @@ I started writing this file using
 but now use [[https://github.com/polymode/polymode][polymode]]:
 #+begin_src emacs-lisp
 (use-package poly-markdown
-  :straight (:host github :repo "polymode/poly-markdown"))
+  :straight (:host github :repo "polymode/poly-markdown")
+  :bind (:map polymode-mode-map ; clear override of move-text
+         ("M-n" . nil)))
 
 (use-package poly-org
   :straight (:host github :repo "polymode/poly-org"))

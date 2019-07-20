@@ -99,11 +99,15 @@ Convert the tab character to spaces:
 #+end_src
 
 Tell Emacs to stop littering my environment by setting the directories
-for backup, auto-saves and sessions:
+for backup, auto-saves, sessions and disabling interlock:
 #+begin_src emacs-lisp
 (setq backup-directory-alist `((".*" . ,temporary-file-directory))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
       auto-save-list-file-prefix temporary-file-directory)
+
+;; I'm not sure I see any point besides spamming the filesystem and
+;; breaking some tools.
+(setq create-lockfiles nil)
 #+end_src
 
 Quiet down Emacs a bit:

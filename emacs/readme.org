@@ -214,6 +214,7 @@ may use or copy faces provided by the theme):
 
 Many packages extend [[http://company-mode.github.io/][Company]] by adding specific back-ends, so we'll rely on it
 to provide completion:
+
 #+begin_src emacs-lisp
 (use-package company
   :straight (:host github :repo "company-mode/company-mode")
@@ -348,59 +349,12 @@ And to move regions or lines (Magit-style):
 
 ** Lighter mode-line
 
-[[https://github.com/tautologyclub/feebleline][Feebleline]] completely
-disables the standard mode-line and replaces it with a minimalist version,
-displayed right in the minibuffer when it's idle.
+Disable the standard mode-line and replace it with a minimalistic version,
+displayed in the minibuffer when it's idle.
 
 #+begin_src emacs-lisp
-(defun ether--feebleline-circe-tracking-buffers ()
-  "Circe maintains a list of buffers with activity.
-Join them together as they are already propertized in case of highlight."
-  (defun filter (buffer)
-    (text-property-any 0 1 'face 'circe-highlight-nick-face buffer))
-  (when (boundp 'tracking-buffers)
-    (string-join (append ; put the highlighted buffers first
-                  (sort (seq-filter #'filter tracking-buffers) 'string-collate-lessp)
-                  (sort (seq-filter (lambda (buffer) (not (filter buffer))) tracking-buffers) 'string-collate-lessp))
-                 " ")))
-
-(defun ether--feebleline-major-mode ()
-  (string-trim-right (prin1-to-string major-mode) "-mode"))
-
-;; see also https://github.com/11111000000/taoline, by the creator of tao-theme
-(use-package feebleline
-  :straight (:host github :repo "tautologyclub/feebleline")
-  :config
-  (setq feebleline-msg-functions
-        '((feebleline-line-number :post "")
-          (feebleline-column-number :pre ",")
-          (ether--feebleline-major-mode :face feebleline-git-face)
-          (feebleline-file-directory :face feebleline-dir-face :post "")
-          (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
-          (feebleline-file-modified-star :face feebleline-warning-face :post "")
-          (ether--feebleline-circe-tracking-buffers :face nil :pre " ")))
-  ;; enable feebleline
-  (feebleline-mode 1)
-  ;; but still allow mode line in some cases for readability
-  ;; https://emacs.stackexchange.com/questions/30513/making-a-variable-window-local
-  ;; https://github.com/tautologyclub/feebleline/issues/24
-  (add-hook 'window-configuration-change-hook
-            (lambda ()
-              (when (bound-and-true-p feebleline-mode)
-                (walk-windows (lambda (window) ; reset the mode line of each buffer
-                                (with-current-buffer (window-buffer window)
-                                  (setq mode-line-format nil)))
-                              0) ; don't include minibuffer
-                (walk-windows (lambda (window) ; and set the mode line when necessary
-                                (with-current-buffer (window-buffer window)
-                                  ;; {frame,window}-edges functions return (x1 y1 x2 y2)
-                                  ;; then check if the current buffer (which may be displayed on mutltiple windows)
-                                  ;; doesn't sit on top of the minibuffer
-                                  ;; this isn't perfect but unfortunately, the mode-line-format is buffer-local
-                                  (when (/= (nth 1 (window-edges (minibuffer-window)))
-                                            (nth 3 (window-edges window)))
-                                    (setq mode-line-format "%-"))))
-                              0))))) ; don't include minibuffer
+(require 'ether-mode-line)
+(add-hook 'after-init-hook #'ether-mode-line-mode)
 #+end_src
 
 ** Line numbering

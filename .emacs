@@ -14,6 +14,7 @@
 
 ;; set the location of the emacs directory
 (setq user-emacs-directory (concat (file-name-directory (file-truename "~/.emacs")) "emacs/"))
+(add-to-list 'load-path (concat user-emacs-directory "lisp/"))
 
 ;; redirect annoying customize stuff to another file
 (setq custom-file (locate-user-emacs-file "custom.el"))

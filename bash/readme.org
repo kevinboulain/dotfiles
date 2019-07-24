@@ -203,7 +203,7 @@ PROMPT_COMMAND=prompt_config${PROMPT_COMMAND:+;$PROMPT_COMMAND}
 And finally customize the prompt itself:
 #+begin_src shell
 # \[\] allow readline to correctly calculate the string's size
-PS1='\h:\W \[$(printf -- "%s" "$prompt_color")\]\$\[$(printf -- "%s" "$reset")\] '
+PS1='\h:\W \[$(printf -- '%s' "$prompt_color")\]\$\[$(printf -- '%s' "$reset")\] '
 #+end_src
 
 ** Aliases

@@ -3,6 +3,7 @@
 * Table of Contents :toc_3:
 - [[#installing-packages][Installing packages]]
 - [[#built-in--general-setup][Built-in & general setup]]
+  - [[#debugging][Debugging]]
 - [[#theming][Theming]]
 - [[#other-functionalities][Other Functionalities]]
   - [[#completion][Completion]]
@@ -86,12 +87,6 @@ a possibly out of date =.elc= file:
 (setq load-prefer-newer t)
 #+end_src
 
-And that it should dump a stack trace (as it makes reporting easier,
-disabled for now as too many operations will emit a trace):
-#+begin_src
-(setq debug-on-error t)
-#+end_src
-
 Convert the tab character to spaces:
 #+begin_src emacs-lisp
 (setq-default tab-width 2 ; tab size
@@ -162,6 +157,23 @@ Other unrelated configurations:
 ;; recursive minibuffer
 (setq enable-recursive-minibuffers t)
 (minibuffer-depth-indicate-mode 1)
+#+end_src
+
+** Debugging
+
+It's tiresome and sometimes difficult to set =debug-on-error= so install a
+command line switch:
+#+begin_src emacs-lisp
+(add-to-list 'command-switch-alist '("--debug-on-error" . ether--debug-on-error))
+(defun ether--debug-on-error (switch)
+  "Set `debug-on-error' when the --debug-on-error option is set."
+  (setq debug-on-error t))
+#+end_src
+
+It's sometimes useful to tracks commands:
+#+begin_src emacs-lisp
+(use-package interaction-log
+  :straight (:host github :repo "michael-heerdegen/interaction-log.el"))
 #+end_src
 
 * Theming

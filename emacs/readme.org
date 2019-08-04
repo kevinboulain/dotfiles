@@ -124,7 +124,9 @@ But I prefer more reporting when it's related to the point:
 #+begin_src emacs-lisp
 (line-number-mode 1) ; show line number in the mode-line
 (column-number-mode 1) ; show column number in the mode-line
+
 (global-hl-line-mode) ; highlight the line containing the cursor
+(set-face-attribute 'hl-line nil :foreground 'unspecified) ; why override the foreground?! see also face-remapping-alist
 
 (show-paren-mode 1) ; show matching parenthesis/bracket/...
 #+end_src

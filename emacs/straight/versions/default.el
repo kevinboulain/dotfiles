@@ -9,7 +9,6 @@
  ("dash.el" . "77f3bf40c9c85386a50f2dab3dc950513f6f88bd")
  ("elfeed" . "fd539da2da94ab4794fd69247ce06deca7aa66bf")
  ("emacs-async" . "bd68cc1ab1ac6af890e250bdaa12ffb1cb9649be")
- ("emacs-cquery" . "555e50984ebda177421fdcdc8c76cb29235d9694")
  ("emacs-htmlize" . "8db0aa6aab77475a732b7363f0d57bd3933c18fd")
  ("emacs-which-key" . "ba03e7e5bcbe3f7d95be2cfddd71454151bb98c8")
  ("epkgs" . "9ef18280f0c0567cee0c30dd566d9dbd477ca953")

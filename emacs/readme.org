@@ -187,13 +187,10 @@ is also great but limited to a file.
 
 ** Debugging
 
-It's tiresome and sometimes difficult to set =debug-on-error= so install a
-command line switch:
-#+begin_src emacs-lisp
-(add-to-list 'command-switch-alist '("--debug-on-error" . ether--debug-on-error))
-(defun ether--debug-on-error (switch)
-  "Set `debug-on-error' when the --debug-on-error option is set."
-  (setq debug-on-error t))
+It's sometimes difficult to set =debug-on-error= but Emacs provides the =--eval=
+command line argument:
+#+begin_src shell
+emacs --eval '(setq debug-on-error t)'
 #+end_src
 
 It's sometimes useful to tracks commands:

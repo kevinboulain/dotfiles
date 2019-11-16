@@ -3,6 +3,7 @@
 * Table of Contents :toc_3:
 - [[#installing-packages][Installing packages]]
 - [[#built-in--general-setup][Built-in & general setup]]
+  - [[#profiling][Profiling]]
   - [[#debugging][Debugging]]
 - [[#theming][Theming]]
 - [[#other-functionalities][Other Functionalities]]
@@ -160,6 +161,29 @@ Other unrelated configurations:
 (setq enable-recursive-minibuffers t)
 (minibuffer-depth-indicate-mode 1)
 #+end_src
+
+** Profiling
+
+To determine which of the below packages take the most time to load,
+invoke Emacs in the following way:
+
+#+begin_src shell
+emacs --benchmark-init
+#+end_src
+
+This won't take into account the above =use-package= & =straight.el= setup
+though.
+
+#+begin_src emacs-lisp
+(when (member "--benchmark-init" command-line-args)
+  (use-package benchmark-init
+    :straight (:host github :repo "dholm/benchmark-init-el")
+    :init
+    (add-to-list 'command-switch-alist '("--benchmark-init" . (lambda (switch) (benchmark-init/deactivate))))))
+#+end_src
+
+[[http://www.randomsample.de/profile-dotemacs.el][profile-dotemacs.el]]
+is also great but limited to a file.
 
 ** Debugging
 

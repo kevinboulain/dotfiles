@@ -42,11 +42,6 @@ https://github.com/phillord/lentic/issues/54#issuecomment-429106163"
           (ether--load-warn temporary-path-org))
       (ether--load-warn path-base))))
 
-;; use http://www.randomsample.de/profile-dotemacs.el to show where most
-;; emacs-init-time is spent (that's why everything should be unrolled below)
-;; see also https://github.com/dholm/benchmark-init-el for a more precise
-;; but incomplete report (as it has to loaded via the package manager)
-
 ;; the whole configuration is documented in the readme.org file
 (ether--load "readme")
 ;; optional local configuration

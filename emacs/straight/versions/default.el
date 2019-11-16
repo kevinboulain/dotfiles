@@ -23,6 +23,7 @@
  ("go-mode.el" . "120fb911f1d8038f828da85eed8aaad977dabd8c")
  ("ht.el" . "095fde55294bd20dc7f46d614e1b0504e3830cfa")
  ("idris-mode" . "acc8835449475d7cd205aba213fdd3d41c38ba40")
+ ("interaction-log.el" . "a49a06746d4df6bcfceec3c48dece065d635f9f9")
  ("let-alist" . "33e71829e8814cf5f28b6e4291192aafef61b69e")
  ("lsp-mode" . "1f91a7c7b8d026ace82835197ed9ea8192ed56e8")
  ("lsp-ui" . "3ccc3e3386732c3ee22c151e6b5215a0e4c99173")

@@ -523,7 +523,7 @@ built-in IRC clients.
   "When a network in `circe-network-options' set the `:logging' property to
 a truthy value, enable logging for it."
   ;; see circe-chat-mode and enable-lui-logging-globally
-  (when (plist-get (cdr (assoc (plist-get lui-logging-format-arguments :network)
+  (when (plist-get (cdr (assoc (with-circe-server-buffer circe-network)
                                circe-network-options))
                    :logging)
     (enable-lui-logging)))
@@ -591,6 +591,12 @@ You'll probably need to setup it like so:
    :nick "USERNAME"
    :channels ("#channel1" "#channel2"))
 ))
+
+(add-hook 'circe-channel-mode-hook
+          (lambda ()
+            (when (and (string= (with-circe-server-buffer circe-network) "network")
+                       (string= circe-chat-target "#idlerpg"))
+              (circe-command-MSG "idlerpg" "LOGIN login password"))))
 #+end_src
 
 ** [[https://slack.com/][Slack]]

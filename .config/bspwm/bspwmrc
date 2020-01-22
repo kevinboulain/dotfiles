@@ -9,9 +9,18 @@ if hash xsetroot; then
   xsetroot -cursor_name left_ptr
 fi
 
-# start pulseaudio
-# FIXME: --start daemonize pulseaudio but sometimes it's stuck so background it
-pulseaudio --start -vvv &> /tmp/pulseaudio.log &
+# source local configuration, see .bashrc for explanation
+config_directory=$(
+  cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null &&
+  cd "$(dirname "$(readlink "${BASH_SOURCE[0]}")")" > /dev/null &&
+  pwd
+)
+if [ -f "$config_directory"/local.bash ]; then
+  # pulseaudio --start -vvv
+  # redshift -l latitude:longitude -t 6500:4000
+  . "$config_directory"/local.bash
+fi
+unset config_directory
 
 # spawn sxhkd
 sxhkd &

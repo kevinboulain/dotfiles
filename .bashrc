@@ -8,22 +8,14 @@ config_directory=$(
   cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null &&
   cd "$(dirname "$(readlink "${BASH_SOURCE[0]}")")" > /dev/null &&
   pwd
-)
-# bash sub scripts directory
-bash_config_directory=$config_directory/bash
+)/bash
 
 # the whole configuration is documented in the readme.org file
 # can't source process substitution in Bash 3
-eval "$(sed '/^#+begin_src shell$/,/^#+end_src$/!d;//d' "$bash_config_directory"/readme.org)"
+eval "$(sed '/^#+begin_src shell$/,/^#+end_src$/!d;//d' "$config_directory"/readme.org)"
 
-declare -a bash_files=(
-  # optional local configuration
-  local
-)
+if [ -f "$config_directory"/local.bash ]; then
+  . "$config_directory"/local.bash
+fi
 
-for name in "${bash_files[@]}"; do
-  script=$bash_config_directory/$name.bash
-  [ -f "$script" ] && . "$script"
-done
-
-unset config_directory bash_files bash_config_directory script name
+unset config_directory

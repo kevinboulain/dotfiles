@@ -29,6 +29,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'subr-x)
 
 (defgroup ether-mode-line nil
   "Unobtrusive mode-line."
@@ -61,8 +62,10 @@
       'face (if (and (buffer-file-name) (buffer-modified-p))
                 'warning 'mode-line-buffer-id))
      ;; irc
-     (when (ether-mode-line--circe-tracking-buffers)
-       (concat " " (ether-mode-line--circe-tracking-buffers)))))
+     (when (> (length (ether-mode-line--circe-tracking-buffers)) 0)
+       (concat " " (ether-mode-line--circe-tracking-buffers)))
+     (when (fboundp 'circe-lagmon-format-mode-line-entry)
+       (concat " " (string-trim (circe-lagmon-format-mode-line-entry))))))
   "Return a string to be used as the mode-line."
   :type 'function
   :group 'ether-mode-line)

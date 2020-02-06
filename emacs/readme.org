@@ -532,6 +532,7 @@ a truthy value, enable logging for it."
   :defer t
   :straight (:host github :repo "jorgenschaefer/circe")
   :hook ((circe-mode . (lambda () (setq-local right-margin-width 5)))
+         (circe-mode . circe-lagmon-mode)
          (lui-mode . ether--lui-selective-logging))
   :config
   ;; colorize nicks

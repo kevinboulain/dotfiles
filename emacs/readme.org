@@ -649,6 +649,7 @@ I use the embedded Org for now.
 
 #+begin_src emacs-lisp
 (setq org-replace-disputed-keys t) ; windmove keybindings conflict
+(setq org-startup-folded "nofold") ; don't fold sections when opening a buffer
 #+end_src
 
 Since the whole point of this document is to be readable on GitHub, let's

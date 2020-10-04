@@ -13,7 +13,25 @@
 (setq gc-cons-threshold (* 100 1024 1024))
 
 ;; set the location of the emacs directory
-(setq user-emacs-directory (concat (file-name-directory (file-truename "~/.emacs")) "emacs/"))
+(defun ether--find-loaded-user-init-file ()
+  "Find out if this file was loaded with -l or --load and return its path."
+  (require 'cl-macs)
+  (let (last)
+    (cl-dolist (argument command-line-args)
+      (when (and (member last '("-l" "--load"))
+                 (string= argument load-file-name))
+        (cl-return argument))
+      (setq last argument))))
+
+(setq user-emacs-directory
+      (concat (file-name-directory
+               (file-truename
+                ;; `user-init-file' isn't set when -q is set
+                ;; don't forget `after-init-hook' is done before -l so you
+                ;; might have to call the functions yourself
+                (if user-init-file user-init-file
+                  (ether--find-loaded-user-init-file))))
+              "emacs/"))
 (add-to-list 'load-path (concat user-emacs-directory "lisp/"))
 
 ;; redirect annoying customize stuff to another file

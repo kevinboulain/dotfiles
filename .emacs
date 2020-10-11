@@ -36,6 +36,7 @@
 
 ;; redirect annoying customize stuff to another file
 (setq custom-file (locate-user-emacs-file "custom.el"))
+(load custom-file t)
 
 (defun ether--load-warn (path-base)
   "Try to load PATH-BASE (with or without extension) or warn about it."

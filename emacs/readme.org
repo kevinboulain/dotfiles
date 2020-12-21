@@ -268,7 +268,10 @@ to provide completion:
   (setq company-dabbrev-downcase nil ; dabbrev complete case sensitive
         company-idle-delay 0 ; no delay before showing completion
         company-minimum-prefix-length 2 ; start completing rapidly
-        company-tooltip-align-annotations t)) ; align annotations to the right
+        company-tooltip-align-annotations t ; align annotations to the right
+        ;; for some reason they enable broken backends like company-clang by
+        ;; default (and considering there is LSP, this is just superfluous)
+        company-backends '(company-capf)))
 #+end_src
 
 There is the built-in Ido, but it requires to be extended by multiple

@@ -1,2 +1,2 @@
-# Mac OS X always runs a login shell, so manually source ~/.bashrc
+# macOS always runs a login shell, manually source ~/.bashrc.
 [ -f ~/.bashrc ] && . ~/.bashrc

@@ -1,6 +1,6 @@
-# find where this script is located, should work as long as it's only sourced
-# by bash that give a complete path for ~/.bashrc
-# note that readlink hasn't the -f option on OS X
+# Find out where this script is located, should work as long as it's only
+# sourced by Bash (that gives a complete path for ~/.bashrc).
+# Note that readlink doesn't have the -f option on macOS.
 config_directory=$(
   # cd into the symlink directory
   # cd into the directory of the file pointed by the (possibly relative) symlink
@@ -10,8 +10,8 @@ config_directory=$(
   pwd
 )/bash
 
-# the whole configuration is documented in the readme.org file
-# can't source process substitution in Bash 3
+# The whole configuration is documented in the readme.org file.
+# We can't source via process substitution in Bash 3.
 eval "$(sed '/^#+begin_src shell$/,/^#+end_src$/!d;//d' "$config_directory"/readme.org)"
 
 if [ -f "$config_directory"/local.bash ]; then

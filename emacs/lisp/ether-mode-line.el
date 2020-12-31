@@ -53,15 +53,15 @@
 (defcustom ether-mode-line-hook
   (lambda ()
     (concat
-     ;; standard stuff
+     ;; Standard stuff.
      (format-mode-line "%l,%c") " "
      (propertize (ether-mode-line--major-mode) 'face 'mode-line) " "
-     ;; buffer indication
+     ;; Buffer indication.
      (propertize
       (if (buffer-file-name) (buffer-file-name) (buffer-name))
       'face (if (and (buffer-file-name) (buffer-modified-p))
                 'warning 'mode-line-buffer-id))
-     ;; irc
+     ;; IRC.
      (when (> (length (ether-mode-line--circe-tracking-buffers)) 0)
        (concat " " (ether-mode-line--circe-tracking-buffers)))
      (when (fboundp 'circe-lagmon-format-mode-line-entry)
@@ -97,8 +97,8 @@ STRING and OBJECTS are passed to `format'."
   "Update the displayed mode-line.
 ORIGIN may be either 'window for a window configuration change, 'message for
 a new message, 'timer for a tick or 'command after a command."
-  (let ((message (current-message))) ; on empty message should return nil
-    ;; bookkeeping
+  (let ((message (current-message))) ; On empty message should return nil.
+    ;; Bookkeeping.
     (when (and message (not (equal-including-properties ether-mode-line--last-message message)))
       (ether-mode-line--log "echo area content changed: %S" message)
       (setq ether-mode-line--last-message message)
@@ -108,15 +108,15 @@ a new message, 'timer for a tick or 'command after a command."
       (ether-mode-line--log "echo area content displayed for too long")
       (setq ether-mode-line--last-message nil
             ether-mode-line--last-message-time 0
-            ether-mode-line--last-mode-line nil ; flush cache used below
+            ether-mode-line--last-mode-line nil ; Flush cache used below.
             message nil))
     ;; mode-line
-    (unless message ; no content displayed, show the mode-line
+    (unless message ; No content displayed, show the mode-line.
       (condition-case err
           (let ((mode-line (funcall ether-mode-line-hook)))
-            (if (not (or (memq origin '(message ; a reset message should force a redisplay
-                                        window)) ; a window change should force a resize
-                         (not ; try to avoid unnecessary updates
+            (if (not (or (memq origin '(message ; A reset message should force a redisplay.
+                                        window)) ; A window change should force a resize.
+                         (not ; Try to avoid unnecessary updates.
                           (equal-including-properties ether-mode-line--last-mode-line mode-line))))
                 (ether-mode-line--log "keep cached content of minibuffer: %S" mode-line)
               (setq ether-mode-line--last-mode-line mode-line)
@@ -124,16 +124,16 @@ a new message, 'timer for a tick or 'command after a command."
                 (erase-buffer)
                 (insert mode-line)
                 (let ((lines (ceiling (/ (string-width mode-line) (float (window-total-width))))))
-                  ;; this is dubious at best (it won't properly handle some characters)
-                  ;; but fit-window-to-buffer, count-screen-line,
-                  ;; ivy--resize-minibuffer-to-fit, ... all have problems
+                  ;; This is dubious at best (it won't properly handle some characters)
+                  ;; but `fit-window-to-buffer', `count-screen-line',
+                  ;; `ivy--resize-minibuffer-to-fit', ... all have problems.
                   (ether-mode-line--log "insert %d lines into minibuffer: %S" lines mode-line)
                   (window-resize nil (- lines (window-total-height)) nil t))) ; calls the hook...
-              ;; it may be necessary to flush the echo area sometimes
-              (unless (memq origin '(command window)) ; unneeded and flickers
+              ;; It may be necessary to flush the echo area sometimes.
+              (unless (memq origin '(command window)) ; Unneeded and flickers.
                 (message 'ether-mode-line--message-flush))))
-        (text-read-only (ether-mode-line--log "minibuffer content is read-only")) ; skip when prompting
-        (error (unless (equal ether-mode-line--last-error err) ; keep track of internal errors so we don't spam
+        (text-read-only (ether-mode-line--log "minibuffer content is read-only")) ; Skip when prompting.
+        (error (unless (equal ether-mode-line--last-error err) ; Keep track of internal errors so we don't spam.
                  (setq ether-mode-line--last-error err)
                  (message "ether-mode-line: %S" err)))))))
 
@@ -142,14 +142,14 @@ a new message, 'timer for a tick or 'command after a command."
   `(walk-windows (lambda (window)
                    (with-selected-window window
                      ,@body))
-                 0 frame)) ; don't include minibuffer
+                 0 frame)) ; Don't include minibuffer.
 
 (cl-defun ether-mode-line--window-size-change-hook (&optional (frame (selected-frame)))
   "Selectively show the regular mode-line as an horizontal separator to tell buffers in FRAME apart."
   ;; https://emacs.stackexchange.com/questions/30513/making-a-variable-window-local
   ;; https://github.com/tautologyclub/feebleline/issues/24
   (ether-mode-line--with-walk-windows
-   frame ; reset the mode line of each buffer
+   frame ; Reset the mode line of each buffer.
    (setq mode-line-format nil))
   (ether-mode-line--with-walk-windows
    frame
@@ -165,17 +165,17 @@ a new message, 'timer for a tick or 'command after a command."
 (defun ether-mode-line--message (f &rest args)
   "An advice of `message' so some spurious stuff can be debounced.
 ARGS are formatting arguments passed to F."
-  ;; displaying empty messages too frequently will result in flickering
-  ;; unfortunately some modes do that, like some lsp implementations when
+  ;; Displaying empty messages too frequently will result in flickering.
+  ;; Unfortunately, some modes do that, like some LSP implementations when
   ;; they try to display empty help messages...
-  ;; maybe this will break some stuff that was relying on it?
-  (catch 'return ; simulate proper return value
+  ;; Maybe this will break some stuff that was relying on it?
+  (catch 'return ; Simulate proper return value.
     (when (and (= (length args) 1)
                (eq (nth 0 args) 'ether-mode-line--message-flush))
-      ;; when the mode-line changes, flush any existing message
-      ;; unfortunately some modes are misbehaving and will message soon after
+      ;; When the mode-line changes, flush any existing message.
+      ;; Unfortunately, some modes are misbehaving and will message soon after
       ;; but I don't want to go down the rabbit hole and try to fix unrelated
-      ;; code here
+      ;; code here.
       (ether-mode-line--log "flushing message")
       (throw 'return (apply f '(nil))))
     (when (and (= (length args) 1) (eq (nth 0 args) nil))
@@ -205,7 +205,7 @@ No effort made to restore previous settings..."
       (progn
         (advice-add 'message :around #'ether-mode-line--message)
         (add-hook 'window-size-change-functions 'ether-mode-line--window-size-change-hook)
-        ;; the iteration over the windows for each command is required in this case:
+        ;; The iteration over the windows for each command is required in this case:
         ;; C-h f describe-function *scratch*
         ;; advice-add
         ;; C-x o other-window *scratch*
@@ -218,7 +218,7 @@ No effort made to restore previous settings..."
         (add-hook 'post-command-hook 'ether-mode-line--insert-command-hook)
         (setq ether-mode-line--timer (run-with-timer 0 ether-mode-line-refresh-interval
                                                      #'ether-mode-line--insert 'timer))
-        (setq-default mode-line-format nil)) ; necessary or may reappear in some cases, like revert-buffer
+        (setq-default mode-line-format nil)) ; Necessary or may reappear in some cases, like `revert-buffer'.
     (cancel-timer ether-mode-line--timer)
     (remove-hook 'post-command-hook 'ether-mode-line--insert-command-hook)
     (remove-hook 'post-command-hook 'ether-mode-line--window-size-change-hook)
@@ -231,7 +231,7 @@ Join them together as they are already propertized in case of highlight."
   (when (boundp 'tracking-buffers)
     (cl-flet ((filter (buffer)
                       (text-property-any 0 1 'face 'circe-highlight-nick-face buffer)))
-      (string-join (append ; put the highlighted buffers first
+      (string-join (append ; Put the highlighted buffers first.
                     (sort (seq-filter #'filter tracking-buffers) 'string-collate-lessp)
                     (sort (seq-filter (lambda (buffer) (not (filter buffer))) tracking-buffers) 'string-collate-lessp))
                    " "))))
@@ -241,4 +241,5 @@ Join them together as they are already propertized in case of highlight."
   (string-trim-right (prin1-to-string major-mode) "-mode"))
 
 (provide 'ether-mode-line)
+
 ;;; ether-mode-line.el ends here

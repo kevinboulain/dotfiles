@@ -37,8 +37,7 @@ set -u
 
 ** System independence
 
-On some systems, =PROMPT_COMMAND= may be set externally and may mess up things.
-
+On some systems, =PROMPT_COMMAND= may be set externally and may mess up things:
 #+begin_src shell
 PROMPT_COMMAND=
 #+end_src
@@ -47,8 +46,7 @@ PROMPT_COMMAND=
 
 [[https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pattern-Matching][extglob]]
 is better explained by Bash's manual. In short, it extends pattern matching
-and allows some nice things like =!(file)= meaning /all but this file/.
-
+and allows some nice things like =!(file)= meaning /all but this file/:
 #+begin_src shell
 shopt -s extglob
 #+end_src
@@ -109,7 +107,7 @@ shopt -s histappend
 By default, 500 lines of history are remembered, let's tell Bash we don't want
 any limitations:
 #+begin_src shell
-history_size=$((${BASH_VERSINFO[0]} >= 4 && ${BASH_VERSINFO[1]} >= 3 ? -1 : 1000000000))
+history_size=$((${BASH_VERSINFO[0]} > 4 || (${BASH_VERSINFO[0]} >= 4 && ${BASH_VERSINFO[1]} >= 3) ? -1 : 1000000000))
 HISTSIZE=$history_size
 HISTFILESIZE=$history_size
 unset history_size
@@ -119,10 +117,10 @@ However, we may still want to have a maintainable history file, so
 splitting it by session seems to be a good idea:
 #+begin_src shell
 declare -r history_directory=~/.logs/bash
-# should be read-only to disallow spurious changes during the session
-# (for example, when sourcing again .bashrc)
-# note that due to how Bash works, this isn't perfect and the date
-# is mostly used as an unique identifier that may match
+# Should be read-only to disallow spurious changes during the session
+# (for example, when sourcing again .bashrc).
+# Note that due to how Bash works, this isn't perfect and the date
+# is mostly used as an unique identifier that may match.
 declare -r HISTFILE=$history_directory/$(hostname)/$(date -u +%F_%T_%Z)_$$
 history_subdirectory=$(dirname "$HISTFILE")
 [ -d "$history_subdirectory" ] || mkdir -p "$history_subdirectory"
@@ -132,11 +130,11 @@ unset history_subdirectory
 We may still lose data if the shell is abruptly terminated,
 so tell Bash to write the history immediately:
 #+begin_src shell
-# there seems to be a bug is some Bash versions where -a does nothing, so rely on the less effective -w
+# There seems to be a bug is some Bash versions where -a does nothing, so rely on the less efficient -w.
 PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -w'
 #+end_src
 
-It may be nice to be able to quickly search in all these files, since this
+It's nice to be able to quickly search in all these files, since this
 setup won't load them at the beginning of a new session (I like to start
 fresh):
 #+begin_src shell
@@ -158,9 +156,9 @@ HISTTIMEFORMAT='%F %T %Z '
 Finally, tweak history handling to avoid redundant information and ease
 sensitive information hiding:
 #+begin_src shell
-HISTCONTROL=ignoredups # ignore duplicates
-HISTCONTROL+=:erasedups # remove duplicates
-HISTCONTROL+=:ignorespace # don't store lines beginning with spaces
+HISTCONTROL=ignoredups # Ignore duplicates.
+HISTCONTROL+=:erasedups # Remove duplicates.
+HISTCONTROL+=:ignorespace # Don't store lines beginning with spaces.
 #+end_src
 
 * Unnoteworthy configurations
@@ -174,8 +172,8 @@ zero).
 But first, let's define some termcaps:
 #+begin_src shell
 if hash tput &> /dev/null; then
-  # it's totally fine to not check for termcaps availability here
-  # as it will simply result in an empty string
+  # It's totally fine to not check for termcaps availability here
+  # as it will simply result in an empty string.
   foreground_red=$(tput setaf 1)
   foreground_cyan=$(tput setaf 6)
   reset=$(tput sgr0)
@@ -183,8 +181,7 @@ fi
 declare -r foreground_red foreground_cyan reset
 #+end_src
 
-Then, let's run an handler after each command input to grab the exit code
-(it's important to make it first):
+Then, let's run a handler after each command input to grab the exit code:
 #+begin_src shell
 prompt_config() {
   if [ $? -eq 0 ]; then
@@ -195,14 +192,14 @@ prompt_config() {
 }
 declare -rfx prompt_config
 
-# on macOS, $PROMPT_COMMAND may use the function update_terminal_cwd
-# to display the current directory in the window's decoration
+# On macOS, $PROMPT_COMMAND may use the function update_terminal_cwd
+# to display the current directory in the window's decoration.
 PROMPT_COMMAND=prompt_config${PROMPT_COMMAND:+;$PROMPT_COMMAND}
 #+end_src
 
 And finally customize the prompt itself:
 #+begin_src shell
-# \[\] allow readline to correctly calculate the string's size
+# \[\] allows readline to correctly calculate the string's size.
 PS1='\h:\W \[$(printf -- '%s' "$prompt_color")\]\$\[$(printf -- '%s' "$reset")\] '
 #+end_src
 
@@ -217,7 +214,6 @@ alias l=ls
 ** Functions
 
 Create some CPU load:
-
 #+begin_src shell
 busy() (
   trap 'kill $(jobs -p) &> /dev/null' SIGINT SIGQUIT SIGTERM
@@ -268,7 +264,7 @@ export PAGER
 
 ** PATH
 
-Make sure the =PATH= doesn't contain redundant directories and orders it so
+Make sure the =PATH= doesn't contain redundant directories and order it so
 that I can override the system directories easily:
 #+begin_src shell
 order_path() {
@@ -276,9 +272,9 @@ order_path() {
   IFS=: read -r -a paths <<< "$PATH"
   PATH=
   local path
-  # standard locations comes after any user-defined $PATH
+  # Standard locations comes after any user-defined $PATH.
   for path in ~/.pub-cache/bin ~/.cargo/bin /{,usr/{,local/}}{bin,sbin} "${paths[@]}"; do
-    # if path exists and if it hasn't already been seen, prepend it
+    # If path exists and if it hasn't already been seen, prepend it.
     if [ -d "$path" ] && [[ ! "$PATH" =~ (^|:)"$path"(:|$) ]]; then
       PATH=$path${PATH+:$PATH}
     fi

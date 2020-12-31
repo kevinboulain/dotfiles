@@ -48,15 +48,10 @@ bspc config gapless_monocle true
 bspc config click_to_focus true # 0.9.3 deprecated, now a button name
 bspc config focus_follows_pointer true
 
-if false; then  # zenburn
-  mode_line_buffer_id_foreground='#f0dfaf'
-  mode_line_foreground='#8fb28f'
-  mode_line_background='#2b2b2b'
-else # tao
-  mode_line_buffer_id_foreground='#fafafa'
-  mode_line_foreground='#f1f1f1'
-  mode_line_background='#050505'
-fi
+# tao-theme
+mode_line_buffer_id_foreground='#fafafa'
+mode_line_foreground='#f1f1f1'
+mode_line_background='#050505'
 
 # bspwm style configuration (compton may be used to tweak it more)
 bspc config normal_border_color "$mode_line_background" # unfocused window

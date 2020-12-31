@@ -8,7 +8,7 @@
 - [[#theming][Theming]]
 - [[#other-functionalities][Other Functionalities]]
   - [[#completion][Completion]]
-  - [[#white-spaces-handling][White spaces handling]]
+  - [[#whitespace-handling][Whitespace handling]]
   - [[#delimiters][Delimiters]]
   - [[#remembering-keybindings][Remembering keybindings]]
   - [[#moving-around][Moving around]]
@@ -54,9 +54,9 @@ alternative I'm using.
 It is Git-based and keep only one copy of the installed packages.
 Due to its design, it doesn't handle custom builds for now.
 #+begin_src emacs-lisp
-(setq straight-repository-branch "develop") ; use the development version
+(setq straight-repository-branch "develop") ; Use the development version.
 
-;; automatically install straight
+;; Automatically install straight.
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -72,12 +72,12 @@ Due to its design, it doesn't handle custom builds for now.
 #+end_src
 
 I'll also use
-[[https://github.com/jwiegley/use-package][use-package]] which seems to give
-a better structure to Emacs' configuration.
+[[https://github.com/jwiegley/use-package][use-package]] which gives a better
+structure to this configuration.
 #+begin_src emacs-lisp
 (straight-use-package `(use-package :host github :repo "jwiegley/use-package"))
 
-(require 'bind-key) ; use-package comes with way to define keybindings
+(require 'bind-key) ; `use-package' comes with way to define keybindings.
 #+end_src
 
 * Built-in & general setup
@@ -90,8 +90,8 @@ a possibly out of date =.elc= file:
 
 Convert the tab character to spaces:
 #+begin_src emacs-lisp
-(setq-default tab-width 2 ; tab size
-              indent-tabs-mode nil) ; indent with spaces only
+(setq-default tab-width 2 ; Tab size.
+              indent-tabs-mode nil) ; Indent with spaces only.
 #+end_src
 
 Tell Emacs to stop littering my environment by setting the directories
@@ -101,20 +101,21 @@ for backup, auto-saves, sessions and disabling interlock:
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
       auto-save-list-file-prefix temporary-file-directory)
 
-;; I'm not sure I see any point besides spamming the filesystem and
-;; breaking some tools.
+;; I'm not sure lockfies provide any advantages besides spamming the filesystem
+;; and breaking external tools.
 (setq create-lockfiles nil)
 #+end_src
 
 Quiet down Emacs a bit:
 #+begin_src emacs-lisp
-(menu-bar-mode -1) ; remove the f10 menu
+(menu-bar-mode -1) ; Remove the f10 menu.
 
-(defalias 'yes-or-no-p 'y-or-n-p) ; replace annoying questions 'yes' or 'no' by their 'y' or 'n' counterparts
+(defalias 'yes-or-no-p 'y-or-n-p) ; Replace the 'yes'/'no' question by its 'y'/'n' counterpart.
 
-(set-display-table-slot standard-display-table 'wrap ?\ ) ; remove the \ for a wrapped line
+;; Remove the \ for a wrapped line.
+(set-display-table-slot standard-display-table 'wrap ?\ )
 
-(setq inhibit-startup-screen t) ; don't show the 'GNU Emacs' buffer
+(setq inhibit-startup-screen t) ; Don't show the 'GNU Emacs' buffer.
 (defun display-startup-echo-area-message ()
   "Disable 'For information about GNU Emacs...' in the minibuffer.
 `inhibit-startup-echo-area-message' must be set in the init
@@ -123,13 +124,13 @@ file to your username... Let's override the function instead...")
 
 But I prefer more reporting when it's related to the point:
 #+begin_src emacs-lisp
-(line-number-mode 1) ; show line number in the mode-line
-(column-number-mode 1) ; show column number in the mode-line
+(line-number-mode 1) ; Show line number in the mode-line.
+(column-number-mode 1) ; Show column number in the mode-line.
 
-(global-hl-line-mode) ; highlight the line containing the cursor
-(set-face-attribute 'hl-line nil :foreground 'unspecified) ; why override the foreground?! see also face-remapping-alist
+(global-hl-line-mode) ; Highlight the line containing the cursor.
+(set-face-attribute 'hl-line nil :foreground 'unspecified) ; Don't override the foreground.
 
-(show-paren-mode 1) ; show matching parenthesis/bracket/...
+(show-paren-mode 1) ; Show matching parenthesis/bracket/...
 #+end_src
 
 While we are at it, enable mouse interaction in terminals so clicking and
@@ -137,25 +138,25 @@ scrolling may move the point:
 #+begin_src emacs-lisp
 (unless window-system
   (when (require 'mouse nil t)
-    (xterm-mouse-mode t) ; that seems a bit too hard-coded
+    (xterm-mouse-mode t) ; That seems a bit too hard-coded?
     (bind-keys ([mouse-4] . (lambda () (interactive) (scroll-down 1)))
                ([mouse-5] . (lambda () (interactive) (scroll-up 1))))))
 #+end_src
 
 Some window-related configuration:
 #+begin_src emacs-lisp
-(setq split-width-threshold 1) ; split horizontally by default
+(setq split-width-threshold 1) ; Split horizontally by default.
 
-(windmove-default-keybindings) ; default keybindings for windmove: shift + arrows
+(windmove-default-keybindings) ; Default keybindings for windmove: shift + arrows.
 #+end_src
 
 Other unrelated configurations:
 #+begin_src emacs-lisp
-(setq dired-dwim-target t) ; 'commander' interface for dired
+(setq dired-dwim-target t) ; Guess target directory.
 
-(setq vc-handled-backends nil) ; disable source control handling
+(setq vc-handled-backends nil) ; Disable source control handling.
 
-(setq sort-fold-case t) ; case-insensitive sort-lines
+(setq sort-fold-case t) ; Case-insensitive sort-lines.
 
 ;; recursive minibuffer
 (setq enable-recursive-minibuffers t)
@@ -166,12 +167,11 @@ Other unrelated configurations:
 
 To determine which of the below packages take the most time to load,
 invoke Emacs in the following way:
-
 #+begin_src shell
 emacs --benchmark-init
 #+end_src
 
-This won't take into account the above =use-package= & =straight.el= setup
+It won't take into account the above =use-package= & =straight.el= setup
 though.
 
 #+begin_src emacs-lisp
@@ -187,8 +187,7 @@ is also great but limited to a file.
 
 ** Debugging
 
-It's sometimes difficult to set =debug-on-error= but Emacs provides the =--eval=
-command line argument:
+To debug problems happening early, set =debug-on-error= from the command line:
 #+begin_src shell
 emacs --eval '(setq debug-on-error t)'
 #+end_src
@@ -201,10 +200,7 @@ It's sometimes useful to tracks commands:
 
 * Theming
 
-Here, I keep some of the themes I used.
-Since they are =deferred= they won't even be loaded.
-
-But first, fix Emacs' behavior and make it unload any theme before loading
+First, fix Emacs' behavior and make it unload any theme before loading
 another one:
 #+begin_src emacs-lisp
 ;; http://www.bartuka.com/pages-output/personal-emacs-configuration/
@@ -216,61 +212,50 @@ another one:
 It's important to load the theme early as later configuration may use or copy
 faces provided by the theme:
 #+begin_src emacs-lisp
-(use-package monokai-theme
-  :defer t
-  :straight (:host github :repo "oneKelvinSmith/monokai-emacs"))
-
 (use-package tao-yin-theme
   :straight (tao-theme :host github :repo "11111000000/tao-theme-emacs")
   :init
-  (setq tao-theme-use-sepia nil) ; original behavior
+  (setq tao-theme-use-sepia nil) ; Original behavior before sepia was introduced.
   :config
   (load-theme 'tao-yin t)
-  ;; there is no proper way to use custom-theme-set-faces before load-theme or
-  ;; enable-theme, the behavior seems to have changed in Emacs 27
+  ;; There is no proper way to use `custom-theme-set-faces' before load-theme
+  ;; or `enable-theme', the behavior seems to have changed in Emacs 27:
   ;;  - https://emacs.stackexchange.com/a/14370
   ;;  - https://emacs.stackexchange.com/a/28947
   ;;  - https://emacs.stackexchange.com/q/48365
-  ;; calling custom-theme-set-faces before them will only prepend to
-  ;; 'theme-settings while doing it after will remove the duplicated entries
+  ;; Calling `custom-theme-set-faces' before loading a theme will only prepend
+  ;; to 'theme-settings while doing it after will remove the duplicated entries.
   (custom-theme-set-faces
    'tao-yin
-   ;; override the mode-line{,-inactive} faces to match vertical-border, see
-   ;; the mode-line setup below
+   ;; Override the mode-line{,-inactive} faces to match vertical-border, see
+   ;; the mode-line setup below.
    '(mode-line ((t (:inherit vertical-border))))
    '(mode-line-inactive ((t (:inherit vertical-border))))))
-
-(use-package zenburn-theme
-  :defer t
-  :straight (:host github :repo "bbatsov/zenburn-emacs")
-  :init
-  (setq zenburn-override-colors-alist '(("zenburn-bg" . "#1f1f1f")))) ; darker background
 #+end_src
 
 * Other Functionalities
 
 ** Completion
 
-Many packages extend [[http://company-mode.github.io/][Company]] by adding specific back-ends, so we'll rely on it
-to provide completion:
-
+Many packages extend [[http://company-mode.github.io/][Company]] by adding
+specific back-ends, so we'll rely on it to provide completion:
 #+begin_src emacs-lisp
 (use-package company
   :straight (:host github :repo "company-mode/company-mode")
   :hook (after-init . global-company-mode)
   :bind
   (:map company-active-map
-        ;; by default company use arrows, making me switch from these two
-        ;; they can still be used and C-g will kill the popup
-        ("C-p" . company-select-previous-or-abort)
-        ("C-n" . company-select-next-or-abort))
+        ;; By default company use arrows instead of the commonly used
+        ;; C-p and C-n. Use C-g to kill the pop-up.
+        ("C-n" . company-select-next-or-abort)
+        ("C-p" . company-select-previous-or-abort))
   :config
-  (setq company-dabbrev-downcase nil ; dabbrev complete case sensitive
-        company-idle-delay 0 ; no delay before showing completion
-        company-minimum-prefix-length 2 ; start completing rapidly
-        company-tooltip-align-annotations t ; align annotations to the right
-        ;; for some reason they enable broken backends like company-clang by
-        ;; default (and considering there is LSP, this is just superfluous)
+  (setq company-dabbrev-downcase nil ; dabbrev complete case sensitive.
+        company-idle-delay 0 ; No delay before showing completion.
+        company-minimum-prefix-length 2 ; Start completing sooner.
+        company-tooltip-align-annotations t ; Align annotations to the right.
+        ;; For some reason they enable broken backends, like company-clang, by
+        ;; default (and considering there is LSP, this is just superfluous).
         company-backends '(company-capf)))
 #+end_src
 
@@ -292,40 +277,40 @@ Use =C-j= to force an input not present in completions
   :hook ((selectrum-mode . selectrum-prescient-mode)
          (selectrum-mode . prescient-persist-mode))
   :config
-  (setq prescient-filter-method 'fuzzy)) ; enable fuzzy matching by default
+  (setq prescient-filter-method 'fuzzy)) ; Enable fuzzy matching by default.
 #+end_src
 
-** White spaces handling
+** Whitespace handling
 
-Correct white space handling is important (getting cleaner diffs for example).
+Correct whitespace handling is important (to get cleaner diffs for example).
 However, Emacs' =whitespace-mode= seems to have some problems (as an example,
 its faces mess up with the text's properties in Circe).
-Fortunately, [[https://github.com/glasserc/ethan-wspace][ethan-wspace]] aims to do much better.
-
+Fortunately, [[https://github.com/glasserc/ethan-wspace][ethan-wspace]] aims
+to do much better:
 #+begin_src emacs-lisp
 (use-package ethan-wspace
   :straight (:host github :repo "glasserc/ethan-wspace")
   :config
-  (setq mode-require-final-newline nil) ; don't automatically add final newlines
+  (setq mode-require-final-newline nil) ; Don't automatically add final newlines.
   (global-ethan-wspace-mode 1))
 #+end_src
 
 It's nice to be able to display all white spaces sometimes and
 =whitespace-mode= is still the best here:
-
 #+begin_src emacs-lisp
 (use-package whitespace
-  ;; the default value of whitespace-style and whitespace-line-column seems good enough
+  ;; The default values of `whitespace-style' and `whitespace-line-column'
+  ;; seem good enough.
   :bind (("<f12>" . whitespace-mode)))
 #+end_src
 
 ** Delimiters
 
-Most of the time, brackets, parentheses, braces, etc. are paired together.
+Most of the time, brackets, parentheses, braces, etc, are paired together.
 =show-paren-mode= helps by showing the matching one but it's sometimes a bit
 too cumbersome to use as you have to move the point.
-[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] helps by coloring each pair.
-
+[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] helps by
+coloring each pair:
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :straight (:host github :repo "Fanael/rainbow-delimiters")
@@ -336,8 +321,7 @@ too cumbersome to use as you have to move the point.
 ** Remembering keybindings
 
 [[https://github.com/justbur/emacs-which-key][which-key]] will display
-a pop-in during key combinations.
-
+a pop-in during key combinations:
 #+begin_src emacs-lisp
 (use-package which-key
   :straight (:host github :repo "justbur/emacs-which-key")
@@ -360,17 +344,17 @@ The index appears in the top left corner.
 #+begin_src emacs-lisp
 (use-package avy
   :straight (:host github :repo "abo-abo/avy")
-  :bind (("C-o" . avy-goto-word-or-subword-1))) ; override open-line default binding
+  :bind (("C-o" . avy-goto-word-or-subword-1))) ; Override open-line default binding.
 
-;; despite the name, it's avy-based
+;; Despite the name, it's Avy-based.
 (use-package ace-window
   :straight (:host github :repo "abo-abo/ace-window")
-  :bind (("M-o" . ace-window)) ; override facemenu default binding
+  :bind (("M-o" . ace-window)) ; Override facemenu default binding.
   :config
-  (setq aw-background nil)) ; don't remove colors
+  (setq aw-background nil)) ; Don't remove colors.
 #+end_src
 
-And to move regions or lines (Magit-style):
+And to move regions or lines (Magit commit buffer-style):
 #+begin_src emacs-lisp
 (use-package move-text
   :straight (:host github :repo "emacsfodder/move-text")
@@ -381,8 +365,7 @@ And to move regions or lines (Magit-style):
 ** Lighter mode-line
 
 Disable the standard mode-line and replace it with a minimalistic version,
-displayed in the minibuffer when it's idle.
-
+displayed in the minibuffer when it's idle:
 #+begin_src emacs-lisp
 (require 'ether-mode-line)
 (add-hook 'after-init-hook #'ether-mode-line-mode)
@@ -395,9 +378,9 @@ displayed in the minibuffer when it's idle.
 #+begin_src
 (when (boundp 'display-line-numbers) ; introduced in emacs 26
   (set-face-attribute 'line-number-current-line nil
-                      ;; highlight the line current line number
+                      ;; Highlight the line current line number.
                       :foreground (face-attribute 'font-lock-keyword-face :foreground nil t)
-                      ;; highlight the margin with the same line highlighting
+                      ;; Highlight the margin with the same line highlighting.
                       :background (when (bound-and-true-p global-hl-line-mode)
                                     (face-attribute 'hl-line :background nil t)))
   (global-display-line-numbers-mode))
@@ -411,7 +394,7 @@ Slightly dim the inactive buffers:
 #+begin_src
 (defun ether--dim-color (rgb percent)
   "Dim the RGB color expressed in the format #rrggbb by PERCENT."
-  ;; looks like there is no color-hex-to-rgb
+  ;; Looks like there is no color-hex-to-rgb.
   (let ((r (/ (float (string-to-number (substring rgb 1 3) 16)) (float 255)))
         (g (/ (float (string-to-number (substring rgb 3 5) 16)) (float 255)))
         (b (/ (float (string-to-number (substring rgb 5 7) 16)) (float 255))))
@@ -443,10 +426,9 @@ Use =M-x htmlize-buffer=.
 Or =C-SPC= two times then move the point to the end of the region then
 =M-x htmlize-region= (so you don't render the region selection overlay).
 
-The below configuration even allow to call Emacs like so:
-
+The below configuration even allows to call Emacs like this:
 #+begin_src shell
-emacs --htmlize path/to/file # which will output path/to/file.html
+emacs --htmlize path/to/file # outputs path/to/file.html
 #+end_src
 
 #+begin_src emacs-lisp
@@ -465,7 +447,7 @@ emacs --htmlize path/to/file # which will output path/to/file.html
             (write-region (point-min) (point-max) destination))
           (kill-emacs 0)))
     (error (progn
-             (princ out #' external-debugging-output) ; may not be shown due to termcaps, use a redirection
+             (princ out #' external-debugging-output) ; May not be shown due to termcaps, use a redirection.
              (kill-emacs 1)))))
 
 (use-package htmlize
@@ -474,11 +456,12 @@ emacs --htmlize path/to/file # which will output path/to/file.html
   :init
   (add-to-list 'command-switch-alist '("--htmlize" . ether--htmlize-file))
   :config
-  ;; use the Iosevka font if available (ligatures may be nice for displayed code)
-  ;; requires fontconfig, works on Linux and macOS
-  ;; use %{=unparse} format to see all options
-  ;; regular Iosevka instead of Iosevka Term seems to produce some irregularities
-  ;; for example let-alist and use-package seems to be slightly larger
+  ;; Use the Iosevka font when available (ligatures are nice touch).
+  ;; Requires fontconfig, works on Linux and macOS (use the %{=unparse} format
+  ;; to see all options).
+  ;; The base Iosevka font seems to produce some irregularities (for example
+  ;; `let-alist' and `use-package' seem to be slightly larger), so use Iosevka
+  ;; Term instead.
   (let* ((fc-match "fc-match -f '%{file}' 'Iosevka Term:style=Regular'")
          (path (shell-command-to-string fc-match)))
     (when (s-suffix? ".ttf" path :ignore-case) ; Firefox doesn't like .ttc
@@ -495,14 +478,14 @@ emacs --htmlize path/to/file # which will output path/to/file.html
 "
                                       (base64-encode-string (with-temp-buffer (insert-file-contents path) (buffer-string)) t)))))
   :hook ((htmlize-before . (lambda ()
-                             ;; disable some modes that may influence rendering
-                             ;; the original buffer is protected, no need to restore
-                             ;; flycheck handling (use special faces that are not nicely rendered)
+                             ;; Disable some modes that may influence rendering (the original buffer
+                             ;; is protected, there is no need to restore anything).
+                             ;; Flycheck handling (it uses special faces that are not nicely rendered).
                              (when (bound-and-true-p flycheck-mode) (flycheck-mode))
-                             ;; disable current line highlighting (both a function and a variable)
+                             ;; Disable current line highlighting (both a function and a variable).
                              (when (bound-and-true-p global-hl-line-mode) (global-hl-line-unhighlight))
-                             ;; TODO: lsp stuff
-                             ;; (sit-for 3) ; allow to see the changes made to the buffer
+                             ;; TODO: LSP stuff
+                             ;; (sit-for 3) ; See the changes made to the buffer.
                              ))))
 #+end_src
 
@@ -511,14 +494,13 @@ emacs --htmlize path/to/file # which will output path/to/file.html
 ** IRC
 
 [[https://github.com/jorgenschaefer/circe][Circe]] is an alternative to
-built-in IRC clients.
-
+built-in IRC clients:
 #+begin_src emacs-lisp
-(setq circe-logging nil) ; small hack to avoid a warning because Circe doesn't expect this variable
+(setq circe-logging nil) ; Hack to avoid a warning because Circe doesn't expect this variable.
 (defun ether--lui-selective-logging ()
-  "When a network in `circe-network-options' set the `:logging' property to
+  "When a network in `circe-network-options' sets the `:logging' property to
 a truthy value, enable logging for it."
-  ;; see circe-chat-mode and enable-lui-logging-globally
+  ;; See `circe-chat-mode' and `enable-lui-logging-globally'.
   (when (plist-get (cdr (assoc (with-circe-server-buffer circe-network)
                                circe-network-options))
                    :logging)
@@ -531,40 +513,40 @@ a truthy value, enable logging for it."
          (circe-mode . circe-lagmon-mode)
          (lui-mode . ether--lui-selective-logging))
   :config
-  ;; colorize nicks
+  ;; Colorize nicks.
   (require 'circe-color-nicks)
   (enable-circe-color-nicks)
 
-  ;; logging configuration
+  ;; Logging configuration.
   (require 'lui-logging)
   (setq lui-logging-directory "~/.logs" ; default
         lui-logging-file-format "irc/{network}/{buffer}.txt"
         lui-logging-format "[%F %T %Z] {text}")
-  ;; don't enable it by default for privacy reasons
+  ;; Don't enable it by default for privacy reasons.
   ;; (enable-lui-logging-globally)
-  ;; make sure there is no display difference between others and me
+  ;; No display difference between others and me:
   (setq circe-format-self-say circe-format-say
         circe-format-self-action circe-format-action)
 
-  (setq lui-flyspell-p t) ; enable spell checking
+  (setq lui-flyspell-p t) ; Enable spell checking (see below).
 
-  (setq lui-fill-type nil ; no text wrapping
+  (setq lui-fill-type nil ; No text wrapping.
         lui-time-stamp-format "%H:%M"
-        lui-time-stamp-position 'right-margin ; see above hook
-        circe-format-server-topic "*** Topic change by {nick} ({userhost}): {topic-diff}") ; topic-diff instead of new-topic
+        lui-time-stamp-position 'right-margin ; See :hook above.
+        circe-format-server-topic "*** Topic change by {nick} ({userhost}): {topic-diff}") ; topic-diff instead of new-topic.
 
-  ;; log a new day
+  ;; Log a new day.
   (require 'circe-new-day-notifier)
   (enable-circe-new-day-notifier)
-  (add-to-list 'circe-format-not-tracked 'circe-new-day-notifier-format-message) ; don't track day notifications
+  (add-to-list 'circe-format-not-tracked 'circe-new-day-notifier-format-message) ; Don't track day notifications.
 
-  ;; anonymization
+  ;; Anonymization.
   (setq circe-default-quit-message ""
         circe-default-part-message ""
-        circe-default-realname circe-default-nick)) ; avoid real identity leak from user-full-name
+        circe-default-realname circe-default-nick)) ; Avoid identity leak from `user-full-name'.
 #+end_src
 
-You'll probably need to setup it like so:
+Your setup should like look like this:
 #+begin_src
 (setq circe-network-options '(
   ("freenode"
@@ -606,12 +588,12 @@ You'll probably need to setup it like so:
   :straight (:host github :repo "yuya373/emacs-slack")
   :hook (slack-mode . (lambda () (setq-local right-margin-width 5)))
   :config
-  ;; timestamp setup, same as in circe.el
+  ;; Timestamp setup, same as with Circe.
   (setq lui-time-stamp-format "%H:%M"
         lui-time-stamp-position 'right-margin))
 #+end_src
 
-You'll probably need to setup it like so:
+Your setup should like look like this:
 #+begin_src
 (slack-register-team
   :name "team"
@@ -622,7 +604,7 @@ You'll probably need to setup it like so:
   :full-and-display-names t)
 #+end_src
 
-The easiest way to fill above information is to open the browser's network
+The easiest way to fill above information is to open your browser's network
 tab and search for =_x_id= & =xoxs-=.
 Or you may want to create an application to access the API.
 
@@ -641,11 +623,11 @@ You'll have to set =elfeed-feeds= to a list of feeds.
 
 ** [[https://orgmode.org/][Org]]
 
-I use the embedded Org for now.
-
+Use the embedded Org for now:
 #+begin_src emacs-lisp
-(setq org-replace-disputed-keys t) ; windmove keybindings conflict
-(setq org-startup-folded "nofold") ; don't fold sections when opening a buffer
+(setq org-descriptive-links nil ; Don't shorten links.
+      org-replace-disputed-keys t ; windmove keybindings conflict.
+      org-startup-folded "nofold") ; Don't fold sections when opening a buffer.
 #+end_src
 
 Since the whole point of this document is to be readable on GitHub, let's
@@ -662,10 +644,11 @@ automatically generate a table of contents:
 (use-package markdown-mode
   :defer t
   :straight (:host github :repo "jrblevin/markdown-mode")
-  :bind (:map markdown-mode-map ; clear override of move-text
+  :bind (:map markdown-mode-map ; Clear the override of move-text.
          ("M-n" . nil)
          ("M-p" . nil)))
 #+end_src
+
 ** gettext
 
 On Debian, install =gettext-el=.
@@ -679,8 +662,8 @@ On Debian, install =gettext-el=.
 You'll need to install [[https://hunspell.github.io/][Hunspell]].
 
 Dictionaries may or may not be provided by your distribution.
-On Debian, dictionaries are available via =hunspell-*= packages, else,
-retrieve =.aff= & =.dic= files here:
+On Debian, dictionaries are available via =hunspell-*= packages.
+You can always retrieve =.aff= & =.dic= files here:
 - =en_*=: http://wordlist.aspell.net/dicts/
 - =fr-*=: https://grammalecte.net/download.php?prj=fr
 
@@ -697,36 +680,36 @@ Setup is a bit tricky:
     (progn
       (setq ispell-program-name ether--spellchecker)
       (setq ispell-dictionary ether--languages)
-      ;; the following may crash with:
+      ;; The following may crash with:
       ;;   Wrong type argument: stringp, nil
-      ;; if hunspell isn't able to find dictionaries
+      ;; If Hunspell isn't able to find dictionaries:
       ;;   export LC_ALL=en_US.UTF-8
       ;;   export DICPATH=~/Library/Spelling
-      ;; use hunspell -D to check hunspell's environment
+      ;; Use 'hunspell -D' to check Hunspell's environment.
       (ispell-set-spellchecker-params)
       (ispell-hunspell-add-multi-dic ether--languages)
-      ;; it significantly slows down emacs, so no prog-mode-hook for now
+      ;; It significantly slows down Emacs, so no `prog-mode-hook' for now.
       ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
       ;; (add-hook 'text-mode-hook 'ispell-buffer)
       ;; (add-hook 'prog-mode-hook 'ispell-comments-and-strings)
       ;; (add-hook 'text-mode-hook 'flyspell-buffer)
       (add-hook 'text-mode-hook 'flyspell-mode))
-  (message "Unable to load ispell due to missing dependency"))
+  (message "Unable to load ispell due to missing dependency."))
 #+end_src
 
 If not run automatically, use =M-x flyspell-{buffer,mode}=.
 Use =M-$= to correct an highlighted word.
 
-It may cause significant slow down.
+It may cause noticeable slowdowns.
 
 * Programming languages handling
 
 ** [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]]
 
-LSP is a really nice abstraction and avoid to clutter your Emacs configuration
-because most of the programming languages now have a server implementing this
-protocol. Its means you'll have a consistent experience without much need to
-produce a (sometimes complex) language-specific configuration.
+LSP abstracts most programming languages environment configurations (as many
+of them now provide a server implementing this protocol). It means you'll
+have a consistent experience without needing to produce a (sometimes complex)
+language-specific configuration.
 
 #+begin_src emacs-lisp
 (use-package lsp-mode
@@ -735,37 +718,37 @@ produce a (sometimes complex) language-specific configuration.
   :straight (:host github :repo "emacs-lsp/lsp-mode")
   :config
   (setq lsp-auto-guess-root t
-        lsp-enable-on-type-formatting nil ; don't apply code formatting
-        ;; don't load a bunch of packages I don't use
-        ;; the downside being you'll need to require your preferred client
-        ;; (which is a better default anyway) and invoke `lsp'
+        lsp-enable-on-type-formatting nil ; Don't apply code formatting.
+        ;; Don't load a bunch of packages I don't use, the downside being
+        ;; you'll need to require your preferred client (which is a better
+        ;; default anyway) and invoke `lsp'.
         lsp-client-packages nil))
 
 (use-package lsp-ui
   :commands lsp-ui-mode
   :straight (:host github :repo "emacs-lsp/lsp-ui")
   :config
-  (setq lsp-ui-sideline-ignore-duplicate t)) ; duplicate symbols can quickly grow on multiple lines
+  (setq lsp-ui-sideline-ignore-duplicate t)) ; Duplicate symbols can quickly grow on multiple lines.
 #+end_src
 
 ** Error reporting
 
-[[https://flycheck.readthedocs.io][Flycheck]] aims to replace Emacs' built-in Flymake. It supports many language and
-checkers out the box and offers a more complete experience with LSP.
+[[https://flycheck.readthedocs.io][Flycheck]] aims to replace Emacs' built-in
+Flymake. It supports many languages and checkers out the box and offers a more
+complete experience with LSP.
 
 #+begin_src emacs-lisp
 (use-package flycheck
   :straight (:host github :repo "flycheck/flycheck")
   :hook (prog-mode . flycheck-mode)
   :config
-  (setq flycheck-checker-error-threshold nil ; don't stop after a large number of errors
-        flycheck-temp-prefix ".flycheck")) ; hide temporary files
+  (setq flycheck-checker-error-threshold nil ; Don't stop after a large number of errors.
+        flycheck-temp-prefix ".flycheck")) ; Hide temporary files.
 #+end_src
 
 ** [[http://wiki.portal.chalmers.se/agda/pmwiki.php][Agda]]
 
-Nothing special here, the mode should be installed alongside the compiler.
-
+Nothing special here, the mode should be installed alongside the compiler:
 #+begin_src emacs-lisp
 (when (require 'agda2 nil t))
 #+end_src
@@ -774,7 +757,7 @@ Nothing special here, the mode should be installed alongside the compiler.
 
 Style configuration:
 #+begin_src emacs-lisp
-(c-set-offset 'case-label '+) ; indent case in switch
+(c-set-offset 'case-label '+) ; Indent case in switch.
 (setq c-basic-offset tab-width
       c-default-style "k&r")
 #+end_src
@@ -784,11 +767,10 @@ which can be generated with [[https://github.com/Kitware/CMake][CMake]]:
 #+begin_src emacs-lisp
 (use-package cmake-mode
   :straight (:host github
-             ;; straight does not support shallow clones and the official
-             ;; CMake repository is too big
+             ;; straight.el does not support shallow clones and the official
+             ;; CMake repository is too big.
              :repo "emacsmirror/cmake-mode"
-             ;; this mirror doesn't have its files in the same location
-             ;; declared by the recipe
+             ;; This mirror's files don't follow the recipe:
              ;; https://github.com/melpa/melpa/blob/master/recipes/cmake-mode
              :files ("*.el")))
 #+end_src
@@ -822,7 +804,7 @@ I currently don't like the existing
     st))
 
 (define-derived-mode ether--context-mode
-  text-mode ; so spell checking works (but it also checks commands...)
+  text-mode ; So spell checking works (but it also checks commands...).
   "ConTeXt"
   (setq-local comment-start "%"))
 
@@ -842,7 +824,7 @@ pub global activate dart_language_server
 #+begin_src emacs-lisp
 (use-package dart-mode
   :straight (:host github :repo "bradyt/dart-mode")
-  :hook (dart-mode . flycheck-mode)) ; flycheck isn't enabled automatically otherwise
+  :hook (dart-mode . flycheck-mode)) ; Flycheck isn't enabled automatically otherwise.
 #+end_src
 
 ** [[https://golang.org/][Go]]
@@ -865,7 +847,7 @@ etc.
   :defer t
   :straight (:host github :repo "idris-hackers/idris-mode")
   :config
-  (setq idris-repl-banner-functions nil)) ; disable startup animation
+  (setq idris-repl-banner-functions nil)) ; Disable startup animation.
 #+end_src
 
 ** [[https://www.lua.org/][Lua]]
@@ -885,11 +867,10 @@ Mainly for syntax highlighting and indentation.
 Mainly for syntax highlighting and indentation.
 
 #+begin_src emacs-lisp
-;; straight not supporting shallow clones,
-;; use a mirror instead of the official OpenSCAD repository
-;; it seems to be lagging a bit behind?
 (use-package scad-mode
   :defer t
+  ;; straight.el does not support shallow clones and the official
+  ;; OpenSCAD repository is too big.
   :straight (:host github :repo "emacsmirror/scad-mode"))
 #+end_src
 
@@ -927,7 +908,6 @@ isn't fixed yet).
   :defer t
   :straight (:host github :repo "rust-lang/rust-mode")
   :config
-  (add-to-list 'auto-mode-alist '("\\.rs$" . rust-mode))
   (setq rust-indent-offset tab-width))
 
 (use-package flycheck-rust
@@ -942,7 +922,7 @@ can correctly handle all of Bash's tricks.
 
 #+begin_src emacs-lisp
 (setq sh-basic-offset tab-width)
-(add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; disable the annoying heredoc EOF completion
+(add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; Disable the annoying heredoc EOF completion.
 #+end_src
 
 ** [[https://yaml.org/][YAML]]
@@ -997,7 +977,7 @@ but now use [[https://github.com/polymode/polymode][polymode]]:
 (use-package poly-markdown
   :defer t
   :straight (:host github :repo "polymode/poly-markdown")
-  :bind (:map polymode-mode-map ; clear override of move-text
+  :bind (:map polymode-mode-map ; Clear the override of move-text.
          ("M-n" . nil)))
 
 (use-package poly-org

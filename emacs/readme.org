@@ -273,34 +273,23 @@ to provide completion:
 
 There is the built-in Ido, but it requires to be extended by multiple
 packages (like Smex or =ido-vertical-mode=).
-Instead I rely on [[https://github.com/abo-abo/swiper][Ivy]].
+Instead I rely on [[https://github.com/raxod502/selectrum][Selectrum]]
+(as a replacement of [[https://github.com/abo-abo/swiper][Ivy]]).
 
-Use =C-M-j= to force an input not present in completions
+Use =C-j= to force an input not present in completions
 (similar to Ido's =C-f=), or select what's in the prompt.
 
 #+begin_src emacs-lisp
-;; ivy makes use of flx if it's installed
-;; this provides way better matching, for example
-;; M-x quer will rightfully display query-replace as the top choice
-(use-package flx
-  :defer t
-  :straight (:host github :repo "lewang/flx"))
+(use-package selectrum
+  :straight (:host github :repo "raxod502/selectrum")
+  :hook (after-init . selectrum-mode))
 
-;; provides ivy, swiper & counsel
-;; to get swiper as a replacement of isearch, ivy-yank-word
-;; should probably be reassigned to C-s
-(use-package ivy
-  :straight (:host github :repo "abo-abo/swiper")
-  :hook (after-init . ivy-mode)
-  :init
-  (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy))) ; similar to ido-enable-flex-matching
+(use-package selectrum-prescient
+  :straight (:host github :repo "raxod502/prescient.el")
+  :hook ((selectrum-mode . selectrum-prescient-mode)
+         (selectrum-mode . prescient-persist-mode))
   :config
-  (setq ivy-use-selectable-prompt t)
-  :bind
-  (:map ivy-minibuffer-map
-        ;; ido style selection
-        ("C-j" . ivy-immediate-done)
-        ("RET" . ivy-alt-done)))
+  (setq prescient-filter-method 'fuzzy)) ; enable fuzzy matching by default
 #+end_src
 
 ** White spaces handling

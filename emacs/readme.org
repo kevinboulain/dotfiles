@@ -730,24 +730,19 @@ produce a (sometimes complex) language-specific configuration.
   :defer t
   :commands lsp
   :straight (:host github :repo "emacs-lsp/lsp-mode")
-  :init (setq lsp-auto-guess-root t)
   :config
-  (setq lsp-enable-on-type-formatting nil))
+  (setq lsp-auto-guess-root t
+        lsp-enable-on-type-formatting nil ; don't apply code formatting
+        ;; don't load a bunch of packages I don't use
+        ;; the downside being you'll need to require your preferred client
+        ;; (which is a better default anyway) and invoke `lsp'
+        lsp-client-packages nil))
 
 (use-package lsp-ui
   :commands lsp-ui-mode
   :straight (:host github :repo "emacs-lsp/lsp-ui")
   :config
   (setq lsp-ui-sideline-ignore-duplicate t)) ; duplicate symbols can quickly grow on multiple lines
-
-(use-package company-lsp
-  :commands company-lsp
-  :straight (:host github :repo "tigersoldier/company-lsp")
-  :config
-  (push 'company-lsp company-backends)
-  ;; requires yasnippet, used to complete arguments
-  ;; may need to setup some functions, see company-lsp--fallback-snippet
-  (setq company-lsp-enable-snippet t))
 #+end_src
 
 ** Error reporting
@@ -781,26 +776,8 @@ Style configuration:
       c-default-style "k&r")
 #+end_src
 
-*Disabled for now* (also the project seems dead).
-
-LSP configuration of
-[[https://github.com/cquery-project/emacs-cquery][cquery]]:
-#+begin_src
-;; you'll need to build cquery
-;; https://github.com/cquery-project/cquery/wiki/Emacs
-(use-package cquery
-  :straight (:host github :repo "cquery-project/emacs-cquery")
-  :init (require 'cl)) ; cl-find-if aliased to find-if
-
-(add-hook 'c-mode-hook #'lsp)
-#+end_src
-
-Previously I tried XCscope, cmake-ide, RTags, clangd, etc.
-Nothing offered a more reliable experience but you'll have to generate a
-=compile_commands.json=.
-
-Which is easy with [[https://github.com/Kitware/CMake][CMake]].
-
+clangd should work out of the box with =compile_commands.json=,
+which can be generated with [[https://github.com/Kitware/CMake][CMake]]:
 #+begin_src emacs-lisp
 (use-package cmake-mode
   :straight (:host github
@@ -811,6 +788,13 @@ Which is easy with [[https://github.com/Kitware/CMake][CMake]].
              ;; declared by the recipe
              ;; https://github.com/melpa/melpa/blob/master/recipes/cmake-mode
              :files ("*.el")))
+#+end_src
+
+Set up =.dir-locals.el=:
+#+begin_src
+((c-mode . ((eval . (progn (require 'lsp-clangd)
+                           (add-to-list 'lsp-clients-clangd-args "-header-insertion=never")
+                           (lsp))))))
 #+end_src
 
 To format source code relying on
@@ -855,8 +839,7 @@ pub global activate dart_language_server
 #+begin_src emacs-lisp
 (use-package dart-mode
   :straight (:host github :repo "bradyt/dart-mode")
-  :hook ((dart-mode . flycheck-mode) ; flycheck isn't enabled automatically otherwise
-         (dart-mode . lsp)))
+  :hook (dart-mode . flycheck-mode)) ; flycheck isn't enabled automatically otherwise
 #+end_src
 
 ** [[https://golang.org/][Go]]
@@ -864,7 +847,6 @@ pub global activate dart_language_server
 #+begin_src emacs-lisp
 (use-package go-mode
   :straight (:host github :repo "dominikh/go-mode.el")
-  :hook (go-mode . lsp)
   :config
   ;; https://github.com/dominikh/go-mode.el/pull/212
   (modify-syntax-entry ?_  "_" go-mode-syntax-table))
@@ -917,16 +899,18 @@ with:
 pip install -U python-language-server[all]
 #+end_src
 
+Set up =.dir-locals.el=:
+#+begin_src
+((python-mode . ((eval . (progn (require 'lsp-pyls)
+                                (lsp))))))
+#+end_src
+
 There is also
 [[https://github.com/Microsoft/python-language-server][Microsoft's language server]]
 and
 [[https://github.com/andrew-christianson/lsp-python-ms][this package]]
 which I have not tested yet (Palantir's server is a bit rough around the
 edges at times).
-
-#+begin_src emacs-lisp
-(add-hook 'python-mode-hook #'lsp)
-#+end_src
 
 Flycheck should automatically use the installed linters, like
 [[http://www.mypy-lang.org/][mypy]] (however this
@@ -939,7 +923,6 @@ isn't fixed yet).
 (use-package rust-mode
   :defer t
   :straight (:host github :repo "rust-lang/rust-mode")
-  :hook ((rust-mode . lsp))
   :config
   (add-to-list 'auto-mode-alist '("\\.rs$" . rust-mode))
   (setq rust-indent-offset tab-width))

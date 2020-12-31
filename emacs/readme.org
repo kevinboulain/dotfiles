@@ -810,14 +810,18 @@ Previously I tried XCscope, cmake-ide, RTags, clangd, etc.
 Nothing offered a more reliable experience but you'll have to generate a
 =compile_commands.json=.
 
-Which is easy with [[https://github.com/Kitware/CMake][CMake]],
-so here is the official mode:
+Which is easy with [[https://github.com/Kitware/CMake][CMake]].
+
 #+begin_src emacs-lisp
-;; straight not supporting shallow clones,
-;; use a mirror instead of the official cmake repository
-;; mainly for cmake-help*
 (use-package cmake-mode
-  :straight (:host github :repo "emacsmirror/cmake-mode"))
+  :straight (:host github
+             ;; straight does not support shallow clones and the official
+             ;; CMake repository is too big
+             :repo "emacsmirror/cmake-mode"
+             ;; this mirror doesn't have its files in the same location
+             ;; declared by the recipe
+             ;; https://github.com/melpa/melpa/blob/master/recipes/cmake-mode
+             :files ("*.el")))
 #+end_src
 
 To format source code relying on

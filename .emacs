@@ -32,7 +32,6 @@
                 (if user-init-file user-init-file
                   (ether--find-loaded-user-init-file))))
               "emacs/"))
-(add-to-list 'load-path (concat user-emacs-directory "lisp/"))
 
 ;; Redirect `customize' stuff to another file.
 (setq custom-file (locate-user-emacs-file "custom.el"))

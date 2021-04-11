@@ -12,7 +12,7 @@
   - [[#delimiters][Delimiters]]
   - [[#remembering-keybindings][Remembering keybindings]]
   - [[#moving-around][Moving around]]
-  - [[#lighter-mode-line][Lighter mode-line]]
+  - [[#mode-line][mode-line]]
   - [[#line-numbering][Line numbering]]
   - [[#buffer-dimming][Buffer dimming]]
   - [[#code-rendering][Code rendering]]
@@ -362,13 +362,38 @@ And to move regions or lines (Magit commit buffer-style):
          ("M-p" . move-text-up)))
 #+end_src
 
-** Lighter mode-line
+** mode-line
 
-Disable the standard mode-line and replace it with a minimalistic version,
-displayed in the minibuffer when it's idle:
+Simpler the mode-line format (I'd prefer moving this information to the
+minibuffer but it has a lot of edge cases that are difficult or impossible
+to handle):
 #+begin_src emacs-lisp
-(require 'ether-mode-line)
-(add-hook 'after-init-hook #'ether-mode-line-mode)
+(defun ether--mode-line-circe-tracking-buffers ()
+  "Circe maintains a list of buffers with activity.
+Join them together as they are already propertized in case of highlight."
+  (when (boundp 'tracking-buffers)
+    (cl-flet ((filter (buffer)
+                      (text-property-any 0 1 'face 'circe-highlight-nick-face buffer)))
+      (string-join (append ; Put the highlighted buffers first.
+                    (sort (seq-filter #'filter tracking-buffers) 'string-collate-lessp)
+                    (sort (seq-filter (lambda (buffer) (not (filter buffer))) tracking-buffers) 'string-collate-lessp))
+                   " "))))
+
+(setq-default mode-line-format
+              '("%l,%c " ; Line and column.
+                (:eval ; Major mode (replaces %m).
+                 (string-trim-right (prin1-to-string major-mode) "-mode"))
+                " "
+                (:eval ; Buffer indication.
+                 (propertize (if (buffer-file-name) (buffer-file-name) (buffer-name))
+                             'face (if (and (buffer-file-name) (buffer-modified-p))
+                                       'warning 'mode-line-buffer-id)))
+                (:eval ; IRC.
+                 (when (> (length (ether--mode-line-circe-tracking-buffers)) 0)
+                   (concat " " (ether--mode-line-circe-tracking-buffers)))
+                 (when (fboundp 'circe-lagmon-format-mode-line-entry)
+                   (concat " " (string-trim (circe-lagmon-format-mode-line-entry)))))
+                " %-")) ; Padding.
 #+end_src
 
 ** Line numbering

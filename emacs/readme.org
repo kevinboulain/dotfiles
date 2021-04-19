@@ -736,31 +736,24 @@ of them now provide a server implementing this protocol). It means you'll
 have a consistent experience without needing to produce a (sometimes complex)
 language-specific configuration.
 
-#+begin_src emacs-lisp
-(use-package lsp-mode
-  :defer t
-  :commands lsp
-  :straight (:host github :repo "emacs-lsp/lsp-mode")
-  :config
-  (setq lsp-auto-guess-root t
-        lsp-enable-on-type-formatting nil ; Don't apply code formatting.
-        ;; Don't load a bunch of packages I don't use, the downside being
-        ;; you'll need to require your preferred client (which is a better
-        ;; default anyway) and invoke `lsp'.
-        lsp-client-packages nil))
+[[https://github.com/joaotavora/eglot][Eglot]] is a lightweight alternative to
+[[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], which has the unfortunate
+habit of piling up features and enabling them all by default (for example, while
+LSP UI has a few nice features it's extremely
+[[https://github.com/emacs-lsp/lsp-mode/blob/master/docs/tutorials/how-to-turn-off.md][noisy]]
+and often breaks in the terminal).
 
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :straight (:host github :repo "emacs-lsp/lsp-ui")
-  :config
-  (setq lsp-ui-sideline-ignore-duplicate t)) ; Duplicate symbols can quickly grow on multiple lines.
+#+begin_src emacs-lisp
+(use-package eglot
+  :defer t
+  :straight (:host github :repo "joaotavora/eglot"))
 #+end_src
 
 ** Error reporting
 
 [[https://flycheck.readthedocs.io][Flycheck]] aims to replace Emacs' built-in
-Flymake. It supports many languages and checkers out the box and offers a more
-complete experience with LSP.
+Flymake. It supports many languages and checkers out the box and is often used
+by other packages (note Eglot uses Flymake).
 
 #+begin_src emacs-lisp
 (use-package flycheck
@@ -802,9 +795,9 @@ which can be generated with [[https://github.com/Kitware/CMake][CMake]]:
 
 Set up =.dir-locals.el=:
 #+begin_src
-((c-mode . ((eval . (progn (require 'lsp-clangd)
-                           (add-to-list 'lsp-clients-clangd-args "-header-insertion=never")
-                           (lsp))))))
+((c-mode . ((eval . (progn (require 'eglot)
+                           (add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never")))
+                           (eglot-ensure))))))
 #+end_src
 
 To format source code relying on
@@ -910,8 +903,8 @@ pip install -U python-language-server[all]
 
 Set up =.dir-locals.el=:
 #+begin_src
-((python-mode . ((eval . (progn (require 'lsp-pyls)
-                                (lsp))))))
+((python-mode . ((eval . (progn (require 'eglot) ; Defaults to pyls.
+                                (eglot-ensure))))))
 #+end_src
 
 There is also
@@ -928,16 +921,25 @@ isn't fixed yet).
 
 ** [[https://www.rust-lang.org/][Rust]]
 
-#+begin_src emacs-lisp
-(use-package rust-mode
-  :defer t
-  :straight (:host github :repo "rust-lang/rust-mode")
-  :config
-  (setq rust-indent-offset tab-width))
+[[https://github.com/brotzeit/rustic][rustic]] is a fork of
+[[https://github.com/rust-lang/rust-mode][rust-mode]] with supposedly more
+features and a better integration (like out of the box support for Flycheck).
 
-(use-package flycheck-rust
-  :straight (:host github :repo "flycheck/flycheck-rust")
-  :hook (flycheck-mode . flycheck-rust-setup))
+#+begin_src emacs-lisp
+(use-package rustic
+  :defer t
+  :straight (:host github :repo "brotzeit/rustic")
+  :config
+  (setq rustic-format-on-save t
+        rustic-indent-offset tab-width
+        rustic-lsp-client nil))
+#+end_src
+
+Set up =.dir-locals.el=:
+#+begin_src
+((rustic-mode . ((eval . (progn (setq rustic-lsp-client 'eglot
+                                      rustic-lsp-server 'rust-analyzer)
+                                (eglot-ensure))))))
 #+end_src
 
 ** Shell

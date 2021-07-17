@@ -47,12 +47,12 @@
 
 * Installing packages
 
-The whole point of using another package manager is to be able to easily
-fiddle with a custom version of a package.
+The whole point of using another package manager is to be able to easily fiddle
+with a custom version of a package.
 [[https://github.com/raxod502/straight.el][straight.el]] is the current
-alternative I'm using.
-It is Git-based and keep only one copy of the installed packages.
-Due to its design, it doesn't handle custom builds for now.
+alternative I'm using. It is Git-based and keep only one copy of the installed
+packages. Due to its design, it doesn't handle custom builds for now.
+
 #+begin_src emacs-lisp
 (setq straight-repository-branch "develop") ; Use the development version.
 
@@ -71,31 +71,35 @@ Due to its design, it doesn't handle custom builds for now.
   (load bootstrap-file nil 'nomessage))
 #+end_src
 
-I'll also use
-[[https://github.com/jwiegley/use-package][use-package]] which gives a better
-structure to this configuration.
+I'll also use [[https://github.com/jwiegley/use-package][use-package]] which
+gives a better structure to this configuration and has other niceties, like
+deferred loading.
+
 #+begin_src emacs-lisp
 (straight-use-package `(use-package :host github :repo "jwiegley/use-package"))
 
-(require 'bind-key) ; `use-package' comes with way to define keybindings.
+(require 'bind-key) ; `use-package' comes with its own way to define keybindings.
 #+end_src
 
 * Built-in & general setup
 
-Tell Emacs it should always prefer a more recent =.el= file instead of loading
-a possibly out of date =.elc= file:
+Tell Emacs it should always prefer a more recent =.el= file instead of loading a
+possibly out of date =.elc= file:
+
 #+begin_src emacs-lisp
 (setq load-prefer-newer t)
 #+end_src
 
 Convert the tab character to spaces:
+
 #+begin_src emacs-lisp
 (setq-default tab-width 2 ; Tab size.
               indent-tabs-mode nil) ; Indent with spaces only.
 #+end_src
 
-Tell Emacs to stop littering my environment by setting the directories
-for backup, auto-saves, sessions and disabling interlock:
+Tell Emacs to stop littering my environment by setting the directories for
+backup, auto-saves, sessions and disabling interlock:
+
 #+begin_src emacs-lisp
 (setq backup-directory-alist `((".*" . ,temporary-file-directory))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
@@ -107,6 +111,7 @@ for backup, auto-saves, sessions and disabling interlock:
 #+end_src
 
 Quiet down Emacs a bit:
+
 #+begin_src emacs-lisp
 (menu-bar-mode -1) ; Remove the f10 menu.
 
@@ -123,6 +128,7 @@ file to your username... Let's override the function instead...")
 #+end_src
 
 But I prefer more reporting when it's related to the point:
+
 #+begin_src emacs-lisp
 (line-number-mode 1) ; Show line number in the mode-line.
 (column-number-mode 1) ; Show column number in the mode-line.
@@ -135,6 +141,7 @@ But I prefer more reporting when it's related to the point:
 
 While we are at it, enable mouse interaction in terminals so clicking and
 scrolling may move the point:
+
 #+begin_src emacs-lisp
 (unless window-system
   (when (require 'mouse nil t)
@@ -144,6 +151,7 @@ scrolling may move the point:
 #+end_src
 
 Some window-related configuration:
+
 #+begin_src emacs-lisp
 (setq split-width-threshold 1) ; Split horizontally by default.
 
@@ -151,28 +159,28 @@ Some window-related configuration:
 #+end_src
 
 Other unrelated configurations:
+
 #+begin_src emacs-lisp
-(setq dired-dwim-target t) ; Guess target directory.
+(setq dired-dwim-target t ; Guess target directory.
+      vc-handled-backends nil ; Disable source control handling.
+      sort-fold-case t ; Case-insensitive sort-lines.
+      sentence-end-double-space nil) ; Don't insert two spaces after a sentence (for example, with M-q).
 
-(setq vc-handled-backends nil) ; Disable source control handling.
-
-(setq sort-fold-case t) ; Case-insensitive sort-lines.
-
-;; recursive minibuffer
+;; Recursive minibuffer.
 (setq enable-recursive-minibuffers t)
 (minibuffer-depth-indicate-mode 1)
 #+end_src
 
 ** Profiling
 
-To determine which of the below packages take the most time to load,
-invoke Emacs in the following way:
-#+begin_src shell
+To determine which of the below packages take the most time to load, invoke
+Emacs in the following way:
+
+#+begin_src shell :tangle no
 emacs --benchmark-init
 #+end_src
 
-It won't take into account the above =use-package= & =straight.el= setup
-though.
+It won't take into account the above =use-package= & =straight.el= setup though.
 
 #+begin_src emacs-lisp
 (when (member "--benchmark-init" command-line-args)
@@ -182,17 +190,19 @@ though.
     (add-to-list 'command-switch-alist '("--benchmark-init" . (lambda (switch) (benchmark-init/deactivate))))))
 #+end_src
 
-[[http://www.randomsample.de/profile-dotemacs.el][profile-dotemacs.el]]
-is also great but limited to a file.
+[[http://www.randomsample.de/profile-dotemacs.el][profile-dotemacs.el]] is also
+great but limited to a file.
 
 ** Debugging
 
 To debug problems happening early, set =debug-on-error= from the command line:
-#+begin_src shell
+
+#+begin_src shell :tangle no
 emacs --eval '(setq debug-on-error t)'
 #+end_src
 
 It's sometimes useful to tracks commands:
+
 #+begin_src emacs-lisp
 (use-package interaction-log
   :straight (:host github :repo "michael-heerdegen/interaction-log.el"))
@@ -200,8 +210,9 @@ It's sometimes useful to tracks commands:
 
 * Theming
 
-First, fix Emacs' behavior and make it unload any theme before loading
-another one:
+First, fix Emacs' behavior and make it unload any theme before loading another
+one:
+
 #+begin_src emacs-lisp
 ;; http://www.bartuka.com/pages-output/personal-emacs-configuration/
 (defadvice load-theme (before theme-dont-propagate activate)
@@ -211,6 +222,7 @@ another one:
 
 It's important to load the theme early as later configuration may use or copy
 faces provided by the theme:
+
 #+begin_src emacs-lisp
 (use-package tao-yin-theme
   :straight (tao-theme :host github :repo "11111000000/tao-theme-emacs")
@@ -227,8 +239,8 @@ faces provided by the theme:
   ;; to 'theme-settings while doing it after will remove the duplicated entries.
   (custom-theme-set-faces
    'tao-yin
-   ;; Override the mode-line{,-inactive} faces to match vertical-border, see
-   ;; the mode-line setup below.
+   ;; Override the mode-line{,-inactive} faces to match
+   ;; vertical-border, see the mode-line setup below.
    '(mode-line ((t (:inherit vertical-border))))
    '(mode-line-inactive ((t (:inherit vertical-border))))))
 #+end_src
@@ -239,6 +251,7 @@ faces provided by the theme:
 
 Many packages extend [[http://company-mode.github.io/][Company]] by adding
 specific back-ends, so we'll rely on it to provide completion:
+
 #+begin_src emacs-lisp
 (use-package company
   :straight (:host github :repo "company-mode/company-mode")
@@ -250,7 +263,7 @@ specific back-ends, so we'll rely on it to provide completion:
         ("C-n" . company-select-next-or-abort)
         ("C-p" . company-select-previous-or-abort))
   :config
-  (setq company-dabbrev-downcase nil ; dabbrev complete case sensitive.
+  (setq company-dabbrev-downcase nil ; Case sensitive dabbrev completion.
         company-idle-delay 0 ; No delay before showing completion.
         company-minimum-prefix-length 2 ; Start completing sooner.
         company-tooltip-align-annotations t ; Align annotations to the right.
@@ -259,13 +272,13 @@ specific back-ends, so we'll rely on it to provide completion:
         company-backends '(company-capf)))
 #+end_src
 
-There is the built-in Ido, but it requires to be extended by multiple
-packages (like Smex or =ido-vertical-mode=).
-Instead I rely on [[https://github.com/raxod502/selectrum][Selectrum]]
-(as a replacement of [[https://github.com/abo-abo/swiper][Ivy]]).
+There is the built-in Ido, but it requires to be extended by multiple packages
+(like Smex or =ido-vertical-mode=). Instead I rely on
+[[https://github.com/raxod502/selectrum][Selectrum]] (as a replacement of
+[[https://github.com/abo-abo/swiper][Ivy]]).
 
-Use =C-j= to force an input not present in completions
-(similar to Ido's =C-f=), or select what's in the prompt.
+Use =C-j= to force an input not present in completions (similar to Ido's =C-f=),
+or select what's in the prompt.
 
 #+begin_src emacs-lisp
 (use-package selectrum
@@ -284,9 +297,10 @@ Use =C-j= to force an input not present in completions
 
 Correct whitespace handling is important (to get cleaner diffs for example).
 However, Emacs' =whitespace-mode= seems to have some problems (as an example,
-its faces mess up with the text's properties in Circe).
-Fortunately, [[https://github.com/glasserc/ethan-wspace][ethan-wspace]] aims
-to do much better:
+its faces mess up with the text's properties in Circe). Fortunately,
+[[https://github.com/glasserc/ethan-wspace][ethan-wspace]] aims to do much
+better:
+
 #+begin_src emacs-lisp
 (use-package ethan-wspace
   :straight (:host github :repo "glasserc/ethan-wspace")
@@ -295,8 +309,9 @@ to do much better:
   (global-ethan-wspace-mode 1))
 #+end_src
 
-It's nice to be able to display all white spaces sometimes and
-=whitespace-mode= is still the best here:
+It's nice to be able to display all white spaces sometimes and =whitespace-mode=
+is still the best here:
+
 #+begin_src emacs-lisp
 (use-package whitespace
   ;; The default values of `whitespace-style' and `whitespace-line-column'
@@ -307,10 +322,11 @@ It's nice to be able to display all white spaces sometimes and
 ** Delimiters
 
 Most of the time, brackets, parentheses, braces, etc, are paired together.
-=show-paren-mode= helps by showing the matching one but it's sometimes a bit
-too cumbersome to use as you have to move the point.
+=show-paren-mode= helps by showing the matching one but it's sometimes a bit too
+cumbersome to use as you have to move the point.
 [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] helps by
 coloring each pair:
+
 #+begin_src emacs-lisp
 (use-package rainbow-delimiters
   :straight (:host github :repo "Fanael/rainbow-delimiters")
@@ -320,8 +336,9 @@ coloring each pair:
 
 ** Remembering keybindings
 
-[[https://github.com/justbur/emacs-which-key][which-key]] will display
-a pop-in during key combinations:
+[[https://github.com/justbur/emacs-which-key][which-key]] will display a pop-in
+during key combinations:
+
 #+begin_src emacs-lisp
 (use-package which-key
   :straight (:host github :repo "justbur/emacs-which-key")
@@ -335,11 +352,11 @@ a pop-in during key combinations:
 Jumping around between words and buffers is easy with
 [[https://github.com/abo-abo/avy][Avy]].
 
-Use =C-o $letter $characters= to jump to the first letter of a word.
-The characters are directly overlayed on the words.
+Use =C-o $letter $characters= to jump to the first letter of a word. The
+characters are directly overlayed on the words.
 
-Use =M-o [x (delete) | m (swap) | ...] $index= to jump to/act on a buffer.
-The index appears in the top left corner.
+Use =M-o [x (delete) | m (swap) | ...] $index= to jump to/act on a buffer. The
+index appears in the top left corner.
 
 #+begin_src emacs-lisp
 (use-package avy
@@ -355,6 +372,7 @@ The index appears in the top left corner.
 #+end_src
 
 And to move regions or lines (Magit commit buffer-style):
+
 #+begin_src emacs-lisp
 (use-package move-text
   :straight (:host github :repo "emacsfodder/move-text")
@@ -364,9 +382,9 @@ And to move regions or lines (Magit commit buffer-style):
 
 ** mode-line
 
-Simpler the mode-line format (I'd prefer moving this information to the
-minibuffer but it has a lot of edge cases that are difficult or impossible
-to handle):
+Simpler mode-line format (I'd prefer moving this information to the minibuffer
+but it has a lot of edge cases that are difficult or impossible to handle):
+
 #+begin_src emacs-lisp
 (defun ether--mode-line-circe-tracking-buffers ()
   "Circe maintains a list of buffers with activity.
@@ -400,8 +418,8 @@ Join them together as they are already propertized in case of highlight."
 
 *Disabled for now*.
 
-#+begin_src
-(when (boundp 'display-line-numbers) ; introduced in emacs 26
+#+begin_src emacs-lisp :tangle no
+(when (boundp 'display-line-numbers) ; Introduced in Emacs 26.
   (set-face-attribute 'line-number-current-line nil
                       ;; Highlight the line current line number.
                       :foreground (face-attribute 'font-lock-keyword-face :foreground nil t)
@@ -416,7 +434,8 @@ Join them together as they are already propertized in case of highlight."
 *Disabled for now*.
 
 Slightly dim the inactive buffers:
-#+begin_src
+
+#+begin_src emacs-lisp :tangle no
 (defun ether--dim-color (rgb percent)
   "Dim the RGB color expressed in the format #rrggbb by PERCENT."
   ;; Looks like there is no color-hex-to-rgb.
@@ -443,16 +462,17 @@ Slightly dim the inactive buffers:
 Sometimes, it's nice to show properly rendered code. Projects like
 [[http://pygments.org/][Pygments]] exist but it would be preferable to use your
 pretty Emacs configuration.
-[[https://github.com/hniksic/emacs-htmlize][htmlize]] does just that and
-will export a buffer to HTML, keeping your theme and other settings.
+[[https://github.com/hniksic/emacs-htmlize][htmlize]] does just that and will
+export a buffer to HTML, keeping your theme and other settings.
 
 Use =M-x htmlize-buffer=.
 
-Or =C-SPC= two times then move the point to the end of the region then
-=M-x htmlize-region= (so you don't render the region selection overlay).
+Or =C-SPC= two times then move the point to the end of the region then =M-x
+htmlize-region= (so you don't render the region selection overlay).
 
-The below configuration even allows to call Emacs like this:
-#+begin_src shell
+This configuration even allows to call Emacs like this:
+
+#+begin_src shell :tangle no
 emacs --htmlize path/to/file # outputs path/to/file.html
 #+end_src
 
@@ -518,8 +538,9 @@ emacs --htmlize path/to/file # outputs path/to/file.html
 
 ** IRC
 
-[[https://github.com/jorgenschaefer/circe][Circe]] is an alternative to
-built-in IRC clients:
+[[https://github.com/jorgenschaefer/circe][Circe]] is an alternative to built-in
+IRC clients:
+
 #+begin_src emacs-lisp
 (use-package circe
   :defer t
@@ -561,7 +582,8 @@ built-in IRC clients:
 #+end_src
 
 Your setup might look like this:
-#+begin_src
+
+#+begin_src emacs-lisp :tangle no
 (setq circe-network-options '(
   ("Libera Chat"
    :logging t
@@ -598,7 +620,7 @@ Your setup might look like this:
 
 *Disabled for now*.
 
-#+begin_src
+#+begin_src emacs-lisp :tangle no
 (use-package slack
   :defer t
   :straight (:host github :repo "yuya373/emacs-slack")
@@ -610,7 +632,8 @@ Your setup might look like this:
 #+end_src
 
 Your setup should like look like this:
-#+begin_src
+
+#+begin_src emacs-lisp :tangle no
 (slack-register-team
   :name "team"
   :default t
@@ -620,14 +643,13 @@ Your setup should like look like this:
   :full-and-display-names t)
 #+end_src
 
-The easiest way to fill above information is to open your browser's network
-tab and search for =_x_id= & =xoxs-=.
-Or you may want to create an application to access the API.
+The easiest way to fill above information is to open your browser's network tab
+and search for =_x_id= & =xoxs-=. Or you may want to create an application to
+access the API.
 
 ** Feeds
 
-Follow RSS and Atom feeds.
-You'll have to set =elfeed-feeds= to a list of feeds.
+Follow RSS and Atom feeds:
 
 #+begin_src emacs-lisp
 (use-package elfeed
@@ -635,11 +657,14 @@ You'll have to set =elfeed-feeds= to a list of feeds.
   :straight (:host github :repo "skeeto/elfeed"))
 #+end_src
 
+You'll have to set =elfeed-feeds= to a list of feeds.
+
 * Text handling
 
 ** [[https://orgmode.org/][Org]]
 
 Use the embedded Org for now:
+
 #+begin_src emacs-lisp
 (setq org-descriptive-links nil ; Don't shorten links.
       org-replace-disputed-keys t ; windmove keybindings conflict.
@@ -648,6 +673,7 @@ Use the embedded Org for now:
 
 Since the whole point of this document is to be readable on GitHub, let's
 automatically generate a table of contents:
+
 #+begin_src emacs-lisp
 (use-package toc-org
   :straight (:host github :repo "snosov1/toc-org")
@@ -677,13 +703,14 @@ On Debian, install =gettext-el=.
 
 You'll need to install [[https://hunspell.github.io/][Hunspell]].
 
-Dictionaries may or may not be provided by your distribution.
-On Debian, dictionaries are available via =hunspell-*= packages.
-You can always retrieve =.aff= & =.dic= files here:
+Dictionaries may or may not be provided by your distribution. On Debian,
+dictionaries are available via =hunspell-*= packages. You can always retrieve
+=.aff= & =.dic= files here:
 - =en_*=: http://wordlist.aspell.net/dicts/
 - =fr-*=: https://grammalecte.net/download.php?prj=fr
 
 Setup is a bit tricky:
+
 #+begin_src emacs-lisp
 ;; http://emacs.stackexchange.com/a/21379
 
@@ -713,8 +740,8 @@ Setup is a bit tricky:
   (message "Unable to load ispell due to missing dependency."))
 #+end_src
 
-If not run automatically, use =M-x flyspell-{buffer,mode}=.
-Use =M-$= to correct an highlighted word.
+If not run automatically, use =M-x flyspell-{buffer,mode}=. Use =M-$= to correct
+an highlighted word.
 
 It may cause noticeable slowdowns.
 
@@ -722,9 +749,9 @@ It may cause noticeable slowdowns.
 
 ** [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]]
 
-LSP abstracts most programming languages environment configurations (as many
-of them now provide a server implementing this protocol). It means you'll
-have a consistent experience without needing to produce a (sometimes complex)
+LSP abstracts most programming languages environment configurations (as many of
+them now provide a server implementing this protocol). It means you'll have a
+consistent experience without needing to produce a (sometimes complex)
 language-specific configuration.
 
 [[https://github.com/joaotavora/eglot][Eglot]] is a lightweight alternative to
@@ -758,6 +785,7 @@ by other packages (note Eglot uses Flymake).
 ** [[http://wiki.portal.chalmers.se/agda/pmwiki.php][Agda]]
 
 Nothing special here, the mode should be installed alongside the compiler:
+
 #+begin_src emacs-lisp
 (when (require 'agda2 nil t))
 #+end_src
@@ -765,14 +793,16 @@ Nothing special here, the mode should be installed alongside the compiler:
 ** C
 
 Style configuration:
+
 #+begin_src emacs-lisp
 (c-set-offset 'case-label '+) ; Indent case in switch.
 (setq c-basic-offset tab-width
       c-default-style "k&r")
 #+end_src
 
-clangd should work out of the box with =compile_commands.json=,
-which can be generated with [[https://github.com/Kitware/CMake][CMake]]:
+clangd should work out of the box with =compile_commands.json=, which can be
+generated with [[https://github.com/Kitware/CMake][CMake]]:
+
 #+begin_src emacs-lisp
 (use-package cmake-mode
   :straight (:host github
@@ -785,7 +815,8 @@ which can be generated with [[https://github.com/Kitware/CMake][CMake]]:
 #+end_src
 
 Set up =.dir-locals.el=:
-#+begin_src
+
+#+begin_src emacs-lisp :tangle no
 ((c-mode . ((eval . (progn (require 'eglot)
                            (add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never")))
                            (eglot-ensure))))))
@@ -793,6 +824,7 @@ Set up =.dir-locals.el=:
 
 To format source code relying on
 [[https://clang.llvm.org/docs/ClangFormat.html][clang-format]]:
+
 #+begin_src emacs-lisp
 (when (require 'clang-format nil t)
   ;; (global-set-key [C-M-tab] 'clang-format-region)
@@ -822,11 +854,12 @@ I currently don't like the existing
 
 ** [[https://www.dartlang.org/][Dart]]
 
-It works nicely with [[https://flutter.io/][Flutter]], for a full
-terminal-based setup.
+It works nicely with [[https://flutter.io/][Flutter]], for a full terminal-based
+setup.
 
 You'll need to install the language server with:
-#+begin_src shell
+
+#+begin_src shell :tangle no
 pub global activate dart_language_server
 #+end_src
 
@@ -848,8 +881,7 @@ pub global activate dart_language_server
 
 ** [[https://www.idris-lang.org/][Idris]]
 
-No LSP here, as it has its own mode to handle the REPL, interactive proofs,
-etc.
+No LSP here, as it has its own mode to handle the REPL, interactive proofs, etc.
 
 #+begin_src emacs-lisp
 (use-package idris-mode
@@ -886,29 +918,29 @@ Mainly for syntax highlighting and indentation.
 ** [[https://www.python.org/][Python]]
 
 You'll need to install
-[[https://github.com/palantir/python-language-server][Palantir's language server]]
-with:
-#+begin_src shell
+[[https://github.com/palantir/python-language-server][Palantir's language
+server]] with:
+
+#+begin_src shell :tangle no
 pip install -U python-language-server[all]
 #+end_src
 
 Set up =.dir-locals.el=:
-#+begin_src
+
+#+begin_src emacs-lisp :tangle no
 ((python-mode . ((eval . (progn (require 'eglot) ; Defaults to pyls.
                                 (eglot-ensure))))))
 #+end_src
 
-There is also
-[[https://github.com/Microsoft/python-language-server][Microsoft's language server]]
-and
-[[https://github.com/andrew-christianson/lsp-python-ms][this package]]
-which I have not tested yet (Palantir's server is a bit rough around the
-edges at times).
+There is also [[https://github.com/Microsoft/python-language-server][Microsoft's
+language server]] and
+[[https://github.com/andrew-christianson/lsp-python-ms][this package]] which I
+have not tested yet (Palantir's server is a bit rough around the edges at
+times).
 
 Flycheck should automatically use the installed linters, like
 [[http://www.mypy-lang.org/][mypy]] (however this
-[[https://github.com/flycheck/flycheck/pull/1486][issue]]
-isn't fixed yet).
+[[https://github.com/flycheck/flycheck/pull/1486][issue]] isn't fixed yet).
 
 ** [[https://www.rust-lang.org/][Rust]]
 
@@ -927,7 +959,8 @@ features and a better integration (like out of the box support for Flycheck).
 #+end_src
 
 Set up =.dir-locals.el=:
-#+begin_src
+
+#+begin_src emacs-lisp :tangle no
 ((rustic-mode . ((eval . (progn (setq rustic-lsp-client 'eglot
                                       rustic-lsp-server 'rust-analyzer)
                                 (eglot-ensure))))))
@@ -935,8 +968,8 @@ Set up =.dir-locals.el=:
 
 ** Shell
 
-Well, nothing much here as I don't know of any viable checker that
-can correctly handle all of Bash's tricks.
+Well, nothing much here as I don't know of any viable checker that can correctly
+handle all of Bash's tricks.
 
 #+begin_src emacs-lisp
 (setq sh-basic-offset tab-width)
@@ -988,9 +1021,9 @@ sometimes used as a dependency.
 
 *** Literate programming
 
-I started writing this file using
-[[https://github.com/phillord/lentic][lentic]]
+I started writing this file using [[https://github.com/phillord/lentic][lentic]]
 but now use [[https://github.com/polymode/polymode][polymode]]:
+
 #+begin_src emacs-lisp
 (use-package poly-markdown
   :defer t

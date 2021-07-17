@@ -29,6 +29,7 @@
 * Foreword
 
 Enable undefined variables reporting to rapidly isolate problems:
+
 #+begin_src shell
 set -u
 #+end_src
@@ -38,6 +39,7 @@ set -u
 ** System independence
 
 On some systems, =PROMPT_COMMAND= may be set externally and may mess up things:
+
 #+begin_src shell
 PROMPT_COMMAND=
 #+end_src
@@ -45,16 +47,18 @@ PROMPT_COMMAND=
 ** Globbing
 
 [[https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pattern-Matching][extglob]]
-is better explained by Bash's manual. In short, it extends pattern matching
-and allows some nice things like =!(file)= meaning /all but this file/:
+is better explained by Bash's manual. In short, it extends pattern matching and
+allows some nice things like =!(file)= meaning /all but this file/:
+
 #+begin_src shell
 shopt -s extglob
 #+end_src
 
 ** Completion
 
-Allow Bash to edit the readline buffer during completions (see =dirspell=,
-it will also replace variables by their value):
+Allow Bash to edit the readline buffer during completions (see =dirspell=, it
+will also replace variables by their value):
+
 #+begin_src shell
 if [ ${BASH_VERSINFO[0]} -ge 4 ] && [ ${BASH_VERSINFO[1]} -ge 3 ]; then
   shopt -s direxpand
@@ -62,20 +66,23 @@ fi
 #+end_src
 
 Allow Bash to correct typos:
+
 #+begin_src shell
 if shopt -q direxpand &> /dev/null; then
-  shopt -s dirspell # fix names during tab completion
+  shopt -s dirspell # Fix names during tab completion.
 fi
-shopt -s cdspell # cd will try to correct an invalid name, displaying it
+shopt -s cdspell # cd will try to correct an invalid name, displaying it.
 #+end_src
 
 And disable useless completion on empty line:
+
 #+begin_src shell
 shopt -s no_empty_cmd_completion
 #+end_src
 
-I also like to disable the programmable completion altogether as it
-will hinder actual tab completion most of the time:
+I also like to disable the programmable completion altogether as it will hinder
+actual tab completion most of the time:
+
 #+begin_src shell
 complete -r
 #+end_src
@@ -83,14 +90,16 @@ complete -r
 ** Input
 
 For good measure, make sure readline is in Emacs mode:
+
 #+begin_src shell
 set -o emacs
 #+end_src
 
 ** Terminal handling
 
-It's better to always recheck for the terminal size, as it may avoid
-garbling the input method:
+It's better to always recheck for the terminal size, as it may avoid garbling
+the input method:
+
 #+begin_src shell
 shopt -s checkwinsize
 #+end_src
@@ -100,12 +109,14 @@ shopt -s checkwinsize
 Proper history handling is important, but the default configuration is quite
 inappropriate and often lead to data loss: an exiting Bash instance may
 overwrite the history of other instances. Fortunately it's easy to fix:
+
 #+begin_src shell
 shopt -s histappend
 #+end_src
 
 By default, 500 lines of history are remembered, let's tell Bash we don't want
 any limitations:
+
 #+begin_src shell
 history_size=$((${BASH_VERSINFO[0]} > 4 || (${BASH_VERSINFO[0]} >= 4 && ${BASH_VERSINFO[1]} >= 3) ? -1 : 1000000000))
 HISTSIZE=$history_size
@@ -113,30 +124,31 @@ HISTFILESIZE=$history_size
 unset history_size
 #+end_src
 
-However, we may still want to have a maintainable history file, so
-splitting it by session seems to be a good idea:
+However, we may still want to have a maintainable history file, so splitting it
+by session seems to be a good idea:
+
 #+begin_src shell
 declare -r history_directory=~/.logs/bash
 # Should be read-only to disallow spurious changes during the session
 # (for example, when sourcing again .bashrc).
-# Note that due to how Bash works, this isn't perfect and the date
-# is mostly used as an unique identifier that may match.
 declare -r HISTFILE=$history_directory/$(hostname)/$(date -u +%F_%T_%Z)_$$
 history_subdirectory=$(dirname "$HISTFILE")
 [ -d "$history_subdirectory" ] || mkdir -p "$history_subdirectory"
 unset history_subdirectory
 #+end_src
 
-We may still lose data if the shell is abruptly terminated,
-so tell Bash to write the history immediately:
+We may still lose data if the shell is abruptly terminated, so tell Bash to
+write the history immediately:
+
 #+begin_src shell
-# There seems to be a bug is some Bash versions where -a does nothing, so rely on the less efficient -w.
+# There seems to be a bug is some Bash versions where -a does nothing,
+# so rely on the less efficient -w.
 PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -w'
 #+end_src
 
-It's nice to be able to quickly search in all these files, since this
-setup won't load them at the beginning of a new session (I like to start
-fresh):
+It's nice to be able to quickly search in all these files, since this setup
+won't load them at the beginning of a new session (I like to start fresh):
+
 #+begin_src shell
 hist() {
   if hash ag &> /dev/null; then
@@ -149,12 +161,14 @@ declare -rfx hist
 #+end_src
 
 Show the date of commands:
+
 #+begin_src shell
 HISTTIMEFORMAT='%F %T %Z '
 #+end_src
 
 Finally, tweak history handling to avoid redundant information and ease
 sensitive information hiding:
+
 #+begin_src shell
 HISTCONTROL=ignoredups # Ignore duplicates.
 HISTCONTROL+=:erasedups # Remove duplicates.
@@ -165,11 +179,11 @@ HISTCONTROL+=:ignorespace # Don't store lines beginning with spaces.
 
 ** Prompt
 
-I prefer a clean and concise prompt, mine only tells which host I'm on,
-in which directory and if last command resulted in an error (exit code wasn't
-zero).
+I prefer a clean and concise prompt, mine only tells which host I'm on, in which
+directory and if last command resulted in an error (exit code wasn't zero).
 
 But first, let's define some termcaps:
+
 #+begin_src shell
 if hash tput &> /dev/null; then
   # It's totally fine to not check for termcaps availability here
@@ -182,6 +196,7 @@ declare -r foreground_red foreground_cyan reset
 #+end_src
 
 Then, let's run a handler after each command input to grab the exit code:
+
 #+begin_src shell
 prompt_config() {
   if [ $? -eq 0 ]; then
@@ -198,6 +213,7 @@ PROMPT_COMMAND=prompt_config${PROMPT_COMMAND:+;$PROMPT_COMMAND}
 #+end_src
 
 And finally customize the prompt itself:
+
 #+begin_src shell
 # \[\] allows readline to correctly calculate the string's size.
 PS1='\h:\W \[$(printf -- '%s' "$prompt_color")\]\$\[$(printf -- '%s' "$reset")\] '
@@ -207,6 +223,7 @@ PS1='\h:\W \[$(printf -- '%s' "$prompt_color")\]\$\[$(printf -- '%s' "$reset")\]
 
 I don't like aliases as they are often abused where functions should be used.
 However, they are fine to correct recurrent typos or really small commands:
+
 #+begin_src shell
 alias l=ls
 #+end_src
@@ -214,6 +231,7 @@ alias l=ls
 ** Functions
 
 Create some CPU load:
+
 #+begin_src shell
 busy() (
   trap 'kill $(jobs -p) &> /dev/null' SIGINT SIGQUIT SIGTERM
@@ -229,6 +247,7 @@ busy() (
 ** EDITOR
 
 Nothing special, only in order of preference:
+
 #+begin_src shell
 if hash emacs &> /dev/null; then
   EDITOR='emacs -nw'
@@ -252,6 +271,7 @@ fi
 ** PAGER
 
 Nothing special, only in order of preference:
+
 #+begin_src shell
 if hash less &> /dev/null; then
   PAGER='less -r'
@@ -264,8 +284,9 @@ export PAGER
 
 ** PATH
 
-Make sure the =PATH= doesn't contain redundant directories and order it so
-that I can override the system directories easily:
+Make sure the =PATH= doesn't contain redundant directories and order it so that
+I can override the system directories easily:
+
 #+begin_src shell
 order_path() {
   local -a path
@@ -285,6 +306,7 @@ declare -rfx order_path
 #+end_src
 
 Apply it:
+
 #+begin_src shell
 order_path
 #+end_src
@@ -295,25 +317,28 @@ order_path
 
 This configuration is only interesting to have on macOS, so let's guard other
 OSes against it:
+
 #+begin_src shell
 if [ "$(uname)" = Darwin ]; then
 #+end_src
 
 *** Homebrew
 
-First things first, let's opt-out of [[https://brew.sh/][Homebrew]]
-analytics...
+First things first, let's opt-out of [[https://brew.sh/][Homebrew]] analytics...
+
 #+begin_src shell
   export HOMEBREW_NO_ANALYTICS=1
 #+end_src
 
 I also prefer to not install applications system-wide:
+
 #+begin_src shell
   export HOMEBREW_CASK_OPTS='--appdir=~/Applications'
 #+end_src
 
-And since Homebrew has trouble in virtual environments, let's deactivate
-them when invoked:
+And since Homebrew has trouble in virtual environments, let's deactivate them
+when invoked:
+
 #+begin_src shell
   brew() {
     [ -n "$VIRTUAL_ENV" ] && deactivate
@@ -325,11 +350,13 @@ them when invoked:
 *** Other
 
 Tell [[https://hunspell.github.io/][Hunspell]] where to find dictionaries:
+
 #+begin_src shell
   export DICPATH=~/Library/Spelling
 #+end_src
 
 Finally, make macOS's environment be sane when SSH'ing to other OSes:
+
 #+begin_src shell
   export LC_ALL=en_US.UTF-8
 #+end_src
@@ -345,8 +372,9 @@ fi
 * Afterword
 
 Unfortunately, many scripts don't properly use parameter expansion, so revert
-what we did in the [[#foreword][foreword]] (and for the day-to-day CLI usage,
-it may be a bit too verbose):
+what we did in the [[#foreword][foreword]] (and for the day-to-day CLI usage, it
+may be a bit too verbose):
+
 #+begin_src shell
 set +u
 #+end_src

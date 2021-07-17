@@ -349,12 +349,6 @@ when invoked:
 
 *** Other
 
-Tell [[https://hunspell.github.io/][Hunspell]] where to find dictionaries:
-
-#+begin_src shell
-  export DICPATH=~/Library/Spelling
-#+end_src
-
 Finally, make macOS's environment be sane when SSH'ing to other OSes:
 
 #+begin_src shell

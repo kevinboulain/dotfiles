@@ -521,34 +521,21 @@ emacs --htmlize path/to/file # outputs path/to/file.html
 [[https://github.com/jorgenschaefer/circe][Circe]] is an alternative to
 built-in IRC clients:
 #+begin_src emacs-lisp
-(setq circe-logging nil) ; Hack to avoid a warning because Circe doesn't expect this variable.
-(defun ether--lui-selective-logging ()
-  "When a network in `circe-network-options' sets the `:logging' property to
-a truthy value, enable logging for it."
-  ;; See `circe-chat-mode' and `enable-lui-logging-globally'.
-  (when (plist-get (cdr (assoc (with-circe-server-buffer circe-network)
-                               circe-network-options))
-                   :logging)
-    (enable-lui-logging)))
-
 (use-package circe
   :defer t
   :straight (:host github :repo "jorgenschaefer/circe")
   :hook ((circe-mode . (lambda () (setq-local right-margin-width 5)))
-         (circe-mode . circe-lagmon-mode)
-         (lui-mode . ether--lui-selective-logging))
+         (circe-mode . circe-lagmon-mode))
   :config
   ;; Colorize nicks.
   (require 'circe-color-nicks)
   (enable-circe-color-nicks)
 
   ;; Logging configuration.
-  (require 'lui-logging)
   (setq lui-logging-directory "~/.logs" ; default
-        lui-logging-file-format "irc/{network}/{buffer}.txt"
+        lui-logging-file-format "irc/{network}/{target}.txt"
         lui-logging-format "[%F %T %Z] {text}")
-  ;; Don't enable it by default for privacy reasons.
-  ;; (enable-lui-logging-globally)
+
   ;; No display difference between others and me:
   (setq circe-format-self-say circe-format-say
         circe-format-self-action circe-format-action)
@@ -563,44 +550,48 @@ a truthy value, enable logging for it."
   ;; Log a new day.
   (require 'circe-new-day-notifier)
   (enable-circe-new-day-notifier)
-  (add-to-list 'circe-format-not-tracked 'circe-new-day-notifier-format-message) ; Don't track day notifications.
 
   ;; Anonymization.
   (setq circe-default-quit-message ""
         circe-default-part-message ""
-        circe-default-realname circe-default-nick)) ; Avoid identity leak from `user-full-name'.
+        ;; Avoid identity leak (for example, realname defaults to `user-full-name').
+        ;; (Servers can refuse empty identifiers.)
+        circe-default-user circe-default-nick
+        circe-default-realname circe-default-nick))
 #+end_src
 
-Your setup should like look like this:
+Your setup might look like this:
 #+begin_src
 (setq circe-network-options '(
-  ("freenode"
-   :host "irc.freenode.net"
-   :port 6697
-   :tls t
-   :nick "USERNAME"
-   :nickserv-nick "USERNAME"
-   :nickserv-password "PASSWORD"
-   :nickserv-mask "^NickServ!NickServ@services\\.$"
-   :nickserv-identify-challenge "\C-b/msg\\s-NickServ\\s-identify\\s-<password>\C-b"
-   :nickserv-identify-command "PRIVMSG NickServ :IDENTIFY {nick} {password}"
-   :nickserv-identify-confirmation "^You are now identified for .*\\.$"
-   :nickserv-ghost-command "PRIVMSG NickServ :GHOST {nick} {password}"
-   :nickserv-ghost-confirmation "has been ghosted\\.$\\|is not online\\.$"
-   :channels (:after-auth "#channel1" "#channel2"))
-  ("mozilla"
-   :host "irc.mozilla.org"
-   :port 6697
-   :tls t
-   :nick "USERNAME"
-   :channels ("#channel1" "#channel2"))
-))
+  ("Libera Chat"
+   :logging t
+   :nick "nick" :user "nick" :realname "nick" :nickserv-password "password"
+   :channels (:after-cloak "#channel1" "#channel2")) ; Or :after-auth.
+  ("Twitch" :host "irc.twitch.tv" :port 6697 :tls t
+   :logging t
+   :lagmon-disabled t ; Twitch doesn't support CTCP.
+   :nick "login" :user "login" :realname "login" :pass "oauth:token"
+   :channels ("#channel1" "#channe2"))))
 
-(add-hook 'circe-channel-mode-hook
+(add-hook 'circe-server-connected-hook
           (lambda ()
-            (when (and (string= (with-circe-server-buffer circe-network) "network")
-                       (string= circe-chat-target "#idlerpg"))
-              (circe-command-MSG "idlerpg" "LOGIN login password"))))
+            (with-circe-server-buffer
+             (when (string= circe-network "Twitch")
+               ;; https://dev.twitch.tv/docs/irc/guide#twitch-irc-capabilities
+               (circe-command-QUOTE "CAP REQ :twitch.tv/membership")))))
+
+(defun ether--circe-idlerpg-login (connection event sender target &rest args)
+  (with-current-buffer (irc-connection-get connection :server-buffer)
+    (when (and (string= circe-network "network")
+               (string= target "#idlerpg")
+               (irc-current-nick-p connection (irc-userstring-nick sender)))
+      (circe-command-MSG "idlerpg" "LOGIN login password"))))
+
+(add-hook 'circe-mode-hook
+          (lambda ()
+            (let ((table (circe-irc-handler-table)))
+              (irc-handler-remove table "JOIN" #'ether--circe-idlerpg-login) ; Prevent duplicate entries.
+              (irc-handler-add table "JOIN" #'ether--circe-idlerpg-login))))
 #+end_src
 
 ** [[https://slack.com/][Slack]]
@@ -623,9 +614,9 @@ Your setup should like look like this:
 (slack-register-team
   :name "team"
   :default t
-  :client-id "_X_ID"
-  :client-secret "PASSWORD"
-  :token "XOXS-"
+  :client-id "_x_id"
+  :client-secret "password"
+  :token "xoxs-"
   :full-and-display-names t)
 #+end_src
 

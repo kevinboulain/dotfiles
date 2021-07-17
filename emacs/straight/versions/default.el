@@ -1,6 +1,6 @@
 (("ace-window" . "c7cb315c14e36fded5ac4096e158497ae974bec9")
  ("avy" . "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
- ("circe" . "e67e2d1149ebf3e79cd2162e78802af3ed5f82da")
+ ("circe" . "77e16de3b9fbaa0417b56a9acc70a9bca17c4ad0")
  ("cmake-mode" . "252a6951166cda99ff7f42a00b63efd0d91e6596")
  ("company-mode" . "25f6a2717ade173c37dc4d013ce68312673596d7")
  ("dart-mode" . "04fcd649f19d49390079fbf2920a10bf37f6a634")

@@ -190,6 +190,9 @@ It won't take into account the above =use-package= & =straight.el= setup though.
     (add-to-list 'command-switch-alist '("--benchmark-init" . (lambda (switch) (benchmark-init/deactivate))))))
 #+end_src
 
+=use-package= has its own =M-x use-package-report= (to figure out deferrable
+packages).
+
 [[http://www.randomsample.de/profile-dotemacs.el][profile-dotemacs.el]] is also
 great but limited to a file.
 
@@ -205,7 +208,8 @@ It's sometimes useful to tracks commands:
 
 #+begin_src emacs-lisp
 (use-package interaction-log
-  :straight (:host github :repo "michael-heerdegen/interaction-log.el"))
+  :straight (:host github :repo "michael-heerdegen/interaction-log.el")
+  :defer t)
 #+end_src
 
 * Theming
@@ -304,9 +308,9 @@ better:
 #+begin_src emacs-lisp
 (use-package ethan-wspace
   :straight (:host github :repo "glasserc/ethan-wspace")
+  :hook (after-init . global-ethan-wspace-mode)
   :config
-  (setq mode-require-final-newline nil) ; Don't automatically add final newlines.
-  (global-ethan-wspace-mode 1))
+  (setq mode-require-final-newline nil)) ; Don't automatically add final newlines.
 #+end_src
 
 It's nice to be able to display all white spaces sometimes and =whitespace-mode=
@@ -342,9 +346,9 @@ during key combinations:
 #+begin_src emacs-lisp
 (use-package which-key
   :straight (:host github :repo "justbur/emacs-which-key")
+  :hook (after-init . which-key-mode)
   :config
-  (setq which-key-separator " ")
-  (which-key-mode))
+  (setq which-key-separator " "))
 #+end_src
 
 ** Moving around
@@ -811,7 +815,8 @@ generated with [[https://github.com/Kitware/CMake][CMake]]:
              :repo "emacsmirror/cmake-mode"
              ;; This mirror's files don't follow the recipe:
              ;; https://github.com/melpa/melpa/blob/master/recipes/cmake-mode
-             :files ("*.el")))
+             :files ("*.el"))
+  :defer t)
 #+end_src
 
 Set up =.dir-locals.el=:
@@ -874,6 +879,7 @@ pub global activate dart_language_server
 #+begin_src emacs-lisp
 (use-package go-mode
   :straight (:host github :repo "dominikh/go-mode.el")
+  :defer t
   :config
   ;; https://github.com/dominikh/go-mode.el/pull/212
   (modify-syntax-entry ?_  "_" go-mode-syntax-table))

@@ -2,7 +2,7 @@
  ("avy" . "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
  ("circe" . "77e16de3b9fbaa0417b56a9acc70a9bca17c4ad0")
  ("cmake-mode" . "252a6951166cda99ff7f42a00b63efd0d91e6596")
- ("company-mode" . "25f6a2717ade173c37dc4d013ce68312673596d7")
+ ("company-mode" . "d77184094b9a45b204813d824918e1ec2aac8504")
  ("dart-mode" . "04fcd649f19d49390079fbf2920a10bf37f6a634")
  ("dash.el" . "b92ab5a39b987e4fe69317b9d9fda452300baf20")
  ("eglot" . "fc221c8b8af33363a6a8d1e07950dc01555f6c9b")

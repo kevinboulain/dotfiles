@@ -253,8 +253,26 @@ faces provided by the theme:
 
 ** Completion
 
-Many packages extend [[http://company-mode.github.io/][Company]] by adding
-specific back-ends, so we'll rely on it to provide completion:
+For minibuffer completion there are a lot of choices. There is the
+built-in Ido, but it requires to be extended by multiple packages
+(like Smex or =ido-vertical-mode=). There is also
+[[https://github.com/abo-abo/swiper][Ivy]] or
+[[https://github.com/raxod502/selectrum][Selectrum]] but both have
+issues
+([[https://github.com/raxod502/selectrum#ivy][complexity]] or
+[[https://github.com/minad/vertico/issues/1#issuecomment-813558238][speed]]
+and reusability). We'll rely on
+[[https://github.com/minad/vertico][Vertico]]:
+
+#+begin_src emacs-lisp
+(use-package vertico
+  :straight (:host github :repo "minad/vertico" :branch "main")
+  :if (>= emacs-major-version 27)
+  :hook (after-init . vertico-mode))
+#+end_src
+
+For in-buffer completion, [[http://company-mode.github.io/][Company]]
+is ubiquitous and extended by many packages, so we'll rely on it:
 
 #+begin_src emacs-lisp
 (use-package company
@@ -276,25 +294,19 @@ specific back-ends, so we'll rely on it to provide completion:
         company-backends '(company-capf)))
 #+end_src
 
-There is the built-in Ido, but it requires to be extended by multiple packages
-(like Smex or =ido-vertical-mode=). Instead I rely on
-[[https://github.com/raxod502/selectrum][Selectrum]] (as a replacement of
-[[https://github.com/abo-abo/swiper][Ivy]]).
-
-Use =C-j= to force an input not present in completions (similar to Ido's =C-f=),
-or select what's in the prompt.
+Then, the completion style (honored by =company-capf=) can be tuned to
+provide more flexibility, like fuzzy matching. We do that with
+[[https://github.com/oantolin/orderless][Orderless]]:
 
 #+begin_src emacs-lisp
-(use-package selectrum
-  :straight (:host github :repo "raxod502/selectrum")
-  :hook (after-init . selectrum-mode))
-
-(use-package selectrum-prescient
-  :straight (:host github :repo "raxod502/prescient.el")
-  :hook ((selectrum-mode . selectrum-prescient-mode)
-         (selectrum-mode . prescient-persist-mode))
+(use-package orderless
+  :straight (:host github :repo "oantolin/orderless")
   :config
-  (setq prescient-filter-method 'fuzzy)) ; Enable fuzzy matching by default.
+  (setq completion-styles '(basic orderless) ; I don't really care about the others.
+        orderless-matching-styles '(orderless-flex) ; Multiple subsequence matching.
+        ;; Only use `completion-styles'.
+        completion-category-defaults nil
+        completion-category-overrides nil))
 #+end_src
 
 ** Whitespace handling

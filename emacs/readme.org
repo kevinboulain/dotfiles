@@ -487,8 +487,6 @@ emacs --htmlize path/to/file # outputs path/to/file.html
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package s :defer t) ; for s-suffix?
-
 (defun ether--htmlize-file (switch)
   "`htmlize-file' seems to have some issues, here is a simpler one."
   (ignore switch)
@@ -504,6 +502,9 @@ emacs --htmlize path/to/file # outputs path/to/file.html
     (error (progn
              (princ out #' external-debugging-output) ; May not be shown due to termcaps, use a redirection.
              (kill-emacs 1)))))
+
+(use-package s ; For s-suffix? below.
+  :straight (:host github :repo "magnars/s.el"))
 
 (use-package htmlize
   :defer t

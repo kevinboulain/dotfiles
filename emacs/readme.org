@@ -1,56 +1,56 @@
-#+title: Personal Emacs configuration
-
-* Table of Contents :toc_3:
-- [[#installing-packages][Installing packages]]
-- [[#built-in--general-setup][Built-in & general setup]]
-  - [[#profiling][Profiling]]
-  - [[#debugging][Debugging]]
-- [[#theming][Theming]]
-- [[#other-functionalities][Other Functionalities]]
-  - [[#completion][Completion]]
-  - [[#whitespace-handling][Whitespace handling]]
-  - [[#delimiters][Delimiters]]
-  - [[#remembering-keybindings][Remembering keybindings]]
-  - [[#moving-around][Moving around]]
-  - [[#mode-line][mode-line]]
-  - [[#line-numbering][Line numbering]]
-  - [[#buffer-dimming][Buffer dimming]]
-  - [[#code-rendering][Code rendering]]
-- [[#social][Social]]
-  - [[#irc][IRC]]
-  - [[#slack][Slack]]
-  - [[#feeds][Feeds]]
-- [[#text-handling][Text handling]]
-  - [[#org][Org]]
-  - [[#markdown][Markdown]]
-  - [[#gettext][gettext]]
-  - [[#spell-checking][Spell checking]]
-- [[#programming-languages-handling][Programming languages handling]]
-  - [[#language-server-protocol][Language Server Protocol]]
-  - [[#error-reporting][Error reporting]]
-  - [[#agda][Agda]]
-  - [[#c][C]]
-  - [[#context][ConTeXt]]
-  - [[#dart][Dart]]
-  - [[#go][Go]]
-  - [[#idris][Idris]]
-  - [[#lua][Lua]]
-  - [[#openscad][OpenSCAD]]
-  - [[#python][Python]]
-  - [[#rust][Rust]]
-  - [[#shell][Shell]]
-  - [[#yaml][YAML]]
-  - [[#other][Other]]
+* Personal Emacs configuration :toc_4:
+  - [[#general-setup][General setup]]
+    - [[#package-management][Package management]]
+    - [[#profiling][Profiling]]
+    - [[#debugging][Debugging]]
+    - [[#built-in][Built-in]]
+    - [[#theme][Theme]]
+      - [[#mode-line][Mode-line]]
+      - [[#delimiters][Delimiters]]
+      - [[#line-numbering][Line numbering]]
+      - [[#buffer-dimming][Buffer dimming]]
+      - [[#exporting][Exporting]]
+    - [[#completion][Completion]]
+    - [[#whitespace][Whitespace]]
+    - [[#moving-around][Moving around]]
+  - [[#extensions][Extensions]]
+    - [[#remembering-keybindings][Remembering keybindings]]
+    - [[#error-checking][Error checking]]
     - [[#git][Git]]
-    - [[#templates][Templates]]
-    - [[#literate-programming][Literate programming]]
+    - [[#snippets][Snippets]]
+    - [[#programming][Programming]]
+      - [[#language-server-protocol][Language Server Protocol]]
+      - [[#literate-programming][Literate programming]]
+      - [[#agda][Agda]]
+      - [[#c][C]]
+      - [[#dart][Dart]]
+      - [[#go][Go]]
+      - [[#idris][Idris]]
+      - [[#lua][Lua]]
+      - [[#openscad][OpenSCAD]]
+      - [[#python][Python]]
+      - [[#rust][Rust]]
+      - [[#shell][Shell]]
+      - [[#yaml][YAML]]
+    - [[#text][Text]]
+      - [[#spell-checking][Spell checking]]
+      - [[#context][ConTeXt]]
+      - [[#markdown][Markdown]]
+      - [[#org][Org]]
+      - [[#gettext][gettext]]
+    - [[#social][Social]]
+      - [[#irc][IRC]]
+      - [[#slack][Slack]]
+      - [[#feeds][Feeds]]
 
-* Installing packages
+** General setup
+
+*** Package management
 
 The whole point of using another package manager is to be able to easily fiddle
 with a custom version of a package.
 [[https://github.com/raxod502/straight.el][straight.el]] is the current
-alternative I'm using. It is Git-based and keep only one copy of the installed
+alternative I'm using. It is Git-based and keeps only one copy of the installed
 packages. Due to its design, it doesn't handle custom builds for now.
 
 #+begin_src emacs-lisp
@@ -81,7 +81,48 @@ deferred loading.
 (require 'bind-key) ; `use-package' comes with its own way to define keybindings.
 #+end_src
 
-* Built-in & general setup
+*** Profiling
+
+To determine which of the below packages take the most time to load, invoke
+Emacs in the following way:
+
+#+begin_src shell :tangle no
+emacs --benchmark-init
+#+end_src
+
+It won't take into account the above =use-package= & =straight.el= setup though.
+
+#+begin_src emacs-lisp
+(when (member "--benchmark-init" command-line-args)
+  (use-package benchmark-init
+    :straight (:host github :repo "dholm/benchmark-init-el")
+    :init
+    (add-to-list 'command-switch-alist '("--benchmark-init" . (lambda (switch) (benchmark-init/deactivate))))))
+#+end_src
+
+=use-package= has its own =M-x use-package-report= (to figure out deferrable
+packages).
+
+[[http://www.randomsample.de/profile-dotemacs.el][profile-dotemacs.el]] is also
+great but limited to a file.
+
+*** Debugging
+
+To debug problems happening early, set =debug-on-error= from the command line:
+
+#+begin_src shell :tangle no
+emacs --eval '(setq debug-on-error t)'
+#+end_src
+
+It's sometimes useful to tracks commands:
+
+#+begin_src emacs-lisp
+(use-package interaction-log
+  :straight (:host github :repo "michael-heerdegen/interaction-log.el")
+  :defer t)
+#+end_src
+
+*** Built-in
 
 Tell Emacs it should always prefer a more recent =.el= file instead of loading a
 possibly out of date =.elc= file:
@@ -171,48 +212,7 @@ Other unrelated configurations:
 (minibuffer-depth-indicate-mode 1)
 #+end_src
 
-** Profiling
-
-To determine which of the below packages take the most time to load, invoke
-Emacs in the following way:
-
-#+begin_src shell :tangle no
-emacs --benchmark-init
-#+end_src
-
-It won't take into account the above =use-package= & =straight.el= setup though.
-
-#+begin_src emacs-lisp
-(when (member "--benchmark-init" command-line-args)
-  (use-package benchmark-init
-    :straight (:host github :repo "dholm/benchmark-init-el")
-    :init
-    (add-to-list 'command-switch-alist '("--benchmark-init" . (lambda (switch) (benchmark-init/deactivate))))))
-#+end_src
-
-=use-package= has its own =M-x use-package-report= (to figure out deferrable
-packages).
-
-[[http://www.randomsample.de/profile-dotemacs.el][profile-dotemacs.el]] is also
-great but limited to a file.
-
-** Debugging
-
-To debug problems happening early, set =debug-on-error= from the command line:
-
-#+begin_src shell :tangle no
-emacs --eval '(setq debug-on-error t)'
-#+end_src
-
-It's sometimes useful to tracks commands:
-
-#+begin_src emacs-lisp
-(use-package interaction-log
-  :straight (:host github :repo "michael-heerdegen/interaction-log.el")
-  :defer t)
-#+end_src
-
-* Theming
+*** Theme
 
 First, fix Emacs' behavior and make it unload any theme before loading another
 one:
@@ -244,153 +244,12 @@ faces provided by the theme:
   (custom-theme-set-faces
    'tao-yin
    ;; Override the mode-line{,-inactive} faces to match
-   ;; vertical-border, see the mode-line setup below.
+   ;; vertical-border, see the [[mode-line]].
    '(mode-line ((t (:inherit vertical-border))))
    '(mode-line-inactive ((t (:inherit vertical-border))))))
 #+end_src
 
-* Other Functionalities
-
-** Completion
-
-For minibuffer completion there are a lot of choices. There is the
-built-in Ido, but it requires to be extended by multiple packages
-(like Smex or =ido-vertical-mode=). There is also
-[[https://github.com/abo-abo/swiper][Ivy]] or
-[[https://github.com/raxod502/selectrum][Selectrum]] but both have
-issues
-([[https://github.com/raxod502/selectrum#ivy][complexity]] or
-[[https://github.com/minad/vertico/issues/1#issuecomment-813558238][speed]]
-and reusability). We'll rely on
-[[https://github.com/minad/vertico][Vertico]]:
-
-#+begin_src emacs-lisp
-(use-package vertico
-  :straight (:host github :repo "minad/vertico" :branch "main")
-  :if (>= emacs-major-version 27)
-  :hook (after-init . vertico-mode))
-#+end_src
-
-For in-buffer completion, [[http://company-mode.github.io/][Company]]
-is ubiquitous and extended by many packages, so we'll rely on it:
-
-#+begin_src emacs-lisp
-(use-package company
-  :straight (:host github :repo "company-mode/company-mode")
-  :hook (after-init . global-company-mode)
-  :config
-  (setq company-dabbrev-downcase nil ; Case sensitive dabbrev completion.
-        company-idle-delay 0 ; No delay before showing completion.
-        company-minimum-prefix-length 2 ; Start completing sooner.
-        company-tooltip-align-annotations t ; Align annotations to the right.
-        ;; For some reason they enable broken backends, like company-clang, by
-        ;; default (and considering there is LSP, this is just superfluous).
-        company-backends '(company-capf)))
-#+end_src
-
-Then, the completion style (honored by =company-capf=) can be tuned to
-provide more flexibility, like fuzzy matching. We do that with
-[[https://github.com/oantolin/orderless][Orderless]]:
-
-#+begin_src emacs-lisp
-(use-package orderless
-  :straight (:host github :repo "oantolin/orderless")
-  :config
-  (setq completion-styles '(basic orderless) ; I don't really care about the others.
-        orderless-matching-styles '(orderless-flex) ; Multiple subsequence matching.
-        ;; Only use `completion-styles'.
-        completion-category-defaults nil
-        completion-category-overrides nil))
-#+end_src
-
-** Whitespace handling
-
-Correct whitespace handling is important (to get cleaner diffs for example).
-However, Emacs' =whitespace-mode= seems to have some problems (as an example,
-its faces mess up with the text's properties in Circe). Fortunately,
-[[https://github.com/glasserc/ethan-wspace][ethan-wspace]] aims to do much
-better:
-
-#+begin_src emacs-lisp
-(use-package ethan-wspace
-  :straight (:host github :repo "glasserc/ethan-wspace")
-  :hook (after-init . global-ethan-wspace-mode)
-  :config
-  (setq mode-require-final-newline nil)) ; Don't automatically add final newlines.
-#+end_src
-
-It's nice to be able to display all white spaces sometimes and =whitespace-mode=
-is still the best here:
-
-#+begin_src emacs-lisp
-(use-package whitespace
-  ;; The default values of `whitespace-style' and `whitespace-line-column'
-  ;; seem good enough.
-  :bind (("<f12>" . whitespace-mode)))
-#+end_src
-
-** Delimiters
-
-Most of the time, brackets, parentheses, braces, etc, are paired together.
-=show-paren-mode= helps by showing the matching one but it's sometimes a bit too
-cumbersome to use as you have to move the point.
-[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] helps by
-coloring each pair:
-
-#+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :straight (:host github :repo "Fanael/rainbow-delimiters")
-  :hook ((prog-mode . rainbow-delimiters-mode)
-         (text-mode . rainbow-delimiters-mode)))
-#+end_src
-
-** Remembering keybindings
-
-[[https://github.com/justbur/emacs-which-key][which-key]] will display a pop-in
-during key combinations:
-
-#+begin_src emacs-lisp
-(use-package which-key
-  :straight (:host github :repo "justbur/emacs-which-key")
-  :hook (after-init . which-key-mode)
-  :config
-  (setq which-key-separator " "))
-#+end_src
-
-** Moving around
-
-Jumping around between words and buffers is easy with
-[[https://github.com/abo-abo/avy][Avy]].
-
-Use =C-o $letter $characters= to jump to the first letter of a word. The
-characters are directly overlayed on the words.
-
-Use =M-o [x (delete) | m (swap) | ...] $index= to jump to/act on a buffer. The
-index appears in the top left corner.
-
-#+begin_src emacs-lisp
-(use-package avy
-  :straight (:host github :repo "abo-abo/avy")
-  :bind (("C-o" . avy-goto-word-or-subword-1))) ; Override open-line default binding.
-
-;; Despite the name, it's Avy-based.
-(use-package ace-window
-  :straight (:host github :repo "abo-abo/ace-window")
-  :bind (("M-o" . ace-window)) ; Override facemenu default binding.
-  :config
-  (setq aw-background nil)) ; Don't remove colors.
-#+end_src
-
-And to move regions or lines (Magit commit buffer-style):
-
-#+begin_src emacs-lisp
-(use-package move-text
-  :straight (:host github :repo "emacsfodder/move-text")
-  :bind (("M-n" . move-text-down)
-         ("M-p" . move-text-up)))
-#+end_src
-
-** mode-line
+**** Mode-line
 
 Simpler mode-line format (I'd prefer moving this information to the minibuffer
 but it has a lot of edge cases that are difficult or impossible to handle):
@@ -424,7 +283,22 @@ Join them together as they are already propertized in case of highlight."
                 " %-")) ; Padding.
 #+end_src
 
-** Line numbering
+**** Delimiters
+
+Most of the time, brackets, parentheses, braces, etc, are paired together.
+=show-paren-mode= helps by showing the matching one but it's sometimes a bit too
+cumbersome to use as you have to move the point.
+[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] helps by
+coloring each pair:
+
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+  :straight (:host github :repo "Fanael/rainbow-delimiters")
+  :hook ((prog-mode . rainbow-delimiters-mode)
+         (text-mode . rainbow-delimiters-mode)))
+#+end_src
+
+**** Line numbering
 
 *Disabled for now*.
 
@@ -439,7 +313,7 @@ Join them together as they are already propertized in case of highlight."
   (global-display-line-numbers-mode))
 #+end_src
 
-** Buffer dimming
+**** Buffer dimming
 
 *Disabled for now*.
 
@@ -467,7 +341,7 @@ Slightly dim the inactive buffers:
                       :background (ether--dim-color (face-attribute 'default :background nil t) 5)))
 #+end_src
 
-** Code rendering
+**** Exporting
 
 Sometimes, it's nice to show properly rendered code. Projects like
 [[http://pygments.org/][Pygments]] exist but it would be preferable to use your
@@ -545,9 +419,517 @@ emacs --htmlize path/to/file # outputs path/to/file.html
                              ))))
 #+end_src
 
-* Social
+*** Completion
 
-** IRC
+For minibuffer completion there are a lot of choices. There is the
+built-in Ido, but it requires to be extended by multiple packages
+(like Smex or =ido-vertical-mode=). There is also
+[[https://github.com/abo-abo/swiper][Ivy]] or
+[[https://github.com/raxod502/selectrum][Selectrum]] but both have
+issues
+([[https://github.com/raxod502/selectrum#ivy][complexity]] or
+[[https://github.com/minad/vertico/issues/1#issuecomment-813558238][speed]]
+and reusability). We'll rely on
+[[https://github.com/minad/vertico][Vertico]]:
+
+#+begin_src emacs-lisp
+(use-package vertico
+  :straight (:host github :repo "minad/vertico" :branch "main")
+  :if (>= emacs-major-version 27)
+  :hook (after-init . vertico-mode))
+#+end_src
+
+For in-buffer completion, [[http://company-mode.github.io/][Company]]
+is ubiquitous and extended by many packages, so we'll rely on it:
+
+#+begin_src emacs-lisp
+(use-package company
+  :straight (:host github :repo "company-mode/company-mode")
+  :hook (after-init . global-company-mode)
+  :config
+  (setq company-dabbrev-downcase nil ; Case sensitive dabbrev completion.
+        company-idle-delay 0 ; No delay before showing completion.
+        company-minimum-prefix-length 2 ; Start completing sooner.
+        company-tooltip-align-annotations t ; Align annotations to the right.
+        ;; For some reason they enable broken backends, like company-clang, by
+        ;; default (and considering there is LSP, this is just superfluous).
+        company-backends '(company-capf)))
+#+end_src
+
+Then, the completion style (honored by =company-capf=) can be tuned to
+provide more flexibility, like fuzzy matching. We do that with
+[[https://github.com/oantolin/orderless][Orderless]]:
+
+#+begin_src emacs-lisp
+(use-package orderless
+  :straight (:host github :repo "oantolin/orderless")
+  :config
+  (setq completion-styles '(basic orderless) ; I don't really care about the others.
+        orderless-matching-styles '(orderless-flex) ; Multiple subsequence matching.
+        ;; Only use `completion-styles'.
+        completion-category-defaults nil
+        completion-category-overrides nil))
+#+end_src
+
+*** Whitespace
+
+Correct whitespace handling is important (to get cleaner diffs for example).
+However, Emacs' =whitespace-mode= seems to have some problems (as an example,
+its faces mess up with the text's properties in Circe). Fortunately,
+[[https://github.com/glasserc/ethan-wspace][ethan-wspace]] aims to do much
+better:
+
+#+begin_src emacs-lisp
+(use-package ethan-wspace
+  :straight (:host github :repo "glasserc/ethan-wspace")
+  :hook (after-init . global-ethan-wspace-mode)
+  :config
+  (setq mode-require-final-newline nil)) ; Don't automatically add final newlines.
+#+end_src
+
+It's nice to be able to display all white spaces sometimes and =whitespace-mode=
+is still the best here:
+
+#+begin_src emacs-lisp
+(use-package whitespace
+  ;; The default values of `whitespace-style' and `whitespace-line-column'
+  ;; seem good enough.
+  :bind (("<f12>" . whitespace-mode)))
+#+end_src
+
+*** Moving around
+
+Jumping around between words and buffers is easy with
+[[https://github.com/abo-abo/avy][Avy]].
+
+Use =C-o $letter $characters= to jump to the first letter of a word. The
+characters are directly overlayed on the words.
+
+Use =M-o [x (delete) | m (swap) | ...] $index= to jump to/act on a buffer. The
+index appears in the top left corner.
+
+#+begin_src emacs-lisp
+(use-package avy
+  :straight (:host github :repo "abo-abo/avy")
+  :bind (("C-o" . avy-goto-word-or-subword-1))) ; Override open-line default binding.
+
+;; Despite the name, it's Avy-based.
+(use-package ace-window
+  :straight (:host github :repo "abo-abo/ace-window")
+  :bind (("M-o" . ace-window)) ; Override facemenu default binding.
+  :config
+  (setq aw-background nil)) ; Don't remove colors.
+#+end_src
+
+And to move regions or lines (Magit commit buffer-style):
+
+#+begin_src emacs-lisp
+(use-package move-text
+  :straight (:host github :repo "emacsfodder/move-text")
+  :bind (("M-n" . move-text-down)
+         ("M-p" . move-text-up)))
+#+end_src
+
+** Extensions
+
+*** Remembering keybindings
+
+[[https://github.com/justbur/emacs-which-key][which-key]] will display a pop-in
+during key combinations:
+
+#+begin_src emacs-lisp
+(use-package which-key
+  :straight (:host github :repo "justbur/emacs-which-key")
+  :hook (after-init . which-key-mode)
+  :config
+  (setq which-key-separator " "))
+#+end_src
+
+*** Error checking
+
+[[https://flycheck.readthedocs.io][Flycheck]] aims to replace Emacs' built-in
+Flymake. It supports many modes and checkers out the box and is often used by
+other packages (note Eglot uses Flymake).
+
+#+begin_src emacs-lisp
+(use-package flycheck
+  :straight (:host github :repo "flycheck/flycheck")
+  :hook (prog-mode . flycheck-mode)
+  :config
+  (setq flycheck-checker-error-threshold nil ; Don't stop after a large number of errors.
+        flycheck-temp-prefix ".flycheck")) ; Hide temporary files.
+#+end_src
+
+*** Git
+
+[[https://github.com/magit/magit][Magit]] is the go-to Git wrapper in Emacs,
+sometimes used as a dependency.
+
+#+begin_src emacs-lisp
+(use-package magit
+  :defer t
+  :straight (:host github :repo "magit/magit"))
+#+end_src
+
+*** Snippets
+
+[[https://github.com/joaotavora/yasnippet][YASnippet]] is a template system,
+sometimes used as a dependency.
+
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :straight (:host github :repo "joaotavora/yasnippet")
+  :hook (after-init . yas-global-mode)
+  :config
+  (setq yas-verbosity 0))
+#+end_src
+
+*** Programming
+
+**** [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]]
+
+LSP abstracts most programming languages environment configurations (as many of
+them now provide a server implementing this protocol). It means you'll have a
+consistent experience without needing to produce a (sometimes complex)
+language-specific configuration.
+
+[[https://github.com/joaotavora/eglot][Eglot]] is a lightweight alternative to
+[[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], which has the unfortunate
+habit of piling up features and enabling them all by default (for example, while
+LSP UI has a few nice features it's extremely
+[[https://github.com/emacs-lsp/lsp-mode/blob/master/docs/tutorials/how-to-turn-off.md][noisy]]
+and often breaks in the terminal).
+
+#+begin_src emacs-lisp
+(use-package eglot
+  :defer t
+  :straight (:host github :repo "joaotavora/eglot"))
+#+end_src
+
+**** Literate programming
+
+I started writing this file using [[https://github.com/phillord/lentic][lentic]]
+but now use [[https://github.com/polymode/polymode][polymode]]:
+
+#+begin_src emacs-lisp
+(use-package poly-markdown
+  :defer t
+  :straight (:host github :repo "polymode/poly-markdown")
+  :bind (:map polymode-mode-map ; Clear the override of move-text.
+         ("M-n" . nil)))
+
+(use-package poly-org
+  :defer t
+  :straight (:host github :repo "polymode/poly-org"))
+
+(use-package poly-rst
+  :defer t
+  :straight (:host github :repo "polymode/poly-rst"))
+#+end_src
+
+**** [[http://wiki.portal.chalmers.se/agda/pmwiki.php][Agda]]
+
+Nothing special here, the mode should be installed alongside the compiler:
+
+#+begin_src emacs-lisp
+(when (require 'agda2 nil t))
+#+end_src
+
+**** C
+
+Style configuration:
+
+#+begin_src emacs-lisp
+(c-set-offset 'case-label '+) ; Indent case in switch.
+(setq c-basic-offset tab-width
+      c-default-style "k&r")
+#+end_src
+
+clangd should work out of the box with =compile_commands.json=, which can be
+generated with [[https://github.com/Kitware/CMake][CMake]]:
+
+#+begin_src emacs-lisp
+(use-package cmake-mode
+  :straight (:host github
+             ;; straight.el does not support shallow clones and the official
+             ;; CMake repository is too big.
+             :repo "emacsmirror/cmake-mode"
+             ;; This mirror's files don't follow the recipe:
+             ;; https://github.com/melpa/melpa/blob/master/recipes/cmake-mode
+             :files ("*.el"))
+  :defer t)
+#+end_src
+
+Set up =.dir-locals.el=:
+
+#+begin_src emacs-lisp :tangle no
+((c-mode . ((eval . (progn (require 'eglot)
+                           (add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never")))
+                           (eglot-ensure))))))
+#+end_src
+
+To format source code relying on
+[[https://clang.llvm.org/docs/ClangFormat.html][clang-format]]:
+
+#+begin_src emacs-lisp
+(when (require 'clang-format nil t)
+  ;; (global-set-key [C-M-tab] 'clang-format-region)
+  )
+#+end_src
+
+**** [[https://www.dartlang.org/][Dart]]
+
+It works nicely with [[https://flutter.io/][Flutter]], for a full terminal-based
+setup.
+
+You'll need to install the language server with:
+
+#+begin_src shell :tangle no
+pub global activate dart_language_server
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package dart-mode
+  :straight (:host github :repo "bradyt/dart-mode")
+  :hook (dart-mode . flycheck-mode)) ; Flycheck isn't enabled automatically otherwise.
+#+end_src
+
+**** [[https://golang.org/][Go]]
+
+#+begin_src emacs-lisp
+(use-package go-mode
+  :straight (:host github :repo "dominikh/go-mode.el")
+  :defer t
+  :config
+  ;; https://github.com/dominikh/go-mode.el/pull/212
+  (modify-syntax-entry ?_  "_" go-mode-syntax-table))
+#+end_src
+
+**** [[https://www.idris-lang.org/][Idris]]
+
+No LSP here, as it has its own mode to handle the REPL, interactive proofs, etc.
+
+#+begin_src emacs-lisp
+(use-package idris-mode
+  :defer t
+  :straight (:host github :repo "idris-hackers/idris-mode")
+  :config
+  (setq idris-repl-banner-functions nil)) ; Disable startup animation.
+#+end_src
+
+**** [[https://www.lua.org/][Lua]]
+
+Mainly for syntax highlighting and indentation.
+
+#+begin_src emacs-lisp
+(use-package lua-mode
+  :defer t
+  :straight (:host github :repo "immerrr/lua-mode")
+  :config
+  (setq lua-indent-level tab-width))
+#+end_src
+
+**** [[https://www.openscad.org/][OpenSCAD]]
+
+Mainly for syntax highlighting and indentation.
+
+#+begin_src emacs-lisp
+(use-package scad-mode
+  :defer t
+  ;; straight.el does not support shallow clones and the official
+  ;; OpenSCAD repository is too big.
+  :straight (:host github :repo "emacsmirror/scad-mode"))
+#+end_src
+
+**** [[https://www.python.org/][Python]]
+
+You'll need to install
+[[https://github.com/palantir/python-language-server][Palantir's language
+server]] with:
+
+#+begin_src shell :tangle no
+pip install -U python-language-server[all]
+#+end_src
+
+Set up =.dir-locals.el=:
+
+#+begin_src emacs-lisp :tangle no
+((python-mode . ((eval . (progn (require 'eglot) ; Defaults to pyls.
+                                (eglot-ensure))))))
+#+end_src
+
+There is also [[https://github.com/Microsoft/python-language-server][Microsoft's
+language server]] and
+[[https://github.com/andrew-christianson/lsp-python-ms][this package]] which I
+have not tested yet (Palantir's server is a bit rough around the edges at
+times).
+
+Flycheck should automatically use the installed linters, like
+[[http://www.mypy-lang.org/][mypy]] (however this
+[[https://github.com/flycheck/flycheck/pull/1486][issue]] isn't fixed yet).
+
+**** [[https://www.rust-lang.org/][Rust]]
+
+[[https://github.com/brotzeit/rustic][rustic]] is a fork of
+[[https://github.com/rust-lang/rust-mode][rust-mode]] with supposedly more
+features and a better integration (like out of the box support for Flycheck).
+
+#+begin_src emacs-lisp
+(use-package rustic
+  :defer t
+  :straight (:host github :repo "brotzeit/rustic")
+  :config
+  (setq rustic-format-on-save t
+        rustic-indent-offset tab-width
+        rustic-lsp-client nil))
+#+end_src
+
+Set up =.dir-locals.el=:
+
+#+begin_src emacs-lisp :tangle no
+((rustic-mode . ((eval . (progn (setq rustic-lsp-client 'eglot
+                                      rustic-lsp-server 'rust-analyzer)
+                                (eglot-ensure))))))
+#+end_src
+
+**** Shell
+
+Well, nothing much here as I don't know of any viable checker that can correctly
+handle all of Bash's tricks.
+
+#+begin_src emacs-lisp
+(setq sh-basic-offset tab-width)
+(add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; Disable the annoying heredoc EOF completion.
+#+end_src
+
+**** [[https://yaml.org/][YAML]]
+
+I only want comments to work out of the box.
+
+#+begin_src emacs-lisp
+(defconst ether--yaml-mode-syntax-table
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?# "<" st)
+    (modify-syntax-entry ?\n ">" st)
+    st))
+
+(define-derived-mode ether--yaml-mode fundamental-mode "YAML"
+  (setq-local comment-start "#"))
+
+(add-to-list 'auto-mode-alist '("\\.ya?ml$" . ether--yaml-mode))
+#+end_src
+
+*** Text
+
+**** Spell checking
+
+You'll need to install [[https://hunspell.github.io/][Hunspell]].
+
+Dictionaries may or may not be provided by your distribution. On Debian,
+dictionaries are available via =hunspell-*= packages. You can always retrieve
+=.aff= & =.dic= files here:
+- =en_*=: http://wordlist.aspell.net/dicts/
+- =fr-*=: https://grammalecte.net/download.php?prj=fr
+
+Setup is a bit tricky:
+
+#+begin_src emacs-lisp
+;; http://emacs.stackexchange.com/a/21379
+
+(defconst ether--spellchecker "hunspell")
+(defconst ether--languages "fr-toutesvariantes,en_US")
+
+(if (and (>= emacs-major-version 25)
+         (executable-find ether--spellchecker)
+         (require 'ispell nil t))
+    (progn
+      (setq ispell-program-name ether--spellchecker)
+      (setq ispell-dictionary ether--languages)
+      ;; The following may crash with:
+      ;;   Wrong type argument: stringp, nil
+      ;; If Hunspell isn't able to find dictionaries:
+      ;;   export LC_ALL=en_US.UTF-8
+      ;;   export DICPATH=~/Library/Spelling
+      ;; Use 'hunspell -D' to check Hunspell's environment.
+      (ispell-set-spellchecker-params)
+      (ispell-hunspell-add-multi-dic ether--languages)
+      ;; It significantly slows down Emacs, so no `prog-mode-hook' for now.
+      ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+      ;; (add-hook 'text-mode-hook 'ispell-buffer)
+      ;; (add-hook 'prog-mode-hook 'ispell-comments-and-strings)
+      ;; (add-hook 'text-mode-hook 'flyspell-buffer)
+      (add-hook 'text-mode-hook 'flyspell-mode))
+  (message "Unable to load ispell due to missing dependency."))
+#+end_src
+
+If not run automatically, use =M-x flyspell-{buffer,mode}=. Use =M-$= to correct
+an highlighted word.
+
+It may cause noticeable slowdowns.
+
+**** [[https://wiki.contextgarden.net/][ConTeXt]]
+
+I currently don't like the existing
+[[https://www.gnu.org/software/auctex/][AUCTeX]] support and the default
+=plain-tex-mode= doesn't fit with ConTeXt, so the setup is rather minimal...
+
+#+begin_src emacs-lisp
+(defconst ether--context-mode-syntax-table
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?% "<" st)
+    (modify-syntax-entry ?\n ">" st)
+    st))
+
+(define-derived-mode ether--context-mode
+  text-mode ; So spell checking works (but it also checks commands...).
+  "ConTeXt"
+  (setq-local comment-start "%"))
+
+(add-to-list 'auto-mode-alist '("\\.tex$" . ether--context-mode))
+#+end_src
+
+**** Markdown
+
+#+begin_src emacs-lisp
+(use-package markdown-mode
+  :defer t
+  :straight (:host github :repo "jrblevin/markdown-mode")
+  :bind (:map markdown-mode-map ; Clear the override of move-text.
+         ("M-n" . nil)
+         ("M-p" . nil)))
+#+end_src
+
+**** [[https://orgmode.org/][Org]]
+
+Use the embedded Org for now:
+
+#+begin_src emacs-lisp
+(setq org-descriptive-links nil ; Don't shorten links.
+      org-replace-disputed-keys t ; windmove keybindings conflict.
+      org-startup-folded "nofold" ; Don't fold sections when opening a buffer.
+      org-adapt-indentation nil) ; Don't (de)indent when demoting or promoting headings.
+#+end_src
+
+Since the whole point of this document is to be readable on GitHub, let's
+automatically generate a table of contents:
+
+#+begin_src emacs-lisp
+(use-package toc-org
+  :straight (:host github :repo "snosov1/toc-org")
+  :hook (org-mode . toc-org-enable))
+#+end_src
+
+**** gettext
+
+On Debian, install =gettext-el=.
+
+#+begin_src emacs-lisp
+(when (require 'po-mode nil t))
+#+end_src
+
+*** Social
+
+**** IRC
 
 [[https://github.com/jorgenschaefer/circe][Circe]] is an alternative to built-in
 IRC clients:
@@ -628,7 +1010,7 @@ Your setup might look like this:
               (irc-handler-add table "JOIN" #'ether--circe-idlerpg-login))))
 #+end_src
 
-** [[https://slack.com/][Slack]]
+**** [[https://slack.com/][Slack]]
 
 *Disabled for now*.
 
@@ -659,7 +1041,7 @@ The easiest way to fill above information is to open your browser's network tab
 and search for =_x_id= & =xoxs-=. Or you may want to create an application to
 access the API.
 
-** Feeds
+**** Feeds
 
 Follow RSS and Atom feeds:
 
@@ -670,386 +1052,3 @@ Follow RSS and Atom feeds:
 #+end_src
 
 You'll have to set =elfeed-feeds= to a list of feeds.
-
-* Text handling
-
-** [[https://orgmode.org/][Org]]
-
-Use the embedded Org for now:
-
-#+begin_src emacs-lisp
-(setq org-descriptive-links nil ; Don't shorten links.
-      org-replace-disputed-keys t ; windmove keybindings conflict.
-      org-startup-folded "nofold") ; Don't fold sections when opening a buffer.
-#+end_src
-
-Since the whole point of this document is to be readable on GitHub, let's
-automatically generate a table of contents:
-
-#+begin_src emacs-lisp
-(use-package toc-org
-  :straight (:host github :repo "snosov1/toc-org")
-  :hook (org-mode . toc-org-enable))
-#+end_src
-
-** Markdown
-
-#+begin_src emacs-lisp
-(use-package markdown-mode
-  :defer t
-  :straight (:host github :repo "jrblevin/markdown-mode")
-  :bind (:map markdown-mode-map ; Clear the override of move-text.
-         ("M-n" . nil)
-         ("M-p" . nil)))
-#+end_src
-
-** gettext
-
-On Debian, install =gettext-el=.
-
-#+begin_src emacs-lisp
-(when (require 'po-mode nil t))
-#+end_src
-
-** Spell checking
-
-You'll need to install [[https://hunspell.github.io/][Hunspell]].
-
-Dictionaries may or may not be provided by your distribution. On Debian,
-dictionaries are available via =hunspell-*= packages. You can always retrieve
-=.aff= & =.dic= files here:
-- =en_*=: http://wordlist.aspell.net/dicts/
-- =fr-*=: https://grammalecte.net/download.php?prj=fr
-
-Setup is a bit tricky:
-
-#+begin_src emacs-lisp
-;; http://emacs.stackexchange.com/a/21379
-
-(defconst ether--spellchecker "hunspell")
-(defconst ether--languages "fr-toutesvariantes,en_US")
-
-(if (and (>= emacs-major-version 25)
-         (executable-find ether--spellchecker)
-         (require 'ispell nil t))
-    (progn
-      (setq ispell-program-name ether--spellchecker)
-      (setq ispell-dictionary ether--languages)
-      ;; The following may crash with:
-      ;;   Wrong type argument: stringp, nil
-      ;; If Hunspell isn't able to find dictionaries:
-      ;;   export LC_ALL=en_US.UTF-8
-      ;;   export DICPATH=~/Library/Spelling
-      ;; Use 'hunspell -D' to check Hunspell's environment.
-      (ispell-set-spellchecker-params)
-      (ispell-hunspell-add-multi-dic ether--languages)
-      ;; It significantly slows down Emacs, so no `prog-mode-hook' for now.
-      ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-      ;; (add-hook 'text-mode-hook 'ispell-buffer)
-      ;; (add-hook 'prog-mode-hook 'ispell-comments-and-strings)
-      ;; (add-hook 'text-mode-hook 'flyspell-buffer)
-      (add-hook 'text-mode-hook 'flyspell-mode))
-  (message "Unable to load ispell due to missing dependency."))
-#+end_src
-
-If not run automatically, use =M-x flyspell-{buffer,mode}=. Use =M-$= to correct
-an highlighted word.
-
-It may cause noticeable slowdowns.
-
-* Programming languages handling
-
-** [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]]
-
-LSP abstracts most programming languages environment configurations (as many of
-them now provide a server implementing this protocol). It means you'll have a
-consistent experience without needing to produce a (sometimes complex)
-language-specific configuration.
-
-[[https://github.com/joaotavora/eglot][Eglot]] is a lightweight alternative to
-[[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], which has the unfortunate
-habit of piling up features and enabling them all by default (for example, while
-LSP UI has a few nice features it's extremely
-[[https://github.com/emacs-lsp/lsp-mode/blob/master/docs/tutorials/how-to-turn-off.md][noisy]]
-and often breaks in the terminal).
-
-#+begin_src emacs-lisp
-(use-package eglot
-  :defer t
-  :straight (:host github :repo "joaotavora/eglot"))
-#+end_src
-
-** Error reporting
-
-[[https://flycheck.readthedocs.io][Flycheck]] aims to replace Emacs' built-in
-Flymake. It supports many languages and checkers out the box and is often used
-by other packages (note Eglot uses Flymake).
-
-#+begin_src emacs-lisp
-(use-package flycheck
-  :straight (:host github :repo "flycheck/flycheck")
-  :hook (prog-mode . flycheck-mode)
-  :config
-  (setq flycheck-checker-error-threshold nil ; Don't stop after a large number of errors.
-        flycheck-temp-prefix ".flycheck")) ; Hide temporary files.
-#+end_src
-
-** [[http://wiki.portal.chalmers.se/agda/pmwiki.php][Agda]]
-
-Nothing special here, the mode should be installed alongside the compiler:
-
-#+begin_src emacs-lisp
-(when (require 'agda2 nil t))
-#+end_src
-
-** C
-
-Style configuration:
-
-#+begin_src emacs-lisp
-(c-set-offset 'case-label '+) ; Indent case in switch.
-(setq c-basic-offset tab-width
-      c-default-style "k&r")
-#+end_src
-
-clangd should work out of the box with =compile_commands.json=, which can be
-generated with [[https://github.com/Kitware/CMake][CMake]]:
-
-#+begin_src emacs-lisp
-(use-package cmake-mode
-  :straight (:host github
-             ;; straight.el does not support shallow clones and the official
-             ;; CMake repository is too big.
-             :repo "emacsmirror/cmake-mode"
-             ;; This mirror's files don't follow the recipe:
-             ;; https://github.com/melpa/melpa/blob/master/recipes/cmake-mode
-             :files ("*.el"))
-  :defer t)
-#+end_src
-
-Set up =.dir-locals.el=:
-
-#+begin_src emacs-lisp :tangle no
-((c-mode . ((eval . (progn (require 'eglot)
-                           (add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never")))
-                           (eglot-ensure))))))
-#+end_src
-
-To format source code relying on
-[[https://clang.llvm.org/docs/ClangFormat.html][clang-format]]:
-
-#+begin_src emacs-lisp
-(when (require 'clang-format nil t)
-  ;; (global-set-key [C-M-tab] 'clang-format-region)
-  )
-#+end_src
-
-** [[https://wiki.contextgarden.net/][ConTeXt]]
-
-I currently don't like the existing
-[[https://www.gnu.org/software/auctex/][AUCTeX]] support and the default
-=plain-tex-mode= doesn't fit with ConTeXt, so the setup is rather minimal...
-
-#+begin_src emacs-lisp
-(defconst ether--context-mode-syntax-table
-  (let ((st (make-syntax-table)))
-    (modify-syntax-entry ?% "<" st)
-    (modify-syntax-entry ?\n ">" st)
-    st))
-
-(define-derived-mode ether--context-mode
-  text-mode ; So spell checking works (but it also checks commands...).
-  "ConTeXt"
-  (setq-local comment-start "%"))
-
-(add-to-list 'auto-mode-alist '("\\.tex$" . ether--context-mode))
-#+end_src
-
-** [[https://www.dartlang.org/][Dart]]
-
-It works nicely with [[https://flutter.io/][Flutter]], for a full terminal-based
-setup.
-
-You'll need to install the language server with:
-
-#+begin_src shell :tangle no
-pub global activate dart_language_server
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package dart-mode
-  :straight (:host github :repo "bradyt/dart-mode")
-  :hook (dart-mode . flycheck-mode)) ; Flycheck isn't enabled automatically otherwise.
-#+end_src
-
-** [[https://golang.org/][Go]]
-
-#+begin_src emacs-lisp
-(use-package go-mode
-  :straight (:host github :repo "dominikh/go-mode.el")
-  :defer t
-  :config
-  ;; https://github.com/dominikh/go-mode.el/pull/212
-  (modify-syntax-entry ?_  "_" go-mode-syntax-table))
-#+end_src
-
-** [[https://www.idris-lang.org/][Idris]]
-
-No LSP here, as it has its own mode to handle the REPL, interactive proofs, etc.
-
-#+begin_src emacs-lisp
-(use-package idris-mode
-  :defer t
-  :straight (:host github :repo "idris-hackers/idris-mode")
-  :config
-  (setq idris-repl-banner-functions nil)) ; Disable startup animation.
-#+end_src
-
-** [[https://www.lua.org/][Lua]]
-
-Mainly for syntax highlighting and indentation.
-
-#+begin_src emacs-lisp
-(use-package lua-mode
-  :defer t
-  :straight (:host github :repo "immerrr/lua-mode")
-  :config
-  (setq lua-indent-level tab-width))
-#+end_src
-
-** [[https://www.openscad.org/][OpenSCAD]]
-
-Mainly for syntax highlighting and indentation.
-
-#+begin_src emacs-lisp
-(use-package scad-mode
-  :defer t
-  ;; straight.el does not support shallow clones and the official
-  ;; OpenSCAD repository is too big.
-  :straight (:host github :repo "emacsmirror/scad-mode"))
-#+end_src
-
-** [[https://www.python.org/][Python]]
-
-You'll need to install
-[[https://github.com/palantir/python-language-server][Palantir's language
-server]] with:
-
-#+begin_src shell :tangle no
-pip install -U python-language-server[all]
-#+end_src
-
-Set up =.dir-locals.el=:
-
-#+begin_src emacs-lisp :tangle no
-((python-mode . ((eval . (progn (require 'eglot) ; Defaults to pyls.
-                                (eglot-ensure))))))
-#+end_src
-
-There is also [[https://github.com/Microsoft/python-language-server][Microsoft's
-language server]] and
-[[https://github.com/andrew-christianson/lsp-python-ms][this package]] which I
-have not tested yet (Palantir's server is a bit rough around the edges at
-times).
-
-Flycheck should automatically use the installed linters, like
-[[http://www.mypy-lang.org/][mypy]] (however this
-[[https://github.com/flycheck/flycheck/pull/1486][issue]] isn't fixed yet).
-
-** [[https://www.rust-lang.org/][Rust]]
-
-[[https://github.com/brotzeit/rustic][rustic]] is a fork of
-[[https://github.com/rust-lang/rust-mode][rust-mode]] with supposedly more
-features and a better integration (like out of the box support for Flycheck).
-
-#+begin_src emacs-lisp
-(use-package rustic
-  :defer t
-  :straight (:host github :repo "brotzeit/rustic")
-  :config
-  (setq rustic-format-on-save t
-        rustic-indent-offset tab-width
-        rustic-lsp-client nil))
-#+end_src
-
-Set up =.dir-locals.el=:
-
-#+begin_src emacs-lisp :tangle no
-((rustic-mode . ((eval . (progn (setq rustic-lsp-client 'eglot
-                                      rustic-lsp-server 'rust-analyzer)
-                                (eglot-ensure))))))
-#+end_src
-
-** Shell
-
-Well, nothing much here as I don't know of any viable checker that can correctly
-handle all of Bash's tricks.
-
-#+begin_src emacs-lisp
-(setq sh-basic-offset tab-width)
-(add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; Disable the annoying heredoc EOF completion.
-#+end_src
-
-** [[https://yaml.org/][YAML]]
-
-I only want comments to work out of the box.
-
-#+begin_src emacs-lisp
-(defconst ether--yaml-mode-syntax-table
-  (let ((st (make-syntax-table)))
-    (modify-syntax-entry ?# "<" st)
-    (modify-syntax-entry ?\n ">" st)
-    st))
-
-(define-derived-mode ether--yaml-mode fundamental-mode "YAML"
-  (setq-local comment-start "#"))
-
-(add-to-list 'auto-mode-alist '("\\.ya?ml$" . ether--yaml-mode))
-#+end_src
-
-** Other
-
-*** Git
-
-[[https://github.com/magit/magit][Magit]] is the go-to Git wrapper in Emacs,
-sometimes used as a dependency.
-
-#+begin_src emacs-lisp
-(use-package magit
-  :defer t
-  :straight (:host github :repo "magit/magit"))
-#+end_src
-
-*** Templates
-
-[[https://github.com/joaotavora/yasnippet][YASnippet]] is a template system,
-sometimes used as a dependency.
-
-#+begin_src emacs-lisp
-(use-package yasnippet
-  :straight (:host github :repo "joaotavora/yasnippet")
-  :hook (after-init . yas-global-mode)
-  :config
-  (setq yas-verbosity 0))
-#+end_src
-
-*** Literate programming
-
-I started writing this file using [[https://github.com/phillord/lentic][lentic]]
-but now use [[https://github.com/polymode/polymode][polymode]]:
-
-#+begin_src emacs-lisp
-(use-package poly-markdown
-  :defer t
-  :straight (:host github :repo "polymode/poly-markdown")
-  :bind (:map polymode-mode-map ; Clear the override of move-text.
-         ("M-n" . nil)))
-
-(use-package poly-org
-  :defer t
-  :straight (:host github :repo "polymode/poly-org"))
-
-(use-package poly-rst
-  :defer t
-  :straight (:host github :repo "polymode/poly-rst"))
-#+end_src

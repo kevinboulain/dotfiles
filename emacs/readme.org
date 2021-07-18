@@ -559,35 +559,36 @@ IRC clients:
   :hook ((circe-mode . (lambda () (setq-local right-margin-width 5)))
          (circe-mode . circe-lagmon-mode))
   :config
-  ;; Colorize nicks.
-  (require 'circe-color-nicks)
-  (enable-circe-color-nicks)
-
-  ;; Logging configuration.
-  (setq lui-logging-directory "~/.logs" ; default
+  ;; Logging.
+  (setq lui-logging-directory "~/.logs" ; Default.
         lui-logging-file-format "irc/{network}/{target}.txt"
         lui-logging-format "[%F %T %Z] {text}")
 
-  ;; No display difference between others and me:
-  (setq circe-format-self-say circe-format-say
-        circe-format-self-action circe-format-action)
-
-  (setq lui-flyspell-p t) ; Enable spell checking (see below).
-
+  ;; UI.
   (setq lui-fill-type nil ; No text wrapping.
         lui-time-stamp-format "%H:%M"
-        lui-time-stamp-position 'right-margin ; See :hook above.
-        circe-format-server-topic "*** Topic change by {nick} ({userhost}): {topic-diff}") ; topic-diff instead of new-topic.
+        lui-time-stamp-position 'right-margin) ; See :hook above.
+
+  (setq lui-flyspell-p t ; Enable spell checking (see [[Spell checking]]).
+        lui-max-buffer-size (* 1 1024 1024)) ; Scrollback.
+
+  ;; Colorize nicks.
+  (require 'circe-color-nicks)
+  (enable-circe-color-nicks)
 
   ;; Log a new day.
   (require 'circe-new-day-notifier)
   (enable-circe-new-day-notifier)
 
-  ;; Anonymization.
-  (setq circe-default-quit-message ""
+  (setq circe-format-server-topic "*** Topic change by {nick} ({userhost}): {topic-diff}" ; topic-diff instead of new-topic.
+        ;; No display difference between others and me.
+        circe-format-self-say circe-format-say
+        circe-format-self-action circe-format-action
+        ;; Anonymization.
+        circe-default-quit-message ""
         circe-default-part-message ""
         ;; Avoid identity leak (for example, realname defaults to `user-full-name').
-        ;; (Servers can refuse empty identifiers.)
+        ;; Servers can refuse empty identifiers.
         circe-default-user circe-default-nick
         circe-default-realname circe-default-nick))
 #+end_src

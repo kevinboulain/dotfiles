@@ -568,7 +568,9 @@ sometimes used as a dependency.
 #+begin_src emacs-lisp
 (use-package magit
   :defer t
-  :straight (:host github :repo "magit/magit"))
+  :straight (:host github :repo "magit/magit")
+  :config
+  (setq magit-diff-refine-hunk 'all))
 #+end_src
 
 *** Snippets

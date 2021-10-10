@@ -22,6 +22,7 @@
       - [[#language-server-protocol][Language Server Protocol]]
       - [[#literate-programming][Literate programming]]
       - [[#agda][Agda]]
+      - [[#bqn][BQN]]
       - [[#c][C]]
       - [[#dart][Dart]]
       - [[#go][Go]]
@@ -642,6 +643,15 @@ Nothing special here, the mode should be installed alongside the compiler:
 
 #+begin_src emacs-lisp
 (when (require 'agda2 nil t))
+#+end_src
+
+**** [[https://mlochbaum.github.io/BQN][BQN]]
+
+#+begin_src emacs-lisp
+(use-package bqn-mode
+  :straight (:host github :repo "museoa/bqn-mode" :branch "trunk")
+  ;; If the layout isn't installed, use \ to enter the characters.
+  :hook (bqn-mode . (lambda () (set-input-method "BQN-Z"))))
 #+end_src
 
 **** C

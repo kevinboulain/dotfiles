@@ -909,7 +909,7 @@ I currently don't like the existing
 Use the embedded Org for now:
 
 #+begin_src emacs-lisp
-(setq org-descriptive-links nil ; Don't shorten links.
+(setq org-link-descriptive nil ; Don't shorten links.
       org-replace-disputed-keys t ; windmove keybindings conflict.
       org-startup-folded "nofold" ; Don't fold sections when opening a buffer.
       org-adapt-indentation nil) ; Don't (de)indent when demoting or promoting headings.

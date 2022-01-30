@@ -246,7 +246,10 @@ faces provided by the theme:
    ;; Override the mode-line{,-inactive} faces to match
    ;; vertical-border, see the [[mode-line]].
    '(mode-line ((t (:inherit vertical-border))))
-   '(mode-line-inactive ((t (:inherit vertical-border))))))
+   '(mode-line-inactive ((t (:inherit vertical-border))))
+   ;; The vertico-current face should match hl-line, it's too jarring
+   ;; by default.
+   '(vertico-current ((t (:inherit hl-line))))))
 #+end_src
 
 **** Mode-line

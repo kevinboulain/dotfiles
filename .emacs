@@ -1,4 +1,4 @@
-;;; .emacs --- Personal configuration.
+;;; .emacs --- Personal configuration. -*- lexical-binding: t -*-
 
 ;;; Commentary:
 

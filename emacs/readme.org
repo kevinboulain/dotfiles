@@ -45,6 +45,10 @@
 
 ** General setup
 
+#+begin_src emacs-lisp
+;;; readme.el --- Personal configuration. -*- lexical-binding: t -*-
+#+end_src
+
 *** Package management
 
 The whole point of using another package manager is to be able to easily fiddle

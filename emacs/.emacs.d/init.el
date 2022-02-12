@@ -12,7 +12,6 @@
 (defconst gc-cons-threshold-backup gc-cons-threshold)
 (setq gc-cons-threshold (* 100 1024 1024))
 
-;; Set the location of the emacs directory.
 (defun ether--find-loaded-user-init-file ()
   "Find out if this file was loaded with -l or --load and return its path."
   (require 'cl-macs)
@@ -23,15 +22,17 @@
         (cl-return argument))
       (setq last argument))))
 
-(setq user-emacs-directory
-      (concat (file-name-directory
-               (file-truename
-                ;; `user-init-file' isn't set when -q is set.
-                ;; Don't forget `after-init-hook' is done before -l so you
-                ;; might have to call the functions yourself.
-                (if user-init-file user-init-file
-                  (ether--find-loaded-user-init-file))))
-              "emacs/"))
+(defvar ether--emacs-directory
+   (file-name-directory  ;; emacs/
+    (directory-file-name (file-name-directory ;; emacs/.emacs
+                          (file-truename ;; emacs/.emacs.d/init.el
+                           ;; `user-init-file' isn't set when -q is set.
+                           ;; Don't forget `after-init-hook' is done
+                           ;; before -l so you might have to call the
+                           ;; functions yourself.
+                           (if user-init-file
+                               user-init-file
+                             (ether--find-loaded-user-init-file)))))))
 
 ;; Redirect `customize' stuff to another file.
 (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -44,14 +45,13 @@
     (message (format "Unable to load %s{%s}" path-base (string-join load-suffixes ",")))))
 
 (defun ether--load (name)
-  "Load file with basename NAME from `user-emacs-directory'.
+  "Load file with basename NAME from `ether--emacs-directory'.
 Instead of relying on `org-babel-load-file' (which may overwrite lentic's),
 reimplement a safer logic here, for the details, see:
 https://github.com/phillord/lentic/issues/54#issuecomment-429106163"
-  (let* ((filename-org (concat name ".org"))
-         (path-org (locate-user-emacs-file filename-org))
+  (let* ((path-org (concat ether--emacs-directory name ".org"))
          (temporary-path-org (concat temporary-file-directory name ".el"))
-         (path-base (locate-user-emacs-file name)))
+         (path-base (concat ether--emacs-directory name)))
     (if (file-readable-p path-org) ; Fallbacking may load the lentic file...
         (progn
           (when (file-newer-than-file-p path-org temporary-path-org)

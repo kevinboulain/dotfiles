@@ -7,8 +7,7 @@ config_directory=$(
   # get actual path
   cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null &&
   cd "$(dirname "$(readlink "${BASH_SOURCE[0]}")")" > /dev/null &&
-  pwd
-)/bash
+  pwd)
 
 # The whole configuration is documented in the readme.org file.
 # We can't source via process substitution in Bash 3.

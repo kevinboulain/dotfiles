@@ -1,6 +1,4 @@
 /*
- * can't be symlinked
- *
  * https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/TextDefaultsBindings.html
  */
 {

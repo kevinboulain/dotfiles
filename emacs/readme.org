@@ -699,7 +699,7 @@ pub global activate dart_language_server
 
 #+begin_src emacs-lisp
 (use-package dart-mode
-  :straight (:host github :repo "bradyt/dart-mode")
+  :straight (:host github :repo "bradyt/dart-mode" :branch "main")
   :hook (dart-mode . flycheck-mode)) ; Flycheck isn't enabled automatically otherwise.
 #+end_src
 
@@ -721,7 +721,7 @@ No LSP here, as it has its own mode to handle the REPL, interactive proofs, etc.
 #+begin_src emacs-lisp
 (use-package idris-mode
   :defer t
-  :straight (:host github :repo "idris-hackers/idris-mode")
+  :straight (:host github :repo "idris-hackers/idris-mode" :branch "main")
   :config
   (setq idris-repl-banner-functions nil)) ; Disable startup animation.
 #+end_src

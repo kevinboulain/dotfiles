@@ -31,6 +31,7 @@
       - [[#openscad][OpenSCAD]]
       - [[#python][Python]]
       - [[#rust][Rust]]
+      - [[#scheme][Scheme]]
       - [[#shell][Shell]]
       - [[#yaml][YAML]]
     - [[#text][Text]]
@@ -207,10 +208,11 @@ Some window-related configuration:
 Other unrelated configurations:
 
 #+begin_src emacs-lisp
-(setq dired-dwim-target t ; Guess target directory.
-      vc-handled-backends nil ; Disable source control handling.
+(setq confirm-kill-processes nil ; Kill background processes on exit.
+      dired-dwim-target t ; Guess target directory.
+      sentence-end-double-space nil ; Don't insert two spaces after a sentence (for example, with M-q).
       sort-fold-case t ; Case-insensitive sort-lines.
-      sentence-end-double-space nil) ; Don't insert two spaces after a sentence (for example, with M-q).
+      vc-handled-backends nil) ; Disable source control handling.
 
 ;; Recursive minibuffer.
 (setq enable-recursive-minibuffers t)
@@ -675,7 +677,7 @@ generated with [[https://github.com/Kitware/CMake][CMake]]:
              :repo "emacsmirror/cmake-mode"
              ;; This mirror's files don't follow the recipe:
              ;; https://github.com/melpa/melpa/blob/master/recipes/cmake-mode
-             :files ("*.el"))
+             :files (:defaults "*.el"))
   :defer t)
 #+end_src
 
@@ -809,6 +811,22 @@ Set up =.dir-locals.el=:
 ((rustic-mode . ((eval . (progn (setq rustic-lsp-client 'eglot
                                       rustic-lsp-server 'rust-analyzer)
                                 (eglot-ensure))))))
+#+end_src
+
+**** Scheme
+
+#+begin_src emacs-lisp
+(use-package geiser
+  :defer t
+  :straight (:host gitlab :repo "emacs-geiser/geiser"))
+
+(use-package geiser-guile
+  :defer t
+  :straight (:host gitlab :repo "emacs-geiser/guile"
+             :files (:defaults
+                     ;; Include the necessary Scheme files in the build.
+                     ;; See %load-path in Guile's REPL.
+                     "src")))
 #+end_src
 
 **** Shell

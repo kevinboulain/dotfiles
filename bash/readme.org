@@ -14,7 +14,6 @@
     - [[#editor][EDITOR]]
     - [[#manpath][MANPATH]]
     - [[#pager][PAGER]]
-    - [[#path][PATH]]
   - [[#os-specific][OS-specific]]
     - [[#macos][macOS]]
       - [[#homebrew][Homebrew]]
@@ -276,35 +275,6 @@ elif hash most &> /dev/null; then
 fi
 
 export PAGER
-#+end_src
-
-*** PATH
-
-Make sure the =PATH= doesn't contain redundant directories and order it so that
-I can override the system directories easily:
-
-#+begin_src shell
-order_path() {
-  local -a path
-  IFS=: read -r -a paths <<< "$PATH"
-  PATH=
-  local path
-  # Standard locations comes after any user-defined $PATH.
-  for path in ~/.pub-cache/bin ~/.cargo/bin /{,usr/{,local/}}{bin,sbin} "${paths[@]}"; do
-    # If path exists and if it hasn't already been seen, prepend it.
-    if [ -d "$path" ] && [[ ! "$PATH" =~ (^|:)"$path"(:|$) ]]; then
-      PATH=$path${PATH+:$PATH}
-    fi
-  done
-  export PATH
-}
-declare -rfx order_path
-#+end_src
-
-Apply it:
-
-#+begin_src shell
-order_path
 #+end_src
 
 ** OS-specific

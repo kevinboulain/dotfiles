@@ -18,21 +18,22 @@
   (let (last)
     (cl-dolist (argument command-line-args)
       (when (and (member last '("-l" "--load"))
-                 (string= argument load-file-name))
+                 (string= (file-truename argument) (file-truename load-file-name)))
         (cl-return argument))
       (setq last argument))))
 
 (defvar ether--emacs-directory
    (file-name-directory  ;; emacs/
-    (directory-file-name (file-name-directory ;; emacs/.emacs
-                          (file-truename ;; emacs/.emacs.d/init.el
-                           ;; `user-init-file' isn't set when -q is set.
-                           ;; Don't forget `after-init-hook' is done
-                           ;; before -l so you might have to call the
-                           ;; functions yourself.
-                           (if user-init-file
-                               user-init-file
-                             (ether--find-loaded-user-init-file)))))))
+    (directory-file-name
+     (file-name-directory ;; emacs/.emacs
+      (file-truename ;; emacs/.emacs.d/init.el
+       ;; `user-init-file' isn't set when -q is set.
+       ;; Don't forget `after-init-hook' is done before -l so you might have to
+       ;; call the functions yourself:
+       ;;  emacs --eval '(setq user-emacs-directory ".emacs.d")' -Q -l .emacs.d/init.el
+       (if user-init-file
+           user-init-file
+         (ether--find-loaded-user-init-file)))))))
 
 ;; Redirect `customize' stuff to another file.
 (setq custom-file (locate-user-emacs-file "custom.el"))

@@ -621,7 +621,9 @@ and often breaks in the terminal).
 #+begin_src emacs-lisp
 (use-package eglot
   :defer t
-  :straight (:host github :repo "joaotavora/eglot"))
+  :straight (:host github :repo "joaotavora/eglot")
+  :config
+  (setq eglot-sync-connect nil)) ; Asynchronously establish the connection.
 #+end_src
 
 **** Literate programming

@@ -186,6 +186,18 @@ But I prefer more reporting when it's related to the point:
 (show-paren-mode 1) ; Show matching parenthesis/bracket/...
 #+end_src
 
+For conflicting buffer names, it's better the distinction provides some context:
+
+#+begin_src emacs-lisp
+(require 'uniquify)
+;; Instead of suffixing <1>, <2>, ... to the buffer name, suffix the part of the
+;; path that is different. Suffixing is preferred to prefixing because it makes
+;; switching to a buffer a bit more intuitive when completing names.
+(setq uniquify-buffer-name-style 'post-forward)
+;; I find removing common suffixes confusing, especially when they're long.
+(setq uniquify-strip-common-suffix nil)
+#+end_src
+
 While we are at it, enable mouse interaction in terminals so clicking and
 scrolling may move the point:
 

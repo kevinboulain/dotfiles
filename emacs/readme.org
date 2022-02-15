@@ -784,30 +784,23 @@ Mainly for syntax highlighting and indentation.
 
 **** [[https://www.python.org/][Python]]
 
-You'll need to install
-[[https://github.com/palantir/python-language-server][Palantir's language
-server]] with:
+You'll need to install a
+[[https://github.com/python-lsp/python-lsp-server][Python language server]]
+with:
 
 #+begin_src shell :tangle no
-pip install -U python-language-server[all]
+pip install -U python-lsp-server[all]
 #+end_src
 
 Set up =.dir-locals.el=:
 
 #+begin_src emacs-lisp :tangle no
-((python-mode . ((eval . (progn (require 'eglot) ; Defaults to pyls.
+((python-mode . ((eval . (progn (require 'eglot) ; Defaults to pylsp.
                                 (eglot-ensure))))))
 #+end_src
 
-There is also [[https://github.com/Microsoft/python-language-server][Microsoft's
-language server]] and
-[[https://github.com/andrew-christianson/lsp-python-ms][this package]] which I
-have not tested yet (Palantir's server is a bit rough around the edges at
-times).
-
 Flycheck should automatically use the installed linters, like
-[[http://www.mypy-lang.org/][mypy]] (however this
-[[https://github.com/flycheck/flycheck/pull/1486][issue]] isn't fixed yet).
+[[http://www.mypy-lang.org/][mypy]].
 
 **** [[https://www.rust-lang.org/][Rust]]
 

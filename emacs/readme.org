@@ -160,12 +160,7 @@ backup, auto-saves, sessions and disabling interlock:
 Quiet down Emacs a bit:
 
 #+begin_src emacs-lisp
-(menu-bar-mode -1) ; Remove the f10 menu.
-
 (defalias 'yes-or-no-p 'y-or-n-p) ; Replace the 'yes'/'no' question by its 'y'/'n' counterpart.
-
-;; Remove the \ for a wrapped line.
-(set-display-table-slot standard-display-table 'wrap ?\ )
 
 (setq inhibit-startup-screen t) ; Don't show the 'GNU Emacs' buffer.
 (defun display-startup-echo-area-message ()
@@ -198,15 +193,34 @@ For conflicting buffer names, it's better the distinction provides some context:
 (setq uniquify-strip-common-suffix nil)
 #+end_src
 
-While we are at it, enable mouse interaction in terminals so clicking and
-scrolling may move the point:
+Now, configure Emacs's behavior depending on the environment. Globally:
+
+#+begin_src emacs-lisp
+(menu-bar-mode 0) ; Remove the f10 menu.
+#+end_src
+
+In terminals:
 
 #+begin_src emacs-lisp
 (unless window-system
+  (set-display-table-slot standard-display-table 'wrap ?\ ) ; Remove the \ for a wrapped line, the counterpart of fringes.
   (when (require 'mouse nil t)
+    ;; Enable mouse interaction in terminals so clicking and scrolling may move
+    ;; the point:
     (xterm-mouse-mode t) ; That seems a bit too hard-coded?
     (bind-keys ([mouse-4] . (lambda () (interactive) (scroll-down 1)))
                ([mouse-5] . (lambda () (interactive) (scroll-up 1))))))
+#+end_src
+
+And in graphical environments, just in case I happen to run it outside of a
+terminal:
+
+#+begin_src emacs-lisp
+(when window-system
+  (fringe-mode 0) ; Fringes are too stracting.
+  (toggle-scroll-bar 0) ; Remove the scroll bar.
+  (tool-bar-mode 0) ; Remove the new/save/copy/... menu.
+  (add-to-list 'default-frame-alist '(font . "Iosevka Term-8")))
 #+end_src
 
 Some window-related configuration:
@@ -258,14 +272,18 @@ faces provided by the theme:
   :init
   (setq tao-theme-use-sepia nil) ; Original behavior before sepia was introduced.
   :config
-  (load-theme 'tao-yin t)
-  ;; There is no proper way to use `custom-theme-set-faces' before load-theme
-  ;; or `enable-theme', the behavior seems to have changed in Emacs 27:
+  ;; There is no proper way to use `custom-theme-set-faces' before `load-theme'
+  ;; or `enable-theme', the behavior has also changed in Emacs 27:
   ;;  - https://emacs.stackexchange.com/a/14370
   ;;  - https://emacs.stackexchange.com/a/28947
   ;;  - https://emacs.stackexchange.com/q/48365
   ;; Calling `custom-theme-set-faces' before loading a theme will only prepend
   ;; to 'theme-settings while doing it after will remove the duplicated entries.
+  ;;
+  ;; First, load the theme (it also `enable-theme' by default) for the following
+  ;; customizations to work.
+  (load-theme 'tao-yin t)
+  ;; Second, customize the theme.
   (custom-theme-set-faces
    'tao-yin
    ;; Override the mode-line{,-inactive} faces to match
@@ -274,7 +292,9 @@ faces provided by the theme:
    '(mode-line-inactive ((t (:inherit vertical-border))))
    ;; The vertico-current face should match hl-line, it's too jarring
    ;; by default.
-   '(vertico-current ((t (:inherit hl-line))))))
+   '(vertico-current ((t (:inherit hl-line)))))
+  ;; Third, reenable it again to apply changes.
+  (enable-theme 'tao-yin))
 #+end_src
 
 **** Mode-line

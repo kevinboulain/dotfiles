@@ -13,6 +13,7 @@
   #:use-module (gnu packages terminals)
   #:use-module (gnu packages wm)
   #:use-module (gnu services)
+  #:use-module ((my packages linux) #:prefix my:)
   #:use-module ((my packages terminals) #:prefix my:)
   #:use-module ((my packages vnc) #:prefix my:)
   #:use-module ((my home minimal) #:prefix my:)
@@ -70,7 +71,7 @@
     (requirement '(dbus))
     (start
      #~(make-forkexec-constructor
-        (list #$(file-append pipewire-0.3 "/bin/pipewire"))
+        (list #$(file-append my:pipewire "/bin/pipewire"))
         #:environment-variables (append (list "DISABLE_RTKIT=1")
                                         (default-environment-variables))
         #:log-file (string-append (getenv "XDG_LOG_HOME") "/pipewire.log")))
@@ -81,7 +82,7 @@
     (requirement '(dbus pipewire))
     (start
      #~(make-forkexec-constructor
-        (list #$(file-append pipewire-0.3 "/bin/pipewire-pulse"))
+        (list #$(file-append my:pipewire "/bin/pipewire-pulse"))
         #:environment-variables (append (list "DISABLE_RTKIT=1")
                                         (default-environment-variables))
         #:log-file (string-append (getenv "XDG_LOG_HOME") "/pipewire-pulse.log")))
@@ -92,7 +93,7 @@
     (requirement '(dbus pipewire))
     (start
      #~(make-forkexec-constructor
-        (list #$(file-append wireplumber "/bin/wireplumber"))
+        (list #$(file-append my:wireplumber "/bin/wireplumber"))
         #:environment-variables (append (list "DISABLE_RTKIT=1")
                                         (default-environment-variables))
         #:log-file (string-append (getenv "XDG_LOG_HOME") "/wireplumber.log")))
@@ -120,6 +121,7 @@
    mako ; For Sway, notification daemon.
    my:foot
    ;; Audio.
+   my:pipewire ; For pw-*.
    pavucontrol ; Uses @code{pipewire-pulse}.
    ;; The rest.
    my:%minimal-packages))

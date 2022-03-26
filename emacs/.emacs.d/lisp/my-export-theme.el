@@ -1,6 +1,6 @@
 (require 's)
 
-(defvar ether-export-theme--faces
+(defvar my-export-theme--faces
   `(("default:background" . ,(face-attribute 'default :background nil t))
     ("default:foreground" . ,(face-attribute 'default :foreground nil t))
     ("hl-line:background" . ,(face-attribute 'hl-line :background nil t))
@@ -10,8 +10,8 @@
     ("mode-line:background" . ,(face-attribute 'mode-line :background nil t))
     ("mode-line:foreground" . ,(face-attribute 'mode-line :foreground nil t))))
 
-(defun ether-export-theme-foot ()
-  (s-format "# (insert (ether-export-theme-foot))
+(defun my-export-theme-foot ()
+  (s-format "# (insert (my-export-theme-foot))
 font = Iosevka Term:8
 
 [colors]
@@ -19,10 +19,10 @@ background = ${default:background}
 foreground = ${default:foreground}
 urls = ${link-visited:foreground}
 scrollback-indicator = ${mode-line:background} ${mode-line:foreground}
-" 'aget (mapcar (lambda (face) `(,(car face) . ,(string-trim-left (cdr face) "#"))) ether-export-theme--faces)))
+" 'aget (mapcar (lambda (face) `(,(car face) . ,(string-trim-left (cdr face) "#"))) my-export-theme--faces)))
 
-(defun ether-export-theme-sway ()
-  (s-format "# (insert (ether-export-theme-sway))
+(defun my-export-theme-sway ()
+  (s-format "# (insert (my-export-theme-sway))
 default_border pixel
 smart_gaps on
 gaps inner 3
@@ -30,19 +30,19 @@ output * bg ${default:background} solid_color
 client.focused #00000000 ${mode-line:foreground} #00000000 ${mode-line:foreground}
 client.focused_inactive #00000000 ${hl-line:background} #00000000 ${hl-line:background}
 client.unfocused #00000000 ${hl-line:background} #00000000 ${hl-line:background}
-" 'aget ether-export-theme--faces))
+" 'aget my-export-theme--faces))
 
-(defun ether-export-theme-mako ()
-  (s-format "# (insert (ether-export-theme-mako))
+(defun my-export-theme-mako ()
+  (s-format "# (insert (my-export-theme-mako))
 font=Iosevka Term 8
 background-color=${default:background}
 text-color=${default:foreground}
 border-color=${mode-line:foreground}
 progress-color=over ${hl-line:background}
-" 'aget ether-export-theme--faces))
+" 'aget my-export-theme--faces))
 
-(defun ether-export-theme-tmux ()
-  (s-format "# (insert (ether-export-theme-tmux))
+(defun my-export-theme-tmux ()
+  (s-format "# (insert (my-export-theme-tmux))
 setw -g window-style \"fg=${default:foreground},bg=${default:background}\"
 setw -g pane-active-border-style \"fg=${hl-line:background},bg=${default:background}\"
 setw -g pane-border-style \"fg=${hl-line:background},bg=${default:background}\"
@@ -57,6 +57,6 @@ setw -g mode-style \"bg=${hl-line:background}\"
 
 setw -g display-panes-colour \"${link-visited:foreground}\"
 setw -g display-panes-active-colour \"${mode-line-buffer-id:foreground}\"
-" 'aget ether-export-theme--faces))
+" 'aget my-export-theme--faces))
 
-(provide 'ether-export-theme)
+(provide 'my-export-theme)

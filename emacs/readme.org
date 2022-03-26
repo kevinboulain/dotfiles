@@ -303,7 +303,7 @@ Simpler mode-line format (I'd prefer moving this information to the minibuffer
 but it has a lot of edge cases that are difficult or impossible to handle):
 
 #+begin_src emacs-lisp
-(defun ether--mode-line-circe-tracking-buffers ()
+(defun my--mode-line-circe-tracking-buffers ()
   "Circe maintains a list of buffers with activity.
 Join them together as they are already propertized in case of highlight."
   (when (boundp 'tracking-buffers)
@@ -324,8 +324,8 @@ Join them together as they are already propertized in case of highlight."
                              'face (if (and (buffer-file-name) (buffer-modified-p))
                                        'warning 'mode-line-buffer-id)))
                 (:eval ; IRC.
-                 (when (> (length (ether--mode-line-circe-tracking-buffers)) 0)
-                   (concat " " (ether--mode-line-circe-tracking-buffers)))
+                 (when (> (length (my--mode-line-circe-tracking-buffers)) 0)
+                   (concat " " (my--mode-line-circe-tracking-buffers)))
                  (when (fboundp 'circe-lagmon-format-mode-line-entry)
                    (concat " " (string-trim (circe-lagmon-format-mode-line-entry)))))
                 " %-")) ; Padding.
@@ -368,7 +368,7 @@ coloring each pair:
 Slightly dim the inactive buffers:
 
 #+begin_src emacs-lisp :tangle no
-(defun ether--dim-color (rgb percent)
+(defun my--dim-color (rgb percent)
   "Dim the RGB color expressed in the format #rrggbb by PERCENT."
   ;; Looks like there is no color-hex-to-rgb.
   (let ((r (/ (float (string-to-number (substring rgb 1 3) 16)) (float 255)))
@@ -385,8 +385,8 @@ Slightly dim the inactive buffers:
   :hook (after-init . auto-dim-other-buffers-mode)
   :config
   (set-face-attribute 'auto-dim-other-buffers-face nil
-                      ;; :foreground (ether--dim-color (face-attribute 'default :foreground nil t) 5)
-                      :background (ether--dim-color (face-attribute 'default :background nil t) 5)))
+                      ;; :foreground (my--dim-color (face-attribute 'default :foreground nil t) 5)
+                      :background (my--dim-color (face-attribute 'default :background nil t) 5)))
 #+end_src
 
 **** Exporting
@@ -409,7 +409,7 @@ emacs --htmlize path/to/file # outputs path/to/file.html
 #+end_src
 
 #+begin_src emacs-lisp
-(defun ether--htmlize-file (switch)
+(defun my--htmlize-file (switch)
   "`htmlize-file' seems to have some issues, here is a simpler one."
   (ignore switch)
   (condition-case out
@@ -432,7 +432,7 @@ emacs --htmlize path/to/file # outputs path/to/file.html
   :defer t
   :straight (:host github :repo "hniksic/emacs-htmlize")
   :init
-  (add-to-list 'command-switch-alist '("--htmlize" . ether--htmlize-file))
+  (add-to-list 'command-switch-alist '("--htmlize" . my--htmlize-file))
   :config
   ;; Use the Iosevka font when available (ligatures are nice touch).
   ;; Requires fontconfig, works on Linux and macOS (use the %{=unparse} format
@@ -884,16 +884,16 @@ handle all of Bash's tricks.
 I only want comments to work out of the box.
 
 #+begin_src emacs-lisp
-(defconst ether--yaml-mode-syntax-table
+(defconst my--yaml-mode-syntax-table
   (let ((st (make-syntax-table)))
     (modify-syntax-entry ?# "<" st)
     (modify-syntax-entry ?\n ">" st)
     st))
 
-(define-derived-mode ether--yaml-mode fundamental-mode "YAML"
+(define-derived-mode my-yaml-mode fundamental-mode "YAML"
   (setq-local comment-start "#"))
 
-(add-to-list 'auto-mode-alist '("\\.ya?ml$" . ether--yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.ya?ml$" . my-yaml-mode))
 #+end_src
 
 *** Text
@@ -913,15 +913,15 @@ Setup is a bit tricky:
 #+begin_src emacs-lisp
 ;; http://emacs.stackexchange.com/a/21379
 
-(defconst ether--spellchecker "hunspell")
-(defconst ether--languages "fr-toutesvariantes,en_US")
+(defconst my--spellchecker "hunspell")
+(defconst my--languages "fr-toutesvariantes,en_US")
 
 (if (and (>= emacs-major-version 25)
-         (executable-find ether--spellchecker)
+         (executable-find my--spellchecker)
          (require 'ispell nil t))
     (progn
-      (setq ispell-program-name ether--spellchecker)
-      (setq ispell-dictionary ether--languages)
+      (setq ispell-program-name my--spellchecker)
+      (setq ispell-dictionary my--languages)
       ;; The following may crash with:
       ;;   Wrong type argument: stringp, nil
       ;; If Hunspell isn't able to find dictionaries:
@@ -929,7 +929,7 @@ Setup is a bit tricky:
       ;;   export DICPATH=~/Library/Spelling
       ;; Use 'hunspell -D' to check Hunspell's environment.
       (ispell-set-spellchecker-params)
-      (ispell-hunspell-add-multi-dic ether--languages)
+      (ispell-hunspell-add-multi-dic my--languages)
       ;; It significantly slows down Emacs, so no `prog-mode-hook' for now.
       ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
       ;; (add-hook 'text-mode-hook 'ispell-buffer)
@@ -951,18 +951,18 @@ I currently don't like the existing
 =plain-tex-mode= doesn't fit with ConTeXt, so the setup is rather minimal...
 
 #+begin_src emacs-lisp
-(defconst ether--context-mode-syntax-table
+(defconst my--context-mode-syntax-table
   (let ((st (make-syntax-table)))
     (modify-syntax-entry ?% "<" st)
     (modify-syntax-entry ?\n ">" st)
     st))
 
-(define-derived-mode ether--context-mode
+(define-derived-mode my-context-mode
   text-mode ; So spell checking works (but it also checks commands...).
   "ConTeXt"
   (setq-local comment-start "%"))
 
-(add-to-list 'auto-mode-alist '("\\.tex$" . ether--context-mode))
+(add-to-list 'auto-mode-alist '("\\.tex$" . my-context-mode))
 #+end_src
 
 **** Markdown
@@ -1073,7 +1073,7 @@ Your setup might look like this:
                ;; https://dev.twitch.tv/docs/irc/guide#twitch-irc-capabilities
                (circe-command-QUOTE "CAP REQ :twitch.tv/membership")))))
 
-(defun ether--circe-idlerpg-login (connection event sender target &rest args)
+(defun my--circe-idlerpg-login (connection event sender target &rest args)
   (with-current-buffer (irc-connection-get connection :server-buffer)
     (when (and (string= circe-network "network")
                (string= target "#idlerpg")
@@ -1083,8 +1083,8 @@ Your setup might look like this:
 (add-hook 'circe-mode-hook
           (lambda ()
             (let ((table (circe-irc-handler-table)))
-              (irc-handler-remove table "JOIN" #'ether--circe-idlerpg-login) ; Prevent duplicate entries.
-              (irc-handler-add table "JOIN" #'ether--circe-idlerpg-login))))
+              (irc-handler-remove table "JOIN" #'my--circe-idlerpg-login) ; Prevent duplicate entries.
+              (irc-handler-add table "JOIN" #'my--circe-idlerpg-login))))
 #+end_src
 
 **** [[https://slack.com/][Slack]]

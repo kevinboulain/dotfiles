@@ -1,4 +1,4 @@
-# (insert (ether-export-theme-sway))
+# (insert (my-export-theme-sway))
 default_border pixel
 smart_gaps on
 gaps inner 3

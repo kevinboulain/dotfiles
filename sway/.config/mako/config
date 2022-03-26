@@ -1,4 +1,4 @@
-# (insert (ether-export-theme-mako))
+# (insert (my-export-theme-mako))
 font=Iosevka Term 8
 background-color=#171717
 text-color=#DADADA

@@ -4,7 +4,9 @@
   # lg = log --graph --date=short --pretty=tformat:'%h -%d %s (%an, %ad)'
   lg = log --graph --date=short --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an, %ad)%Creset'
   ft = fetch --all --tags --prune
-  fp = format-patch -M -C --find-copies-harder --stdout
+  # git fp outgoing -1
+  # git send-email outgoing/* --to $email
+  fp = format-patch --find-renames --find-copies --ignore-all-space --cover-letter --no-signature --output-directory
 [core]
   # pager = less -R
   whitespace = trailing-space, space-before-tab, tab-in-indent

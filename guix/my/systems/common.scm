@@ -32,6 +32,7 @@
   #:use-module ((nongnu system linux-initrd) #:prefix linux-initrd:)
   #:use-module ((my packages bootloaders) #:prefix my:)
   #:use-module ((my services desktop) #:prefix my:)
+  #:use-module ((my packages linux) #:prefix my:)
   #:export (%bootloader-configuration
             %desktop-services
             %desktop-setuid-programs
@@ -175,8 +176,8 @@ of @code{ttys} can configured."
    (services (append (console-services) %minimal-services))
    (name-service-switch nss:%mdns-host-lookup-nss) ; Resolve over multicast DNS (for Avahi).
    ;; See https://gitlab.com/nonguix/nonguix.
-   (kernel linux:linux-lts) ; A kernel with blobs.
-   (firmware (list linux:linux-firmware)) ; All firmwares.
+   (kernel linux:linux) ; A kernel with blobs.
+   (firmware (list my:linux-firmware)) ; All firmwares.
    (initrd linux-initrd:microcode-initrd))) ; All microcodes.
 
 (define %bootloader-configuration

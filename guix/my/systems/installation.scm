@@ -16,6 +16,7 @@
   #:use-module (gnu system pam)
   #:use-module ((my channels) #:prefix my:)
   #:use-module ((my systems common) #:prefix my:)
+  #:use-module ((my systems acheron) #:prefix my:)
   #:use-module ((my systems cocytus) #:prefix my:)
   #:use-module ((my systems phlegethon) #:prefix my:))
 
@@ -76,13 +77,13 @@
    ;; lvcreate --extents 100%free system --name root
    ;; mkfs.ext4 -L root /dev/system/root
    ;; mount --label root --target /mnt
-   ;; mkdir /mnt/boot
-   ;; mount --label EFI --target /mnt/boot
+   ;; mkdir -p /mnt/boot/efi
+   ;; mount --label EFI --target /mnt/boot/efi
    ;;
    ;; GUIX_PROFILE=/etc/installation/profile
    ;; . "$GUIX_PROFILE"/etc/profile
    ;; guix system --load-path=/etc/installation init /etc/installation/my/systems/cocytus.scm /mnt
-   my:%cocytus my:%phlegethon))
+   my:%acheron my:%cocytus my:%phlegethon))
 
 (operating-system
  (inherit my:%operating-system)

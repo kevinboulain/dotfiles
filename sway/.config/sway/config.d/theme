@@ -1,0 +1,22 @@
+# (insert (my-export-theme-sway))
+default_border pixel 1
+smart_gaps on
+gaps inner 3
+output * bg #171717 solid_color
+client.focused #00000000 #616161 #00000000 #616161
+client.focused_inactive #00000000 #252525 #00000000 #252525
+client.unfocused #00000000 #252525 #00000000 #252525
+
+bar {
+  mode dock
+  position bottom
+  font "Iosevka Term 8"
+  colors {
+    background #171717
+    statusline #DADADA
+    separator #616161
+    focused_workspace #171717 #171717 #FAFAFA
+    active_workspace #171717 #171717 #DADADA
+    inactive_workspace #171717 #171717 #616161
+  }
+}

@@ -1,0 +1,8 @@
+# Only ever lock the screen when asked to or going to sleep.
+# Poll from time to time to check if swaylock is running, if so turn off the screen.
+set $swaylock 'swaylock --daemonize --color 000000'
+bindsym $mod+l exec $swaylock
+exec swayidle -w \
+  timeout 60 'if pgrep --exact swaylock; then swaymsg "output * dpms off"; fi' \
+  resume 'swaymsg "output * dpms on"' \
+  before-sleep $swaylock

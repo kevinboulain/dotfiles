@@ -440,7 +440,7 @@ emacs --htmlize path/to/file # outputs path/to/file.html
   ;; The base Iosevka font seems to produce some irregularities (for example
   ;; `let-alist' and `use-package' seem to be slightly larger), so use Iosevka
   ;; Term instead.
-  (let* ((fc-match "fc-match -f '%{file}' 'Iosevka Term:style=Regular'")
+  (let* ((fc-match "fc-match -f '%{file}' 'Iosevka Term'")
          (path (shell-command-to-string fc-match)))
     (when (s-suffix? ".ttf" path :ignore-case) ; Firefox doesn't like .ttc
       (setq htmlize-head-tags (format "    <style type=\"text/css\">
@@ -579,6 +579,13 @@ And to move regions or lines (Magit commit buffer-style):
 #+end_src
 
 ** Extensions
+
+Add the =lisp= directory to the load path in case additionial libraries are
+stored there:
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path (concat user-emacs-directory "lisp"))
+#+end_src
 
 *** Remembering keybindings
 

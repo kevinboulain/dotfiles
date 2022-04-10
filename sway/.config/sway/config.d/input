@@ -1,0 +1,16 @@
+# man 5 sway-input
+
+input "type:keyboard" {
+  repeat_rate 40
+  repeat_delay 175
+
+  # man 7 xkeyboard-config
+  xkb_layout us
+  xkb_variant intl
+  xkb_options caps:ctrl_modifier
+}
+
+input "type:touchpad" {
+  accel_profile adaptive
+  scroll_factor 0.5
+}

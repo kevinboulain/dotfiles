@@ -1,0 +1,6 @@
+# (insert (my-export-theme-mako))
+font=Iosevka Term 8
+background-color=#171717
+text-color=#DADADA
+border-color=#616161
+progress-color=over #252525

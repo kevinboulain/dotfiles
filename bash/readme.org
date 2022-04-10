@@ -12,7 +12,6 @@
     - [[#aliases][Aliases]]
     - [[#functions][Functions]]
     - [[#editor][EDITOR]]
-    - [[#manpath][MANPATH]]
     - [[#pager][PAGER]]
   - [[#os-specific][OS-specific]]
     - [[#macos][macOS]]
@@ -253,14 +252,6 @@ elif hash nano &> /dev/null; then
 fi
 
 export EDITOR
-#+end_src
-
-*** MANPATH
-
-#+begin_src shell
-if hash man &> /dev/null; then
-  export MANPATH=$(man --path)
-fi
 #+end_src
 
 *** PAGER

@@ -125,7 +125,7 @@ by session seems to be a good idea:
 declare -r history_directory=~/.logs/bash
 # Should be read-only to disallow spurious changes during the session
 # (for example, when sourcing again .bashrc).
-declare -r HISTFILE=$history_directory/$(hostname)/$(date -u +%F_%T_%Z)_$$
+declare -r HISTFILE=$history_directory/$HOSTNAME/$(date -u +%F_%T_%Z)_$$
 history_subdirectory=$(dirname "$HISTFILE")
 [ -d "$history_subdirectory" ] || mkdir -p "$history_subdirectory"
 unset history_subdirectory

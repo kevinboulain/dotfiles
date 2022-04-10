@@ -182,11 +182,10 @@ But first, let's define some termcaps:
 if hash tput &> /dev/null; then
   # It's totally fine to not check for termcaps availability here
   # as it will simply result in an empty string.
-  foreground_red=$(tput setaf 1)
-  foreground_cyan=$(tput setaf 6)
+  foreground_grey=$(tput setaf 8)
   reset=$(tput sgr0)
 fi
-declare -r foreground_red foreground_cyan reset
+declare -r foreground_grey reset
 #+end_src
 
 Then, let's run a handler after each command input to grab the exit code:
@@ -194,9 +193,9 @@ Then, let's run a handler after each command input to grab the exit code:
 #+begin_src shell
 prompt_config() {
   if [ $? -eq 0 ]; then
-    prompt_color=$foreground_cyan
+    prompt_color=
   else
-    prompt_color=$foreground_red
+    prompt_color=$foreground_grey
   fi
 }
 declare -rfx prompt_config

@@ -1,0 +1,8 @@
+# (insert (ether-export-theme-sway))
+default_border pixel
+smart_gaps on
+gaps inner 3
+output * bg #171717 solid_color
+client.focused #00000000 #616161 #00000000 #616161
+client.focused_inactive #00000000 #252525 #00000000 #252525
+client.unfocused #00000000 #252525 #00000000 #252525

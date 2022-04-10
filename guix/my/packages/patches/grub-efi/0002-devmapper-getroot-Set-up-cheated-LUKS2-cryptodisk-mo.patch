@@ -1,0 +1,140 @@
+From 650fdfe42bb25c013ab2a388cc93ae5aecc2c52e Mon Sep 17 00:00:00 2001
+From: Josselin Poiret <dev@jpoiret.xyz>
+Date: Wed, 8 Dec 2021 20:10:17 +0100
+Subject: [PATCH v2 2/2] devmapper/getroot: Set up cheated LUKS2 cryptodisk
+ mount from DM parameters
+
+This lets a LUKS2 cryptodisk have all the cipher, hash, and sizes
+filled out, otherwise they wouldn't be initialized if cheat mounted.
+---
+ grub-core/osdep/devmapper/getroot.c | 99 ++++++++++++++++++++++++++++-
+ 1 file changed, 98 insertions(+), 1 deletion(-)
+
+diff --git a/grub-core/osdep/devmapper/getroot.c b/grub-core/osdep/devmapper/getroot.c
+index ad1daf9c8..4b3458639 100644
+--- a/grub-core/osdep/devmapper/getroot.c
++++ b/grub-core/osdep/devmapper/getroot.c
+@@ -51,6 +51,8 @@
+ #include <grub/emu/misc.h>
+ #include <grub/emu/hostdisk.h>
+ 
++#include <grub/cryptodisk.h>
++
+ static int
+ grub_util_open_dm (const char *os_dev, struct dm_tree **tree,
+ 		   struct dm_tree_node **node)
+@@ -183,7 +185,6 @@ grub_util_pull_devmapper (const char *os_dev)
+       && lastsubdev)
+     {
+       char *grdev = grub_util_get_grub_dev (lastsubdev);
+-      dm_tree_free (tree);
+       if (grdev)
+ 	{
+ 	  grub_err_t err;
+@@ -191,7 +192,103 @@ grub_util_pull_devmapper (const char *os_dev)
+ 	  if (err)
+ 	    grub_util_error (_("can't mount encrypted volume `%s': %s"),
+ 			     lastsubdev, grub_errmsg);
++          if (strncmp (uuid, "CRYPT-LUKS2-", sizeof ("CRYPT-LUKS2-") - 1) == 0)
++            {
++              /* set LUKS2 cipher and size from dm parameter, since it is not
++               * possible to determine the correct ones without unlocking, as
++               * there might be multiple segments.
++               */
++              grub_disk_t source = grub_disk_open (grdev);
++              grub_cryptodisk_t cryptodisk = grub_cryptodisk_get_by_source_disk (source);
++              grub_disk_close (source);
++              grub_addr_t start, length;
++              char *target_type = NULL;
++              char *params;
++              const char *name = dm_tree_node_get_name (node);
++              char *cipher, *cipher_mode;
++              struct dm_task *dmt;
++              grub_util_info ("populating parameters of cryptomount `%s' from DM device `%s'",
++                              uuid, name);
++              if (!(dmt = dm_task_create (DM_DEVICE_TABLE)))
++                grub_util_error (_("can't create dm task DM_DEVICE_TABLE"));
++              if (!dm_task_set_name (dmt, name))
++                grub_util_error (_("can't set dm task name to `%s'"), name);
++              if (!dm_task_run (dmt))
++                grub_util_error (_("can't run dm task for `%s'"), name);
++              dm_get_next_target (dmt, NULL, &start, &length,
++                                  &target_type, &params);
++              if (strncmp (target_type, "crypt", sizeof ("crypt")) != 0)
++                grub_util_error (_("dm target is not `crypt'"));
++
++              cryptodisk->total_sectors = length;
++              cryptodisk->log_sector_size = 9; /* default dm sector size */
++
++              /* dm target parameters for dm-crypt is
++               * <cipher> <key> <iv_offset> <device path> <offset> [<#opt_params> <opt_params>]
++               */
++              char *seek_head, *c;
++              c = params;
++
++              /* first, get the cipher name from the cipher */
++              if (!(seek_head = grub_memchr (c, '-', grub_strlen (c))))
++                grub_util_error (_("can't get cipher from dm-crypt parameters `%s'"),
++                                 params);
++              cipher = grub_strndup (c, seek_head - c);
++              c = seek_head + 1;
++
++              /* now, the cipher mode */
++              if (!(seek_head = grub_memchr (c, ' ', grub_strlen (c))))
++                grub_util_error (_("can't get cipher mode from dm-crypt parameters `%s'"),
++                                 params);
++              cipher_mode = grub_strndup (c, seek_head - c);
++
++              grub_cryptodisk_setcipher (cryptodisk, cipher, cipher_mode);
++
++              /* This is the only hash usable by PBKDF2, so set it as such */
++              cryptodisk->hash = grub_crypto_lookup_md_by_name ("sha256");
++
++              /* drop key, iv_offset, device path and offset */
++              for (int dropped_tokens = 0; dropped_tokens < 4; dropped_tokens++)
++                {
++                  seek_head++;
++                  seek_head = grub_memchr (seek_head, ' ', grub_strlen (seek_head));
++                }
++
++              /* if we have optional parameters, skip #opt_params */
++              if (seek_head && (seek_head = grub_memchr (seek_head, ' ', grub_strlen (seek_head))))
++                {
++                  seek_head++;
++                  for (;seek_head;seek_head = grub_memchr (seek_head, ' ', grub_strlen (seek_head)))
++                    {
++                      seek_head++;
++                      if (strncmp (seek_head, "sector_size:", sizeof ("sector_size:") - 1) == 0)
++                        {
++                          char *sector_size_str;
++                          unsigned long long sector_size;
++                          c = seek_head + sizeof ("sector_size:") - 1;
++                          seek_head = grub_memchr (c, ' ', grub_strlen (c));
++                          if (seek_head)
++                            sector_size_str = grub_strndup (c, seek_head - c);
++                          else
++                            sector_size_str = c;
++                          sector_size = grub_strtoull (sector_size_str, NULL, 10);
++
++                          if (sector_size != 512 && sector_size != 1024 &&
++                              sector_size != 2048 && sector_size != 4096)
++                            grub_util_error (_("dm-crypt parameter sector_size `%s' is not a valid LUKS2 sector size"),
++                                             sector_size_str);
++                          cryptodisk->log_sector_size = grub_log2ull (sector_size);
++                          grub_util_info ("set sector_size for dm `%s' to `%d'",
++                                          name, 1 << cryptodisk->log_sector_size);
++                          break;
++                        }
++                    }
++                }
++
++              dm_task_destroy (dmt);
++            }
+ 	}
++      dm_tree_free (tree);
+       grub_free (grdev);
+     }
+   else
+-- 
+2.34.0
+

@@ -14,6 +14,7 @@
     - [[#editor][EDITOR]]
     - [[#pager][PAGER]]
   - [[#os-specific][OS-specific]]
+    - [[#linux][Linux]]
     - [[#macos][macOS]]
       - [[#homebrew][Homebrew]]
       - [[#other][Other]]
@@ -268,6 +269,54 @@ export PAGER
 #+end_src
 
 ** OS-specific
+
+*** Linux
+
+#+begin_src shell
+if [ "$(uname)" = Linux ]; then
+#+end_src
+
+A bunch of functions to manage the volume:
+
+#+begin_src shell
+  volume_mute() {
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+  }
+  volume_set() {
+    local -ri current=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -1)
+    local -ri new=$((current+${1?}))
+    local -ri clamped=$((new > 100 ? 100 : new < 0 ? 0 : new))
+    pactl set-sink-volume @DEFAULT_SINK@ $clamped%
+  }
+  volume_up() { volume_set "${1:-1}"; }
+  volume_down() { volume_set -"${1:-1}"; }
+  declare -fx volume_mute volume_set volume_down volume_up
+#+end_src
+
+And another bunch to manage the brightness:
+
+#+begin_src shell
+  backlight_set() {
+    # Will break if there are more or less than one device.
+    local -r device=$(basename "$(dirname /sys/class/backlight/*/brightness)")
+    local -ri max=$(< /sys/class/backlight/"$device"/max_brightness)
+    local -ri current=$(< /sys/class/backlight/"$device"/brightness)
+    # Bash doesn't deal with floating point values.
+    local -ri new=$((current+max/100*${1?}))
+    local -ri clamped=$((new > max ? max : new < 0 ? 0 : new))
+    # The recommended way with seat management (logind).
+    busctl call org.freedesktop.login1 /org/freedesktop/login1/session/auto \
+           org.freedesktop.login1.Session SetBrightness ssu \
+           "backlight" "$device" $clamped
+  }
+  backlight_down() { backlight_set -"${1:-1}"; }
+  backlight_up() { backlight_set "${1:-1}"; }
+  declare -rfx backlight_set backlight_down backlight_up
+#+end_src
+
+#+begin_src shell
+fi
+#+end_src
 
 *** macOS
 

@@ -6,15 +6,6 @@ set $right f
 set $up p
 set $down n
 
-# Programs.
-# A launcher (e.g.: dmenu) aternative.
-bindsym $mod+Return exec foot
-bindsym $mod+space exec foot --app-id launcher bash -c 'compgen -c | sort -u | fzf --no-color --layout reverse | xargs -r swaymsg -t command exec'
-for_window [app_id="^launcher$"] floating enable, resize set height 20 ppt
-# Sway will kill mako when exiting. It doesn't make much sense to run it
-# separately. It won't prevent Sway from starting if it's not installed.
-exec mako
-
 # Managing Sway.
 bindsym $mod+Escape reload
 bindsym $mod+Shift+Escape exit

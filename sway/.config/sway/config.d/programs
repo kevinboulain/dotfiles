@@ -1,0 +1,17 @@
+# A launcher (e.g.: dmenu) aternative.
+bindsym $mod+Return exec foot
+bindsym $mod+space exec foot --app-id launcher bash -c 'compgen -c | sort -u | fzf --no-color --layout reverse | xargs -r swaymsg -t command exec'
+for_window [app_id="^launcher$"] floating enable, resize set height 20 ppt
+
+# Sway will kill mako when exiting. It doesn't make much sense to run it
+# separately. It won't prevent Sway from starting if it's not installed.
+exec mako
+
+# Audio volume.
+bindsym XF86AudioMute exec bash -c volume_mute
+bindsym XF86AudioLowerVolume exec bash -c volume_down
+bindsym XF86AudioRaiseVolume exec bash -c volume_up
+
+# Screen backlight.
+bindsym XF86MonBrightnessDown exec bash -c backlight_down
+bindsym XF86MonBrightnessUp exec bash -c backlight_up

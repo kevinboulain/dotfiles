@@ -35,6 +35,7 @@ bar {
   mode dock
   position bottom
   font \"Iosevka Term 8\"
+  status_command ~/.config/sway/venv/bin/python -u ~/.config/sway/status_command.py
   colors {
     background ${default:background}
     statusline ${default:foreground}

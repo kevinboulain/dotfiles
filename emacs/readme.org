@@ -203,13 +203,7 @@ In terminals:
 
 #+begin_src emacs-lisp
 (unless window-system
-  (set-display-table-slot standard-display-table 'wrap ?\ ) ; Remove the \ for a wrapped line, the counterpart of fringes.
-  (when (require 'mouse nil t)
-    ;; Enable mouse interaction in terminals so clicking and scrolling may move
-    ;; the point:
-    (xterm-mouse-mode t) ; That seems a bit too hard-coded?
-    (bind-keys ([mouse-4] . (lambda () (interactive) (scroll-down 1)))
-               ([mouse-5] . (lambda () (interactive) (scroll-up 1))))))
+  (set-display-table-slot standard-display-table 'wrap ?\ )) ; Remove the \ for a wrapped line, the counterpart of fringes.
 #+end_src
 
 And in graphical environments, just in case I happen to run it outside of a

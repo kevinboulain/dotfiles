@@ -28,6 +28,7 @@
       - [[#go][Go]]
       - [[#idris][Idris]]
       - [[#lua][Lua]]
+      - [[#nix][Nix]]
       - [[#openscad][OpenSCAD]]
       - [[#python][Python]]
       - [[#rust][Rust]]
@@ -799,6 +800,15 @@ Mainly for syntax highlighting and indentation.
   :straight (:host github :repo "immerrr/lua-mode")
   :config
   (setq lua-indent-level tab-width))
+#+end_src
+
+
+**** [[https://nixos.org][Nix]]
+
+#+begin_src emacs-lisp
+(use-package nix-mode
+   :defer t
+   :straight (:host github :repo "nixos/nix-mode"))
 #+end_src
 
 **** [[https://www.openscad.org/][OpenSCAD]]

@@ -1,0 +1,4 @@
+{ ... }:
+{
+  networking.useDHCP = true;
+}

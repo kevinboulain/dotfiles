@@ -1,3 +1,4 @@
+--target ~
 # Don't symlink directories, only their files (useful for programs
 # creating more of them and which shouldn't clutter this repository).
 --no-folding

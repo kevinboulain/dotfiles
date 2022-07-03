@@ -12,5 +12,6 @@ input "type:keyboard" {
 
 input "type:touchpad" {
   accel_profile adaptive
-  scroll_factor 0.5
+  # Firefox behaves differently under Wayland, see firefox/user.js
+  scroll_factor 2
 }

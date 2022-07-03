@@ -1,0 +1,2 @@
+# Has to be symlinked to ~/.mozilla/firefox/XXXXXXXX.name/user.js.
+^/user.js

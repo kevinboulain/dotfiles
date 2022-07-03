@@ -203,7 +203,16 @@ In terminals:
 
 #+begin_src emacs-lisp
 (unless window-system
-  (set-display-table-slot standard-display-table 'wrap ?\ )) ; Remove the \ for a wrapped line, the counterpart of fringes.
+  (set-display-table-slot standard-display-table 'wrap ?\ ) ; Remove the \ for a wrapped line, the counterpart of fringes.
+  (when (require 'mouse nil t)
+    ;; Enable mouse interaction in terminals.
+    (xterm-mouse-mode t) ; That seems a bit too hard-coded?
+    ;; tmux also scrolls five lines at a time.
+    ;; https://github.com/tmux/tmux/blob/f08c019d419d7deefce2e8ab699aad404895355a/CHANGES#L1296
+    (bind-keys ([mouse-4] . (lambda () (interactive) (scroll-down 5)))
+               ([mouse-5] . (lambda () (interactive) (scroll-up 5)))
+               ([mouse-6] . (lambda () (interactive) (scroll-right 5)))
+               ([mouse-7] . (lambda () (interactive) (scroll-left 5))))))
 #+end_src
 
 And in graphical environments, just in case I happen to run it outside of a

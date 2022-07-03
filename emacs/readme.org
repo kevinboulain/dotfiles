@@ -40,6 +40,7 @@
       - [[#markdown][Markdown]]
       - [[#org][Org]]
       - [[#gettext][gettext]]
+      - [[#man][man]]
     - [[#social][Social]]
       - [[#irc][IRC]]
       - [[#slack][Slack]]
@@ -1005,6 +1006,14 @@ On Debian, install =gettext-el=.
 
 #+begin_src emacs-lisp
 (when (require 'po-mode nil t))
+#+end_src
+
+**** man
+
+#+begin_src emacs-lisp
+;; No maximum width.
+(setq Man-width-max nil)
+(setq woman-fill-column nil)
 #+end_src
 
 *** Social

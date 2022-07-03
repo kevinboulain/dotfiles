@@ -238,6 +238,15 @@ busy() (
 )
 #+end_src
 
+Use Emacs as (wo)man:
+
+#+begin_src shell
+eman() (
+  # WoMan is slightly better asks for the section if multiple are available.
+  emacs -eval "(woman \"${1?}\")"
+)
+#+end_src
+
 *** EDITOR
 
 Nothing special, only in order of preference:

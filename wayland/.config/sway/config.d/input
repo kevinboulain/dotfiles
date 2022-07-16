@@ -5,9 +5,12 @@ input "type:keyboard" {
   repeat_delay 175
 
   # man 7 xkeyboard-config
-  xkb_layout us
-  xkb_variant intl
-  xkb_options caps:ctrl_modifier
+  xkb_layout us,bqn
+  xkb_variant intl,
+  xkb_options caps:ctrl_modifier,grp:rshift_toggle
+  # Or for xkb_file:
+  #  setxkbmap -layout us,bqn -variant intl, -option caps:ctrl_modifier,grp:rshift_toggle -print
+  # See https://a3nm.net/blog/xkbcomp.html.
 }
 
 input "type:touchpad" {

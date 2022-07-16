@@ -15,3 +15,6 @@ bindsym XF86AudioRaiseVolume exec bash -c volume_up
 # Screen backlight.
 bindsym XF86MonBrightnessDown exec bash -c backlight_down
 bindsym XF86MonBrightnessUp exec bash -c backlight_up
+
+# Night mode.
+exec gammastep -l 47.3769:8.5417

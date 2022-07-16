@@ -7,6 +7,7 @@
     extraPackages = with pkgs; [
       foot
       fzf
+      gammastep
       mako
       swayidle
       swaylock

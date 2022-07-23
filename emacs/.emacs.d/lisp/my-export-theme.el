@@ -61,11 +61,10 @@ setw -g window-style \"fg=${default:foreground},bg=${default:background}\"
 setw -g pane-active-border-style \"fg=${hl-line:background},bg=${default:background}\"
 setw -g pane-border-style \"fg=${hl-line:background},bg=${default:background}\"
 
-setw -g status-fg \"${mode-line:foreground}\"
-setw -g status-bg \"${mode-line:background}\"
+setw -g status-style \"fg=${mode-line-buffer-id:foreground},bg=${mode-line:background}\"
 setw -g message-style \"fg=${mode-line:foreground},bg=${mode-line:background}\"
 
-setw -g window-status-style \"fg=${link-visited:foreground}\"
+setw -g window-status-style \"fg=${mode-line:foreground}\"
 setw -g window-status-current-style \"fg=${mode-line-buffer-id:foreground},${mode-line-buffer-id:weight}\"
 setw -g mode-style \"bg=${hl-line:background}\"
 

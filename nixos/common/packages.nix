@@ -17,6 +17,10 @@
     tmux
   ];
   fonts.fonts = with pkgs; [
-    iosevka-term  # Used in my configurations.
+    iosevka
+    # Used in my configurations, provides correct spacing of some characters in
+    # terminals. Sadly, it's a custom package so it's not cached (and takes time
+    # to build).
+    iosevka-term
   ];
 }

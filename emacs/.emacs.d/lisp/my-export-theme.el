@@ -12,7 +12,7 @@
 
 (defun my-export-theme-foot ()
   (s-format "# (insert (my-export-theme-foot))
-font = Iosevka Term:8
+font = Iosevka Term:size=8
 
 [colors]
 background = ${default:background}

@@ -19,6 +19,7 @@
     ../common/wayland.nix
     ./networking.nix
     ./system.nix
+    ./wayland.nix
   ];
 
   networking.hostName = "acheron";

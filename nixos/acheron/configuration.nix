@@ -1,9 +1,5 @@
 { pkgs, ... }:
 {
-  nixpkgs.overlays = [
-    # (import ./overlays/sof-firmware)
-  ];
-
   imports = [
     ../common/android.nix
     ../common/antivirus.nix

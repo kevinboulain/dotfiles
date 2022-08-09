@@ -13,6 +13,7 @@
     ../common/virtualisation.nix
     ../common/vpn.nix
     ../common/wayland.nix
+    ../common/yubikey.nix
     ./networking.nix
     ./system.nix
     ./wayland.nix

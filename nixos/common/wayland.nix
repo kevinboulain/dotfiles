@@ -19,6 +19,7 @@
     grim
     slurp
     vlc
+    wl-clipboard
   ];
 
   # For screensharing (via WebRTC).

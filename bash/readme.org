@@ -13,6 +13,7 @@
     - [[#functions][Functions]]
     - [[#editor][EDITOR]]
     - [[#pager][PAGER]]
+    - [[#pass][Pass]]
   - [[#os-specific][OS-specific]]
     - [[#linux][Linux]]
     - [[#macos][macOS]]
@@ -275,6 +276,18 @@ elif hash most &> /dev/null; then
 fi
 
 export PAGER
+#+end_src
+
+*** Pass
+
+[[Android Password
+Store][https://github.com/android-password-store/Android-Password-Store]]
+defaults to ASCII-armored output, default [[Password
+Store][https://www.passwordstore.org/]] to that too (so Git's diff don't ends up
+comparing binary files).
+
+#+begin_src shell
+export PASSWORD_STORE_GPG_OPTS='--armor'
 #+end_src
 
 ** OS-specific

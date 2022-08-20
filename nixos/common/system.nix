@@ -20,7 +20,12 @@
     cpu.intel.updateMicrocode = true;
   };
 
-  boot.tmpOnTmpfs = true;  # Not true by default, like cleanTmpDir.
+  # Using a tmpfs can cause issues with large builds:
+  # https://github.com/NixOS/nixpkgs/issues/54707
+  # It's however not as trivial as setting TMPDIR for nix-daemon: root doesn't
+  # appear to use the nix-daemon and a 'sudo nixos-rebuild boot' after a
+  # 'nixos-rebuild build` as user can actually result in a rebuild.
+  # boot.tmpOnTmpfs = true;
 
   # This system boots via EFI.
   fileSystems."/boot/efi".fsType = "vfat";

@@ -1,4 +1,4 @@
-{ config, pkgs, pkgsi686Linux, ... }:
+{ config, pkgs, ... }:
 {
   fileSystems."/boot/efi".device = "/dev/disk/by-uuid/8EEA-1769";
 
@@ -7,58 +7,64 @@
     intel-gpu-tools
   ];
 
-  # This system has a recent Wi-Fi card. 5.15 is known to be missing the
-  # driver while 5.17 is known to have it (including the firmware).
-  # 5.17.15 is the last version that allows waking up from hibernation:
-  # https://gitlab.freedesktop.org/drm/intel/-/issues/6506
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot = {
+    # Wi-Fi driver was merged somewhen between 5.15 and 5.17.
+    # Hibernation has been broken between 5.17.15 and 6.0.3:
+    # https://gitlab.freedesktop.org/drm/intel/-/issues/6506
+    # Audio has been broken between 6.0.3 and 6.0.4:
+    # https://bugzilla.kernel.org/show_bug.cgi?id=216613
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [];
+  };
 
   # Tells ccache to set up the environment for a package:
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/programs/ccache.nix#L58
-  programs.ccache.packageNames = [ "kernel" ];
+  # programs.ccache.packageNames = [ "kernel" ];
   # A custom kernel package to ease bisection.
   # https://euank.com/2022/05/11/nixos-bisect.html
   # https://nixos.wiki/wiki/Linux_kernel
-  boot.kernelPackages = let
-    kernelPackage = { fetchurl, buildLinux, lib, ... }@args:
-      buildLinux (args // rec {
-        # Additionally, the environment needs to be overridden with ccache's.
-        # https://github.com/NixOS/nixpkgs/issues/153343
-        stdenv = pkgs.ccacheStdenv;
-        # To fetch the source from somewhere:
-        src = fetchurl {  # If the method and parameters are the same (the hash changes depending on the method) we can hit cache.nixos.org.
-          url = "https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-${version}.tar.xz";
-          sha256 = "sha256-ShySKkkO6r9bRNT9423pultxcRtzUsYlhxbaQRYNtig=";
-        };
-        # Or instead, to copy it locally (will always cause ccache misses?):
-        # https://nixos.org/manual/nix/stable/expressions/builtins.html#builtins-filterSource
-        # src = builtins.filterSource
-        #   (path: type: type != "directory" || baseNameOf path != ".git")
-        #   /home/ether/source/linux;
-        version = "5.17.15";
-        kernelPatches = with (pkgs.callPackage <nixos/pkgs/os-specific/linux/kernel/patches.nix> {}); [
-          # https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/linux-kernels.nix
-          bridge_stp_helper
-          request_key_helper
-        ];
-        # Sometimes it's too much work to fiddle with structuredExtraConfig
-        # when incompatible options are set.
-        # ignoreConfigErrors = true;
-        # structuredExtraConfig = with lib.kernel; {};
-      } // (args.argsOverride or {}));
-    kernel = pkgs.callPackage kernelPackage {};
-  in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
+  # boot.kernelPackages = let
+  #   kernelPackage = { fetchurl, buildLinux, lib, ... }@args:
+  #     buildLinux (args // rec {
+  #       # Additionally, the environment needs to be overridden with ccache's.
+  #       # https://github.com/NixOS/nixpkgs/issues/153343
+  #       stdenv = pkgs.ccacheStdenv;
+  #       # To fetch the source from somewhere:
+  #       src = fetchurl {
+  #         # If the method and parameters are the same (the hash changes
+  #         # depending on the method) we can hit cache.nixos.org.
+  #         url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
+  #         sha256 = "17awx4c5fz7f656ig5bydccci052jsai0lczrn2bdk5cihw2cg51";
+  #       };
+  #       # Or instead, to copy it locally (will always cause ccache misses?):
+  #       # https://nixos.org/manual/nix/stable/expressions/builtins.html#builtins-filterSource
+  #       # src = builtins.filterSource
+  #       #   (path: type: type != "directory" || baseNameOf path != ".git")
+  #       #   /home/ether/source/linux;
+  #       version = "6.0.2";
+  #       modDirVersion = builtins.replaceStrings ["-"] [".0-"] version;
+  #       kernelPatches = with (pkgs.callPackage <nixos/pkgs/os-specific/linux/kernel/patches.nix> {}); [
+  #         # https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/linux-kernels.nix
+  #         bridge_stp_helper
+  #         request_key_helper
+  #         { name = "https://gitlab.freedesktop.org/drm/intel/-/issues/6506";
+  #           patch = ./drm_resume.patch; }
+  #       ];
+  #       # Sometimes it's too much work to fiddle with structuredExtraConfig
+  #       # when incompatible options are set.
+  #       # ignoreConfigErrors = true;
+  #       # structuredExtraConfig = with lib.kernel; {};
+  #     } // (args.argsOverride or {}));
+  #   kernel = pkgs.callPackage kernelPackage {};
+  # in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
 
-  boot = {
-    kernelParams = [];
-    initrd = {
-      luks.devices.root.device = "/dev/disk/by-uuid/896ef078-adb2-4405-afb8-ec62ea116399";
-      availableKernelModules = [
-        # To mount the root filesystem.
-        "nvme"
-        # Everything else pretty much just works (including the keyboard).
-      ];
-    };
+  boot.initrd = {
+    luks.devices.root.device = "/dev/disk/by-uuid/896ef078-adb2-4405-afb8-ec62ea116399";
+    availableKernelModules = [
+      # To mount the root filesystem.
+      "nvme"
+      # Everything else pretty much just works (including the keyboard).
+    ];
   };
 
   # Power management.
@@ -108,7 +114,10 @@
   hardware = {
     opengl.enable = true;
     video.hidpi.enable = true;  # Also impacts the console.
-    nvidia = {  # This system has an Nvidia graphic card.
+    # This system has an Nvidia graphic card.
+    # Driver 520.56.06 fixes the diagonal tearing in XWayland under PRIME:
+    # https://gitlab.freedesktop.org/xorg/xserver/-/issues/1317
+    nvidia = {
       # There are way more options, like explicitly setting PCI buses:
       # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/hardware/video/nvidia.nix
       # But most of them are configuring Xorg or the power state but the
@@ -119,25 +128,29 @@
       # https://wiki.archlinux.org/title/PRIME#Configure_applications_to_render_using_GPU
       modesetting.enable = true;
       # The default.
-      # package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
       # Largely copied from
       # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nvidia-x11/default.nix
-      package = let
-        generic = args: let imported = import <nixos/pkgs/os-specific/linux/nvidia-x11/generic.nix> args;
-                        in pkgs.callPackage imported {
-                          # Build against the current kernel.
-                          kernel = config.boot.kernelPackages.kernel;
-                          lib32 = (pkgsi686Linux.callPackage imported {
-                            libsOnly = true;
-                            kernel = null;
-                          }).out;
-                        };
-      in generic {
-        version = "515.48.07";
-        sha256_64bit = "sha256-4odkzFsTwy52NwUT2ur8BcKJt37gURVSRQ8aAOMa4eM=";
-        settingsSha256 = "sha256-XwdMsAAu5132x2ZHqjtFvcBJk6Dao7I86UksxrOkknU=";
-        persistencedSha256 = "sha256-BTfYNDJKe4tOvV71/1JJSPltJua0Mx/RvDcWT5ccRRY=";
-      };
+      # I didn't manage to use an overlay:
+      # https://github.com/NixOS/nixpkgs/issues/90459#issuecomment-647041204
+      # package = let
+      #   generic = args: let imported = import <nixos/pkgs/os-specific/linux/nvidia-x11/generic.nix> args;
+      #                   in pkgs.callPackage imported {
+      #                     # Build against the current kernel.
+      #                     kernel = config.boot.kernelPackages.kernel;
+      #                     lib32 = (pkgsi686Linux.callPackage imported {
+      #                       libsOnly = true;
+      #                       kernel = null;
+      #                     }).out;
+      #                   };
+      # in generic {
+      #   version = "515.65.01";
+      #   sha256_64bit = "sha256-BJLdxbXmWqAMvHYujWaAIFyNCOEDtxMQh6FRJq7klek=";
+      #   openSha256 = "sha256-GCCDnaDsbXTmbCYZBCM3fpHmOSWti/DkBJwYrRGAMPI=";
+      #   settingsSha256 = "sha256-kBELMJCIWD9peZba14wfCoxsi3UXO3ehFYcVh4nvzVg=";
+      #   persistencedSha256 = "sha256-P8oT7g944HvNk2Ot/0T0sJM7dZs+e0d+KwbwRrmsuDY=";
+      #   patches = [ ./drm_nvidia.patch ];
+      # };
     };
   };
   # While it's named after X, it doesn't install it. This is necessary

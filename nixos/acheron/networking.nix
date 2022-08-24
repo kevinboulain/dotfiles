@@ -6,7 +6,10 @@
     wireless.iwd = {
       enable = true;
       settings = {
-        General.EnableNetworkConfiguration = true;
+        General = {
+          AddressRandomization = "network";  # https://iwd.wiki.kernel.org/addressrandomization
+          EnableNetworkConfiguration = true;
+        };
         Network.EnableIPv6 = true;
       };
     };

@@ -62,7 +62,6 @@
   };
 
   # Power management.
-  powerManagement.cpuFreqGovernor = "powersave";  # TODO: energy_performance_preference?
   boot.resumeDevice = "/dev/system/swap";
   services.logind.lidSwitch = "hibernate"; # TODO: suspend-then-hibernate (buggy right now, worked fine on arch)
   systemd.sleep.extraConfig = ''
@@ -82,6 +81,18 @@
     criticalPowerAction = "Hibernate";
   };
   systemd.services.upower.wantedBy = [ "multi-user.target" ];  # By default it's graphical.target.
+  # The rest (power saving for the audio interface, automatic power management
+  # of PCI devices, etc) is handled by TLP
+  # (https://linrunner.de/tlp/faq/powertop.html):
+  services.tlp = {
+    enable = true;
+    settings = {
+      # Not enabled by default.
+      # https://linrunner.de/tlp/settings/processor.html
+      CPU_SCALING_GOVERNOR_ON_AC = "powersave";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+    };
+  };
 
   hardware = {
     opengl.enable = true;

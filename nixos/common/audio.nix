@@ -1,7 +1,10 @@
 { pkgs, ... }:
 {
   # https://nixos.wiki/wiki/PipeWire
-  hardware.bluetooth.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = false;  # To save some power.
+  };
   security.rtkit.enable = true;  # For PipeWire to be able to set realtime priority.
   services.pipewire = {
     enable = true;

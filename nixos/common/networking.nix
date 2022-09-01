@@ -10,6 +10,15 @@
 
   # DNS resolution is handed off to systemd.
   services.resolved.enable = true;
+  # And enable mDNS (discovery of printers, chromecasts, ...).
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
+  };
 
   services.openssh = {
     enable = true;

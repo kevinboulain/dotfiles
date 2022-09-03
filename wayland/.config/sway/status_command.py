@@ -16,7 +16,12 @@ def prometheus_snapshot(query: str) -> prometheus.MetricSnapshotDataFrame:
 
 
 def prometheus_query_range(query: str) -> prometheus.MetricRangeDataFrame:
-    return prometheus.MetricRangeDataFrame(PROMETHEUS.custom_query(query))
+    import datetime
+    # 5 points.
+    end = datetime.datetime.now()
+    start = end - datetime.timedelta(minutes=4)
+    step = '1m'
+    return prometheus.MetricRangeDataFrame(PROMETHEUS.custom_query_range(query, start_time=start, end_time=end, step=step))
 
 
 def interpolate(minimum, maximum, value) -> float:
@@ -78,7 +83,7 @@ def batteries() -> Blocks:
 
 
 def cpu() -> Blocks:
-    frame = prometheus_query_range('avg (sum (rate(node_cpu_seconds_total{mode!="idle"}[1m])) without (mode)) without (cpu) [5m:]')
+    frame = prometheus_query_range('avg (sum (rate(node_cpu_seconds_total{mode!="idle"}[1m])) without (mode)) without (cpu)')
     bars = ''
     for second in frame.value:
         utilization = int(float(second)*100)
@@ -94,8 +99,8 @@ def cpu() -> Blocks:
 
 def network() -> Blocks:
     for query, kind in [
-            ('rate(node_network_transmit_bytes_total{device="wlan0"}[1m]) [5m:]', 'Upload'),
-            ('rate(node_network_receive_bytes_total{device="wlan0"}[1m]) [5m:]', 'Download'),
+            ('rate(node_network_transmit_bytes_total{device="wlan0"}[1m])', 'Upload'),
+            ('rate(node_network_receive_bytes_total{device="wlan0"}[1m])', 'Download'),
     ]:
         frame = prometheus_query_range(query)
         bars = ''
@@ -107,7 +112,7 @@ def network() -> Blocks:
 
 
 def temperature() -> Blocks:
-    frame = prometheus_query_range('max (node_thermal_zone_temp) without (type, zone) [5m:]')
+    frame = prometheus_query_range('max (node_thermal_zone_temp) without (type, zone)')
     bars = ''
     for temperature in frame.value:
         temperature = int(float(temperature))

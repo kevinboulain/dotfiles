@@ -146,17 +146,18 @@ Convert the tab character to spaces:
               indent-tabs-mode nil) ; Indent with spaces only.
 #+end_src
 
-Tell Emacs to stop littering my environment by setting the directories for
-backup, auto-saves, sessions and disabling interlock:
+At the cost of convenience, prevent Emacs from littering and more importantly,
+leaking file contents:
 
 #+begin_src emacs-lisp
-(setq backup-directory-alist `((".*" . ,temporary-file-directory))
-      auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
-      auto-save-list-file-prefix temporary-file-directory)
-
-;; I'm not sure lockfies provide any advantages besides spamming the filesystem
-;; and breaking external tools.
-(setq create-lockfiles nil)
+(setq
+ ;; Backups and autosaves tend to end up in unfortunate places, with broader
+ ;; permissions and might leak secret contents (e.g.: password store).
+ auto-save-default nil
+ backup-inhibited t
+ ;; I'm not sure lockfies provide any advantages besides spamming the filesystem
+ ;; and breaking other tools.
+ create-lockfiles nil)
 #+end_src
 
 Quiet down Emacs a bit:

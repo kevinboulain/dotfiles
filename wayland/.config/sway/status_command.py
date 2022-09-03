@@ -146,9 +146,12 @@ def wifi() -> Blocks:
 
 
 def main():
+    import getpass
     import json
     import time
     import traceback
+
+    user = getpass.getuser()
 
     def cache_for(seconds: float, function: Callable[..., Blocks], *args, **kwargs) -> Blocks:
         blocks, start = [], None
@@ -181,7 +184,7 @@ def main():
                 block(time.strftime('%T %A %F')),
             ]), end=',\n')
         except Exception:
-            with open('/tmp/status_command.log', 'a') as handle:
+            with open(f'/tmp/status_command_{user}.log', 'a') as handle:
                 traceback.print_exc(file=handle)
         time.sleep(1)
     print(']')

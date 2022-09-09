@@ -1,5 +1,7 @@
 # man 5 sway-input
 
+seat * hide_cursor 5000
+
 input "type:keyboard" {
   repeat_rate 40
   repeat_delay 175

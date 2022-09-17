@@ -13,6 +13,7 @@
       scrape_interval = "30s";
       evaluation_interval = "30s";
     };
+    retentionTime = "10y";
     scrapeConfigs = [
       {
         job_name = "prometheus";

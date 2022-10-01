@@ -2,7 +2,13 @@
 {
   hardware.bluetooth = {
     enable = true;
-    powerOnBoot = false;  # To save some power.
+    package = pkgs.bluez5-experimental;
+    settings = {
+      # Experimental D-Bus interface (e.g.: integration with UPower).
+      General.Experimental = true;
+      # To save some power.
+      Policy.AutoEnable = false;
+    };
   };
   # https://github.com/NixOS/nixpkgs/issues/170573
   systemd.tmpfiles.rules = [

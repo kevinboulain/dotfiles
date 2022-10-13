@@ -4,9 +4,13 @@
     (import ../common/overlays/iosevka)
   ];
 
+  # Get rid of any package installed by default (like nano).
+  environment.defaultPackages = [];
+
   environment.systemPackages = with pkgs; [
     file
     lsof
+    strace
 
     emacs-nox
     gitFull  # I could (gitMinimal.override { sendEmailSupport = true; }) to do without the UI but that wouldn't be cached.

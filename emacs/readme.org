@@ -854,6 +854,7 @@ features and a better integration (like out of the box support for Flycheck).
 (use-package rustic
   :defer t
   :straight (:host github :repo "brotzeit/rustic")
+  :hook (rustic-mode . (lambda () (setq fill-column 100)))
   :config
   (setq rustic-format-on-save t
         rustic-indent-offset tab-width

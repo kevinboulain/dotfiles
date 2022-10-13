@@ -10,7 +10,7 @@ input "type:keyboard" {
   # man 7 xkeyboard-config
   xkb_layout us,bqn
   xkb_variant intl,
-  xkb_options ctrl:nocaps,grp:rshift_toggle
+  xkb_options ctrl:nocaps,grp:rctrl_rshift_toggle
   # Or for xkb_file:
   #  setxkbmap -layout us,bqn -variant intl, -option caps:ctrl_modifier,grp:rshift_toggle -print
   # See https://a3nm.net/blog/xkbcomp.html.

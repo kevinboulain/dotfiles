@@ -1,9 +1,5 @@
 { pkgs, ... }:
 {
-  nixpkgs.overlays = [
-    (import ../common/overlays/iosevka)
-  ];
-
   # Get rid of any package installed by default (like nano).
   environment.defaultPackages = [];
 
@@ -21,10 +17,9 @@
     tmux
   ];
   fonts.fonts = with pkgs; [
-    iosevka
-    # Used in my configurations, provides correct spacing of some characters in
-    # terminals. Sadly, it's a custom package so it's not cached (and takes time
-    # to build).
-    iosevka-term
+    # iosevka-bin ensures it's never rebuild from source but downloaded from
+    # GitHub when not cached. Also, it embeds Iosevka Term (used in my
+    # configurations).
+    iosevka-bin
   ];
 }

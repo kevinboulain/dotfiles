@@ -46,7 +46,7 @@
   };
 
   # Set up dnsmasq to provide DHCP and DNS to clients attached to nat0.
-  networking.firewall.allowedUDPPorts = [ 53 67 ]; # TODO: restrict to nat0
+  networking.firewall.interfaces.nat0.allowedUDPPorts = [ 53 67 ];
   services.dnsmasq = {
     enable = true;
     resolveLocalQueries = false;

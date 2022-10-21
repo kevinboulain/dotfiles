@@ -82,4 +82,7 @@
   services.logind.extraConfig = ''
     KillOnlyUsers=untrusted
   '';
+
+  # Prevent anyone not in the wheel group to run sudo.
+  security.sudo.execWheelOnly = true;
 }

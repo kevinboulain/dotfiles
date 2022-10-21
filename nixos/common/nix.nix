@@ -6,6 +6,10 @@
     nixos-option  # To evaluate the configuration.
   ];
 
+  # Prevent anyone not in the wheel group from connecting to the Nix daemon.
+  # See also trusted-users, which allows root by default.
+  nix.settings.allowed-users = [ "@wheel" ];
+
   # Set up ccache. Note package need to opt-in with programs.ccache.packageNames
   # and might have to overwrite the derivation's stdenv with ccacheStdenv.
   # Get statistics with:

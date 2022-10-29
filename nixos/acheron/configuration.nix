@@ -9,6 +9,7 @@
     ../common/networking.nix
     ../common/nix.nix
     ../common/packages.nix
+    ../common/steam.nix
     ../common/system.nix
     ../common/virtualisation.nix
     ../common/vpn.nix

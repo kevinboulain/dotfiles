@@ -159,9 +159,4 @@
 
   # Not strictly necessary but more appealing.
   boot.loader.grub.gfxmodeEfi = "1920x1080";
-
-  # Steam.
-  programs.steam.enable = true;  # Installing via nix-env doesn't work: "libnvidia-glvkspirv.so is required at runtime".
-  hardware.opengl.driSupport32Bit = true;
-  programs.gamemode.enable = true;  # For performance-sensitive applications.
 }

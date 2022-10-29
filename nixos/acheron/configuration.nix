@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   imports = [
     ../common/android.nix
@@ -18,7 +18,7 @@
     ./networking.nix
     ./system.nix
     ./wayland.nix
-  ];
+  ] ++ lib.optional (builtins.pathExists ./local.nix) ./local.nix;
 
   networking.hostName = "acheron";
   time.timeZone = "Europe/Zurich";

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   imports = [
     ../common/antivirus.nix
@@ -10,7 +10,7 @@
     ../common/system.nix
     ./networking.nix
     ./system.nix
-  ];
+  ] ++ lib.optional (builtins.pathExists ./local.nix) ./local.nix;
 
   networking.hostName = "cocytus";
   time.timeZone = "Europe/Zurich";

@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
 {
+  environment.variables = {
+    NIX_SHELL_PRESERVE_PROMPT = "1";
+  };
+
   environment.systemPackages = with pkgs; [
     cntr  # https://nixos.org/manual/nixpkgs/stable/#breakpointhook
     nix-index  # To search packages.

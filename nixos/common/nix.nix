@@ -3,6 +3,7 @@
   environment.systemPackages = with pkgs; [
     cntr  # https://nixos.org/manual/nixpkgs/stable/#breakpointhook
     nix-index  # To search packages.
+    nix-tree  # Convenient dependency graphs.
     nixos-option  # To evaluate the configuration.
   ];
 

@@ -1,24 +1,22 @@
 (require 's)
 
 (defvar my-export-theme--faces
-  `(("default:background" . ,(face-attribute 'default :background nil t))
-    ("default:foreground" . ,(face-attribute 'default :foreground nil t))
-    ("hl-line:background" . ,(face-attribute 'hl-line :background nil t))
-    ("link-visited:foreground" . ,(face-attribute 'link-visited :foreground nil t))
-    ("mode-line-buffer-id:foreground" . ,(face-attribute 'mode-line-buffer-id :foreground nil t))
-    ("mode-line-buffer-id:weight" . ,(symbol-name (face-attribute 'mode-line-buffer-id :weight nil t)))
-    ("mode-line:background" . ,(face-attribute 'mode-line :background nil t))
-    ("mode-line:foreground" . ,(face-attribute 'mode-line :foreground nil t))))
+  `(("background" . ,(alist-get "color-4" (tao-theme-yin-palette) nil nil #'equal))
+    ("light-highlight" . ,(alist-get "color-5" (tao-theme-yin-palette) nil nil #'equal))
+    ("status" . ,(alist-get "color-7" (tao-theme-yin-palette) nil nil #'equal))
+    ("foreground" . ,(alist-get "color-10" (tao-theme-yin-palette) nil nil #'equal))
+    ("strong-highlight" . ,(alist-get "color-11" (tao-theme-yin-palette) nil nil #'equal))
+    ("important" . ,(alist-get "color-14" (tao-theme-yin-palette) nil nil #'equal))))
 
 (defun my-export-theme-foot ()
   (s-format "# (insert (my-export-theme-foot))
 font = Iosevka Term:size=8
 
 [colors]
-background = ${default:background}
-foreground = ${default:foreground}
-urls = ${link-visited:foreground}
-scrollback-indicator = ${mode-line:background} ${mode-line:foreground}
+background = ${background}
+foreground = ${foreground}
+urls = ${strong-highlight}
+scrollback-indicator = ${background} ${status}
 " 'aget (mapcar (lambda (face) `(,(car face) . ,(string-trim-left (cdr face) "#"))) my-export-theme--faces)))
 
 (defun my-export-theme-sway ()
@@ -26,50 +24,50 @@ scrollback-indicator = ${mode-line:background} ${mode-line:foreground}
 default_border pixel 1
 smart_gaps on
 gaps inner 3
-output * bg ${default:background} solid_color
-client.focused #00000000 ${mode-line:foreground} #00000000 ${mode-line:foreground}
-client.focused_inactive #00000000 ${hl-line:background} #00000000 ${hl-line:background}
-client.unfocused #00000000 ${hl-line:background} #00000000 ${hl-line:background}
+output * bg ${background} solid_color
+client.focused #00000000 ${status} #00000000 ${status}
+client.focused_inactive #00000000 ${light-highlight} #00000000 ${light-highlight}
+client.unfocused #00000000 ${light-highlight} #00000000 ${light-highlight}
 
 bar {
   mode dock
   position bottom
   font \"Iosevka Term 8\"
-  status_command ~/.config/sway/venv/bin/python -u ~/.config/sway/status_command.py
+  status_command ~/.cargo/bin/swaybar 2>> /tmp/swaybar_$USER.log
   colors {
-    background ${default:background}
-    statusline ${default:foreground}
-    separator ${mode-line:foreground}
-    focused_workspace ${default:background} ${default:background} ${mode-line-buffer-id:foreground}
-    active_workspace ${default:background} ${default:background} ${default:foreground}
-    inactive_workspace ${default:background} ${default:background} ${mode-line:foreground}
+    background ${background}
+    statusline ${foreground}
+    separator ${status}
+    focused_workspace ${background} ${background} ${important}
+    active_workspace ${background} ${background} ${foreground}
+    inactive_workspace ${background} ${background} ${status}
   }
 }" 'aget my-export-theme--faces))
 
 (defun my-export-theme-mako ()
   (s-format "# (insert (my-export-theme-mako))
 font=Iosevka Term 8
-background-color=${default:background}
-text-color=${default:foreground}
-border-color=${mode-line:foreground}
-progress-color=over ${hl-line:background}
+background-color=${background}
+text-color=${foreground}
+border-color=${status}
+progress-color=over ${light-highlight}
 " 'aget my-export-theme--faces))
 
 (defun my-export-theme-tmux ()
   (s-format "# (insert (my-export-theme-tmux))
-setw -g window-style \"fg=${default:foreground},bg=${default:background}\"
-setw -g pane-active-border-style \"fg=${hl-line:background},bg=${default:background}\"
-setw -g pane-border-style \"fg=${hl-line:background},bg=${default:background}\"
+setw -g window-style \"fg=${foreground},bg=${background}\"
+setw -g pane-active-border-style \"fg=${light-highlight},bg=${background}\"
+setw -g pane-border-style \"fg=${light-highlight},bg=${background}\"
 
-setw -g status-style \"fg=${mode-line-buffer-id:foreground},bg=${mode-line:background}\"
-setw -g message-style \"fg=${mode-line:foreground},bg=${mode-line:background}\"
+setw -g status-style \"fg=${important},bg=${background}\"
+setw -g message-style \"fg=${status},bg=${background}\"
 
-setw -g window-status-style \"fg=${mode-line:foreground}\"
-setw -g window-status-current-style \"fg=${mode-line-buffer-id:foreground},${mode-line-buffer-id:weight}\"
-setw -g mode-style \"bg=${hl-line:background}\"
+setw -g window-status-style \"fg=${status}\"
+setw -g window-status-current-style \"fg=${important},bold\"
+setw -g mode-style \"bg=${light-highlight}\"
 
-setw -g display-panes-colour \"${link-visited:foreground}\"
-setw -g display-panes-active-colour \"${mode-line-buffer-id:foreground}\"
+setw -g display-panes-colour \"${strong-highlight}\"
+setw -g display-panes-active-colour \"${important}\"
 " 'aget my-export-theme--faces))
 
 (provide 'my-export-theme)

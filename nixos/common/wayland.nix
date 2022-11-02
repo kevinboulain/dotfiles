@@ -17,12 +17,10 @@
   environment.systemPackages = with pkgs; [
     firefox-wayland
     grim
+    mpv
     slurp
-    vlc
     wl-clipboard
   ];
-  # For VLC (https://github.com/NixOS/nixpkgs/pull/58588/files).
-  networking.firewall.allowedTCPPorts = [ 8010 ];
 
   # For screensharing (via WebRTC).
   # https://discourse.nixos.org/t/some-loose-ends-for-sway-on-nixos-which-we-should-fix/17728

@@ -3,9 +3,9 @@ default_border pixel 1
 smart_gaps on
 gaps inner 3
 output * bg #171717 solid_color
-client.focused #00000000 #616161 #00000000 #616161
-client.focused_inactive #00000000 #252525 #00000000 #252525
-client.unfocused #00000000 #252525 #00000000 #252525
+client.focused #00000000 #616161 #00000000 #9E9E9E
+client.focused_inactive #00000000 #252525 #00000000 #3C3C3C
+client.unfocused #00000000 #252525 #00000000 #3C3C3C
 
 bar {
   mode dock

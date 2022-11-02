@@ -3,7 +3,9 @@
 (defvar my-export-theme--faces
   `(("background" . ,(alist-get "color-4" (tao-theme-yin-palette) nil nil #'equal))
     ("light-highlight" . ,(alist-get "color-5" (tao-theme-yin-palette) nil nil #'equal))
+    ("light-highlight-accent" . ,(alist-get "color-6" (tao-theme-yin-palette) nil nil #'equal))
     ("status" . ,(alist-get "color-7" (tao-theme-yin-palette) nil nil #'equal))
+    ("status-accent" . ,(alist-get "color-8" (tao-theme-yin-palette) nil nil #'equal))
     ("foreground" . ,(alist-get "color-10" (tao-theme-yin-palette) nil nil #'equal))
     ("strong-highlight" . ,(alist-get "color-11" (tao-theme-yin-palette) nil nil #'equal))
     ("important" . ,(alist-get "color-14" (tao-theme-yin-palette) nil nil #'equal))))
@@ -25,9 +27,9 @@ default_border pixel 1
 smart_gaps on
 gaps inner 3
 output * bg ${background} solid_color
-client.focused #00000000 ${status} #00000000 ${status}
-client.focused_inactive #00000000 ${light-highlight} #00000000 ${light-highlight}
-client.unfocused #00000000 ${light-highlight} #00000000 ${light-highlight}
+client.focused #00000000 ${status} #00000000 ${status-accent}
+client.focused_inactive #00000000 ${light-highlight} #00000000 ${light-highlight-accent}
+client.unfocused #00000000 ${light-highlight} #00000000 ${light-highlight-accent}
 
 bar {
   mode dock

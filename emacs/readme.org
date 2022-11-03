@@ -1064,6 +1064,7 @@ IRC clients:
   (enable-circe-new-day-notifier)
 
   (setq circe-format-server-topic "*** Topic change by {nick} ({userhost}): {topic-diff}" ; topic-diff instead of new-topic.
+        circe-reduce-lurker-spam t
         ;; No display difference between others and me.
         circe-format-self-say circe-format-say
         circe-format-self-action circe-format-action

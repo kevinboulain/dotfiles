@@ -20,4 +20,11 @@ input "type:touchpad" {
   accel_profile adaptive
   # Firefox behaves differently under Wayland, see firefox/user.js
   scroll_factor 2
+  # The very small right button area drives me mad, though the thumb can also be
+  # used to indicate the intention:
+  # https://wayland.freedesktop.org/libinput/doc/latest/clickpad-softbuttons.html#id4
+  # However, clickfinger basically extends the button area to the whole
+  # touchpad:
+  # https://wayland.freedesktop.org/libinput/doc/latest/clickpad-softbuttons.html#clickfinger-behavior
+  click_method clickfinger
 }

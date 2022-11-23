@@ -326,7 +326,7 @@ Join them together as they are already propertized in case of highlight."
                  (string-trim-right (prin1-to-string major-mode) "-mode"))
                 " "
                 (:eval ; Buffer indication.
-                 (propertize (if (buffer-file-name) (buffer-file-name) (buffer-name))
+                 (propertize (if (buffer-file-name) (abbreviate-file-name (buffer-file-name)) (buffer-name))
                              'face (if (and (buffer-file-name) (buffer-modified-p))
                                        'warning 'mode-line-buffer-id)))
                 (:eval ; IRC.

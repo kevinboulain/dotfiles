@@ -110,6 +110,10 @@
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
     };
   };
+  powerManagement.resumeCommands = ''
+    # TODO: for some reason the power button is disabled after hibernation.
+    echo enable > /sys/firmware/acpi/interrupts/ff_pwr_btn
+  '';
 
   hardware = {
     opengl.enable = true;

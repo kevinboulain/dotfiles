@@ -35,36 +35,39 @@
            user-init-file
          (my--find-loaded-user-init-file)))))))
 
-;; Redirect `customize' stuff to another file.
-(setq custom-file (locate-user-emacs-file "custom.el"))
-(load custom-file t)
-
-(defun my--load-warn (path-base)
+(defun my--load (path-base)
   "Try to load PATH-BASE (with or without extension) or warn about it."
   (require 'subr-x)
   (when (not (load path-base t t)) ; Automatically byte-compiling those files doesn't seem worth it.
     (message (format "Unable to load %s{%s}" path-base (string-join load-suffixes ",")))))
 
-(defun my--load (name)
-  "Load file with basename NAME from `my--emacs-directory'.
-Instead of relying on `org-babel-load-file' (which may overwrite lentic's),
-reimplement a safer logic here, for the details, see:
-https://github.com/phillord/lentic/issues/54#issuecomment-429106163"
-  (let* ((path-org (concat my--emacs-directory name ".org"))
-         (temporary-path-org (concat temporary-file-directory name ".el"))
-         (path-base (concat my--emacs-directory name)))
-    (if (file-readable-p path-org) ; Fallbacking may load the lentic file...
+;; Redirect `customize' stuff to another file.
+(setq custom-file (locate-user-emacs-file "custom.el"))
+(my--load (file-name-sans-extension custom-file))
+
+(defun my--org-tangle (path-base)
+  "Tangle the Org file PATH-BASE (without extension) or warn about it.
+When newer, stored alongside its source."
+  (let* ((path-org (concat path-base ".org"))
+         (path-el (concat path-base ".el")))
+    (if (not (file-readable-p path-org))
         (progn
-          (when (file-newer-than-file-p path-org temporary-path-org)
-            (require 'org) ; Use the embedded Org.
-            (org-babel-tangle-file path-org temporary-path-org "emacs-lisp"))
-          (my--load-warn temporary-path-org))
-      (my--load-warn path-base))))
+          (message "Unable to tangle %s" path-org)
+          nil)
+      (when (file-newer-than-file-p path-org path-el)
+        (require 'ob-tangle) ; Use the embedded Org.
+        (org-babel-tangle-file path-org path-el "emacs-lisp"))
+      t)))
+
+(defun my--load-org (path-base)
+  "Try to load the tangled Org file PATH-BASE (without extension)."
+  (when (my--org-tangle path-base)
+    (my--load path-base)))
 
 ;; The whole configuration is documented in the readme.org file.
-(my--load "readme")
+(my--load-org (expand-file-name "readme" my--emacs-directory))
 ;; Optional local configuration.
-(my--load "local")
+(my--load (expand-file-name "local" my--emacs-directory))
 
 ;; Restore the garbage collector settings.
 (setq gc-cons-threshold gc-cons-threshold-backup)

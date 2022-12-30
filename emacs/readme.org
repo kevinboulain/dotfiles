@@ -680,7 +680,8 @@ and often breaks in the terminal).
   :defer t
   :straight (:host github :repo "joaotavora/eglot")
   :config
-  (setq eglot-sync-connect nil)) ; Asynchronously establish the connection.
+  (setq eglot-sync-connect nil ; Asynchronously establish the connection.
+        eldoc-display-functions '(eldoc-display-in-buffer))) ; Eliminate all noise in minibuffer.
 #+end_src
 
 **** Literate programming

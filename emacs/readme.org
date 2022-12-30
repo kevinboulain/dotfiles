@@ -296,6 +296,11 @@ faces provided by the theme:
    ;; vertical-border, see the [[mode-line]].
    '(mode-line ((t (:inherit vertical-border))))
    '(mode-line-inactive ((t (:inherit vertical-border))))
+   ;; `sieve-mode' does it own thing, overwrite the few faces.
+   '(sieve-action-commands ((t (:inherit font-lock-keyword-face))))
+   '(sieve-control-commands ((t (:inherit font-lock-keyword-face))))
+   '(sieve-test-commands ((t (:inherit font-lock-keyword-face))))
+   '(sieve-tagged-arguments ((t (:inherit font-lock-type-face))))
    ;; The vertico-current face should match hl-line, it's too jarring
    ;; by default.
    '(vertico-current ((t (:inherit hl-line)))))

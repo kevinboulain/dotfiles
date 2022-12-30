@@ -51,11 +51,11 @@
 
 * Personal Emacs configuration
 
-** General setup
-
 #+begin_src emacs-lisp
-;;; readme.el --- Personal Emacs configuration. -*- lexical-binding: t -*-
+;; -*- lexical-binding: t -*-
 #+end_src
+
+** General setup
 
 *** Package management
 
@@ -191,13 +191,13 @@ But I prefer more reporting when it's related to the point:
 For conflicting buffer names, it's better the distinction provides some context:
 
 #+begin_src emacs-lisp
-(require 'uniquify)
-;; Instead of suffixing <1>, <2>, ... to the buffer name, suffix the part of the
-;; path that is different. Suffixing is preferred to prefixing because it makes
-;; switching to a buffer a bit more intuitive when completing names.
-(setq uniquify-buffer-name-style 'post-forward)
-;; I find removing common suffixes confusing, especially when they're long.
-(setq uniquify-strip-common-suffix nil)
+(when (require 'uniquify nil t)
+  ;; Instead of suffixing <1>, <2>, ... to the buffer name, suffix the part of
+  ;; the path that is different. Suffixing is preferred to prefixing because it
+  ;; makes switching to a buffer a bit more intuitive when completing names.
+  (setq uniquify-buffer-name-style 'post-forward
+        ;; Removing common suffixes confuses me, especially when they're long.
+        uniquify-strip-common-suffix nil))
 #+end_src
 
 Now, configure Emacs's behavior depending on the environment. Globally:
@@ -263,7 +263,7 @@ Other unrelated configurations:
 
 *** Theme
 
-First, fix Emacs' behavior and make it unload any theme before loading another
+First, fix Emacs's behavior and make it unload any theme before loading another
 one:
 
 #+begin_src emacs-lisp
@@ -297,7 +297,7 @@ faces provided by the theme:
   (custom-theme-set-faces
    'tao-yin
    ;; Override the mode-line{,-inactive} faces to match
-   ;; vertical-border, see the [[mode-line]].
+   ;; vertical-border, see the [[*Mode-line]].
    '(mode-line ((t (:inherit vertical-border))))
    '(mode-line-inactive ((t (:inherit vertical-border))))
    ;; `sieve-mode' does it own thing, overwrite the few faces.
@@ -444,8 +444,8 @@ emacs --htmlize path/to/file # outputs path/to/file.html
   :straight (:host github :repo "magnars/s.el"))
 
 (use-package htmlize
-  :defer t
   :straight (:host github :repo "hniksic/emacs-htmlize")
+  :defer t
   :init
   (add-to-list 'command-switch-alist '("--htmlize" . my--htmlize-file))
   :config
@@ -606,7 +606,7 @@ Add the =lisp= directory to the load path in case additionial libraries are
 stored there:
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path (concat user-emacs-directory "lisp"))
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
 *** Remembering keybindings
@@ -644,8 +644,8 @@ sometimes used as a dependency.
 
 #+begin_src emacs-lisp
 (use-package magit
-  :defer t
   :straight (:host github :repo "magit/magit")
+  :defer t
   :config
   (setq magit-diff-refine-hunk 'all))
 #+end_src
@@ -681,8 +681,8 @@ and often breaks in the terminal).
 
 #+begin_src emacs-lisp
 (use-package eglot
-  :defer t
   :straight (:host github :repo "joaotavora/eglot")
+  :defer t
   :config
   (setq eglot-sync-connect nil ; Asynchronously establish the connection.
         eldoc-display-functions '(eldoc-display-in-buffer))) ; Eliminate all noise in minibuffer.
@@ -697,7 +697,7 @@ but now use [[https://github.com/polymode/polymode][polymode]]:
 (use-package poly-markdown
   :straight (:host github :repo "polymode/poly-markdown")
   :bind (:map polymode-mode-map ; Clear the override of move-text.
-         ("M-n" . nil)))
+              ("M-n" . nil)))
 
 (use-package poly-org
   :straight (:host github :repo "polymode/poly-org"))
@@ -799,8 +799,8 @@ No LSP here, as it has its own mode to handle the REPL, interactive proofs, etc.
 
 #+begin_src emacs-lisp
 (use-package idris-mode
-  :defer t
   :straight (:host github :repo "idris-hackers/idris-mode" :branch "main")
+  :defer t
   :config
   (setq idris-repl-banner-functions nil)) ; Disable startup animation.
 #+end_src
@@ -811,8 +811,8 @@ Mainly for syntax highlighting and indentation.
 
 #+begin_src emacs-lisp
 (use-package lua-mode
-  :defer t
   :straight (:host github :repo "immerrr/lua-mode")
+  :defer t
   :config
   (setq lua-indent-level tab-width))
 #+end_src
@@ -822,8 +822,8 @@ Mainly for syntax highlighting and indentation.
 
 #+begin_src emacs-lisp
 (use-package nix-mode
-   :defer t
-   :straight (:host github :repo "nixos/nix-mode"))
+   :straight (:host github :repo "nixos/nix-mode")
+   :defer t)
 #+end_src
 
 **** [[https://www.openscad.org/][OpenSCAD]]
@@ -832,10 +832,10 @@ Mainly for syntax highlighting and indentation.
 
 #+begin_src emacs-lisp
 (use-package scad-mode
-  :defer t
   ;; straight.el does not support shallow clones and the official
   ;; OpenSCAD repository is too big.
-  :straight (:host github :repo "emacsmirror/scad-mode"))
+  :straight (:host github :repo "emacsmirror/scad-mode")
+  :defer t)
 #+end_src
 
 **** [[https://www.python.org/][Python]]
@@ -866,7 +866,6 @@ features and a better integration (like out of the box support for Flycheck).
 
 #+begin_src emacs-lisp
 (use-package rustic
-  :defer t
   :straight (:host github :repo "brotzeit/rustic")
   :hook (rustic-mode . (lambda () (setq fill-column 100)))
   :config
@@ -887,16 +886,16 @@ Set up =.dir-locals.el=:
 
 #+begin_src emacs-lisp
 (use-package geiser
-  :defer t
-  :straight (:host gitlab :repo "emacs-geiser/geiser"))
+  :straight (:host gitlab :repo "emacs-geiser/geiser")
+  :defer t)
 
 (use-package geiser-guile
-  :defer t
   :straight (:host gitlab :repo "emacs-geiser/guile"
              :files (:defaults
                      ;; Include the necessary Scheme files in the build.
                      ;; See %load-path in Guile's REPL.
-                     "src")))
+                     "src"))
+  :defer t)
 #+end_src
 
 **** Shell
@@ -999,23 +998,23 @@ I currently don't like the existing
 
 #+begin_src emacs-lisp
 (use-package markdown-mode
-  :defer t
   :straight (:host github :repo "jrblevin/markdown-mode")
   :bind (:map markdown-mode-map ; Clear the override of move-text.
-         ("M-n" . nil)
-         ("M-p" . nil)))
+              ("M-n" . nil)
+              ("M-p" . nil)))
 #+end_src
 
 **** [[https://orgmode.org/][Org]]
 
-Use the embedded Org for now:
-
 #+begin_src emacs-lisp
-(setq org-link-descriptive nil ; Don't shorten links.
-      org-replace-disputed-keys t ; windmove keybindings conflict.
-      org-startup-folded "nofold" ; Don't fold sections when opening a buffer.
-      org-adapt-indentation nil ; Don't (de)indent when demoting or promoting headings.
-      org-edit-src-content-indentation 0) ; Don't indent code blocks.
+(use-package org ; Use the embedded Org.
+  :defer t
+  :config
+  (setq org-link-descriptive nil ; Don't shorten links.
+        org-replace-disputed-keys t ; windmove keybindings conflict.
+        org-startup-folded "nofold" ; Don't fold sections when opening a buffer.
+        org-adapt-indentation nil ; Don't (de)indent when demoting or promoting headings.
+        org-edit-src-content-indentation 0)) ; Don't indent code blocks.
 #+end_src
 
 Since the whole point of this document is to be readable on GitHub, let's
@@ -1032,7 +1031,7 @@ automatically generate a table of contents:
 On Debian, install =gettext-el=.
 
 #+begin_src emacs-lisp
-(when (require 'po-mode nil t))
+(require 'po-mode nil t)
 #+end_src
 
 **** man
@@ -1052,7 +1051,6 @@ IRC clients:
 
 #+begin_src emacs-lisp
 (use-package circe
-  :defer t
   :straight (:host github :repo "jorgenschaefer/circe")
   :hook ((circe-mode . (lambda () (setq-local right-margin-width 5)))
          (circe-mode . circe-lagmon-mode))
@@ -1133,7 +1131,6 @@ Your setup might look like this:
 
 #+begin_src emacs-lisp :tangle no
 (use-package slack
-  :defer t
   :straight (:host github :repo "yuya373/emacs-slack")
   :hook (slack-mode . (lambda () (setq-local right-margin-width 5)))
   :config
@@ -1164,8 +1161,8 @@ Follow RSS and Atom feeds:
 
 #+begin_src emacs-lisp
 (use-package elfeed
-  :defer t
-  :straight (:host github :repo "skeeto/elfeed"))
+  :straight (:host github :repo "skeeto/elfeed")
+  :defer t)
 #+end_src
 
 You'll have to set =elfeed-feeds= to a list of feeds.

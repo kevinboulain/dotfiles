@@ -1,12 +1,4 @@
-;;; .emacs --- Personal configuration. -*- lexical-binding: t -*-
-
-;;; Commentary:
-
-;;; This configuration will automatically clone the git repository of each
-;;; package for easier modification.
-;;; Simply symlink this file and start Emacs.
-
-;;; Code:
+;; -*- lexical-binding: t -*-
 
 ;; Mess with the garbage collector settings to make loading faster.
 (defconst gc-cons-threshold-backup gc-cons-threshold)
@@ -72,5 +64,3 @@ When newer, stored alongside its source."
 ;; Restore the garbage collector settings.
 (setq gc-cons-threshold gc-cons-threshold-backup)
 (makunbound 'gc-cons-threshold-backup)
-
-;;; .emacs ends here

@@ -488,9 +488,16 @@ and reusability). We'll rely on
 
 #+begin_src emacs-lisp
 (use-package vertico
-  :straight (:host github :repo "minad/vertico" :branch "main")
-  :if (>= emacs-major-version 27)
+  :straight (:host github :repo "minad/vertico")
   :hook (after-init . vertico-mode))
+#+end_src
+
+And extend the results with additional information:
+
+#+begin_src emacs-lisp
+(use-package marginalia
+  :straight (:host github :repo "minad/marginalia")
+  :hook (after-init . marginalia-mode))
 #+end_src
 
 For in-buffer completion, [[http://company-mode.github.io/][Company]]

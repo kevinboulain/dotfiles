@@ -5,6 +5,7 @@
     ../common/locale.nix
     ../common/monitoring.nix
     ../common/networking.nix
+    ../common/nginx.nix
     ../common/nix.nix
     ../common/packages.nix
     ../common/system.nix

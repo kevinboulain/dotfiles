@@ -1010,7 +1010,8 @@ Use the embedded Org for now:
 (setq org-link-descriptive nil ; Don't shorten links.
       org-replace-disputed-keys t ; windmove keybindings conflict.
       org-startup-folded "nofold" ; Don't fold sections when opening a buffer.
-      org-adapt-indentation nil) ; Don't (de)indent when demoting or promoting headings.
+      org-adapt-indentation nil ; Don't (de)indent when demoting or promoting headings.
+      org-edit-src-content-indentation 0) ; Don't indent code blocks.
 #+end_src
 
 Since the whole point of this document is to be readable on GitHub, let's

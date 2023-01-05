@@ -1,4 +1,6 @@
-* Personal Emacs configuration :toc_4:
+#+options: H:4
+* Table of contents :noexport:toc_4:
+- [[#personal-emacs-configuration][Personal Emacs configuration]]
   - [[#general-setup][General setup]]
     - [[#package-management][Package management]]
     - [[#profiling][Profiling]]
@@ -47,10 +49,12 @@
       - [[#slack][Slack]]
       - [[#feeds][Feeds]]
 
+* Personal Emacs configuration
+
 ** General setup
 
 #+begin_src emacs-lisp
-;;; readme.el --- Personal configuration. -*- lexical-binding: t -*-
+;;; readme.el --- Personal Emacs configuration. -*- lexical-binding: t -*-
 #+end_src
 
 *** Package management

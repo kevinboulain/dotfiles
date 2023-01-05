@@ -691,17 +691,14 @@ but now use [[https://github.com/polymode/polymode][polymode]]:
 
 #+begin_src emacs-lisp
 (use-package poly-markdown
-  :defer t
   :straight (:host github :repo "polymode/poly-markdown")
   :bind (:map polymode-mode-map ; Clear the override of move-text.
          ("M-n" . nil)))
 
 (use-package poly-org
-  :defer t
   :straight (:host github :repo "polymode/poly-org"))
 
 (use-package poly-rst
-  :defer t
   :straight (:host github :repo "polymode/poly-rst"))
 #+end_src
 

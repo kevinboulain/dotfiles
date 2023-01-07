@@ -159,6 +159,8 @@ leaking file contents:
  ;; permissions and might leak secret contents (e.g.: password store).
  auto-save-default nil
  backup-inhibited t
+ ;; Somewhat related to leaks: do not save credentials, ever.
+ auth-source-save-behavior nil
  ;; I'm not sure lockfies provide any advantages besides spamming the filesystem
  ;; and breaking other tools.
  create-lockfiles nil)

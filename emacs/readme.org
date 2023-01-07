@@ -45,9 +45,9 @@
       - [[#gettext][gettext]]
       - [[#man][man]]
     - [[#social][Social]]
+      - [[#gnus][Gnus]]
       - [[#irc][IRC]]
       - [[#slack][Slack]]
-      - [[#feeds][Feeds]]
 
 * Personal Emacs configuration
 
@@ -125,6 +125,11 @@ To debug problems happening early, set =debug-on-error= from the command line:
 #+begin_src shell :tangle no
 emacs --eval '(setq debug-on-error t)'
 #+end_src
+
+In case it appears to be an initialization order issue (for example Org can load
+Gnus first so Gnus should be configured before loading Org, see
+[[*\[\[https://www.gnus.org/\]\[Gnus\]\]]]) =apropos-value=,
+=add-variable-watcher= and =C-h v load-history= might help proving it.
 
 It's sometimes useful to tracks commands:
 
@@ -1046,6 +1051,45 @@ On Debian, install =gettext-el=.
 
 *** Social
 
+**** [[https://www.gnus.org/][Gnus]]
+
+A bunch of settings to make the default behavior less surprising.
+
+#+begin_src emacs-lisp
+(use-package gnus ; Use the embedded Gnus.
+  :defer t
+  :init
+  (setq
+   ;; Defaults to ~/News, must be done before loading Gnus.
+   ;; Beware, this is copy/pasted in init.el: when asked to tangle Org will
+   ;; happen to load Gnus and sadly this variable is used as the basis of many
+   ;; others so it must also be set before loading Org.
+   gnus-home-directory (expand-file-name "gnus" user-emacs-directory)
+   ;; Ensure this configuration is idempotent. My local configuration might
+   ;; change this, for example after `my--org-tangle'.
+   gnus-init-file nil)
+  (make-directory gnus-home-directory t) ; Gnus will complain otherwise.
+  :config
+  (setq
+   ;; I don't use another newsreader so don't maintain ~/.newsrc
+   ;; https://www.gnu.org/software/emacs/manual/html_node/gnus/Startup-Files.html
+   gnus-read-newsrc-file nil
+   gnus-save-newsrc-file nil
+   ;; Don't auto-save, sometimes useful to see how Gnus would store changes.
+   gnus-use-dribble-file nil
+   ;; This must be set but defaults to an NNTP backend.
+   ;; https://www.gnu.org/software/emacs/manual/html_node/gnus/The-Empty-Backend.html
+   ;; Ideally all sources are added to `gnus-secondary-select-methods' so
+   ;; prefixing stays consistant.
+   gnus-select-method '(nnnil "")
+   ;; No 'nnfolder+archive:sent...' group.
+   ;; https://www.gnu.org/software/emacs/manual/html_node/gnus/Archived-Messages.html
+   ;; Depending on the source, this might be achieved with the Gcc header in
+   ;; `gnus-parameters' or `gnus-posting-styles' (otherwise sent emails might not
+   ;; be registered for example).
+   gnus-message-archive-group nil))
+#+end_src
+
 **** IRC
 
 [[https://github.com/jorgenschaefer/circe][Circe]] is an alternative to built-in
@@ -1156,15 +1200,3 @@ Your setup should like look like this:
 The easiest way to fill above information is to open your browser's network tab
 and search for =_x_id= & =xoxs-=. Or you may want to create an application to
 access the API.
-
-**** Feeds
-
-Follow RSS and Atom feeds:
-
-#+begin_src emacs-lisp
-(use-package elfeed
-  :straight (:host github :repo "skeeto/elfeed")
-  :defer t)
-#+end_src
-
-You'll have to set =elfeed-feeds= to a list of feeds.

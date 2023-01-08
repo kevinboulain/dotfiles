@@ -21,5 +21,7 @@
     # GitHub when not cached. Also, it embeds Iosevka Term (used in my
     # configurations).
     iosevka-bin
+    (iosevka-bin.override { variant = "aile"; })
+    (iosevka-bin.override { variant = "etoile"; })
   ];
 }

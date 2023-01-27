@@ -27,12 +27,12 @@
   services.dnsmasq = {
     enable = true;
     resolveLocalQueries = false;
-    extraConfig = ''
-      interface = nat0
-      bind-interfaces
-      dhcp-range = 192.168.42.100,192.168.42.200,1d
-      dhcp-authoritative
-    '';
+    settings = {
+      interface = "nat0";
+      bind-interfaces = true;
+      dhcp-range = "192.168.42.100,192.168.42.200,1d";
+      dhcp-authoritative = true;
+    };
   };
 
   environment.etc."qemu/bridge.conf" = {

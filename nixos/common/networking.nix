@@ -26,7 +26,7 @@
   services.openssh = {
     enable = true;
     extraConfig = ''
-      # Only allow any users with privileges to log in remotely.
+      # Only allow users with privileges to log in remotely.
       AllowGroups root wheel
     '';
   };

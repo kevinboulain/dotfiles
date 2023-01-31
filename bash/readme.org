@@ -34,7 +34,7 @@ set -u
 
 *** System independence
 
-On some systems, =PROMPT_COMMAND= may be set externally and may mess up things:
+On some systems, =PROMPT_COMMAND= may be set and may mess up things:
 
 #+begin_src shell
 PROMPT_COMMAND=
@@ -70,7 +70,7 @@ fi
 shopt -s cdspell # cd will try to correct an invalid name, displaying it.
 #+end_src
 
-And disable useless completion on empty line:
+And disable the useless completion on an empty buffer:
 
 #+begin_src shell
 shopt -s no_empty_cmd_completion
@@ -93,8 +93,8 @@ set -o emacs
 
 *** Terminal handling
 
-It's better to always recheck for the terminal size, as it may avoid garbling
-the input method:
+It's better to always recheck the terminal size, as it may avoid garbling the
+input method:
 
 #+begin_src shell
 shopt -s checkwinsize
@@ -102,16 +102,13 @@ shopt -s checkwinsize
 
 *** History
 
-Proper history handling is important, but the default configuration is quite
-inappropriate and often lead to data loss: an exiting Bash instance may
-overwrite the history of other instances. Fortunately it's easy to fix:
+Append to instead of overwrite the history file on exit:
 
 #+begin_src shell
 shopt -s histappend
 #+end_src
 
-By default, 500 lines of history are remembered, let's tell Bash we don't want
-any limitations:
+By default only 500 lines of history are remembered, make that unlimited:
 
 #+begin_src shell
 history_size=$((${BASH_VERSINFO[0]} > 4 || (${BASH_VERSINFO[0]} >= 4 && ${BASH_VERSINFO[1]} >= 3) ? -1 : 1000000000))
@@ -120,8 +117,7 @@ HISTFILESIZE=$history_size
 unset history_size
 #+end_src
 
-However, we may still want to have a maintainable history file, so splitting it
-by session seems to be a good idea:
+But create a dedicated history file per session:
 
 #+begin_src shell
 declare -r history_directory=~/.logs/bash
@@ -133,17 +129,17 @@ history_subdirectory=$(dirname "$HISTFILE")
 unset history_subdirectory
 #+end_src
 
-We may still lose data if the shell is abruptly terminated, so tell Bash to
-write the history immediately:
+History may still be lost when the shell is abruptly terminated, so write it
+after every command:
 
 #+begin_src shell
-# There seems to be a bug is some Bash versions where -a does nothing,
+# There seems to be a bug in some Bash versions where -a does nothing,
 # so rely on the less efficient -w.
 PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -w'
 #+end_src
 
-It's nice to be able to quickly search in all these files, since this setup
-won't load them at the beginning of a new session (I like to start fresh):
+And to quickly search in all these files, since this setup won't load them at
+the beginning of a new session (I like to start fresh):
 
 #+begin_src shell
 hist() {
@@ -156,19 +152,19 @@ hist() {
 declare -rfx hist
 #+end_src
 
-Show the date of commands:
+Display the date alongside the command:
 
 #+begin_src shell
-HISTTIMEFORMAT='%F %T %Z '
+HISTTIMEFORMAT='%F %T %z '
 #+end_src
 
 Finally, tweak history handling to avoid redundant information and ease
-sensitive information hiding:
+the hiding of sensitive information:
 
 #+begin_src shell
 HISTCONTROL=ignoredups # Ignore duplicates.
 HISTCONTROL+=:erasedups # Remove duplicates.
-HISTCONTROL+=:ignorespace # Don't store lines beginning with spaces.
+HISTCONTROL+=:ignorespace # Ignore lines starting with spaces.
 #+end_src
 
 ** Unnoteworthy configurations
@@ -176,21 +172,20 @@ HISTCONTROL+=:ignorespace # Don't store lines beginning with spaces.
 *** Prompt
 
 I prefer a clean and concise prompt, mine only tells which host I'm on, in which
-directory and if last command resulted in an error (exit code wasn't zero).
+directory and if the last command resulted in an error (exit code wasn't zero).
 
-But first, let's define some termcaps:
+First, some termcaps:
 
 #+begin_src shell
 if hash tput &> /dev/null; then
-  # It's totally fine to not check for termcaps availability here
-  # as it will simply result in an empty string.
+  # Will result in an empty string if termcaps aren't available.
   foreground_grey=$(tput setaf 8)
   reset=$(tput sgr0)
 fi
 declare -r foreground_grey reset
 #+end_src
 
-Then, let's run a handler after each command input to grab the exit code:
+Then, run a handler after each command input to grab the exit code:
 
 #+begin_src shell
 prompt_config() {
@@ -243,8 +238,8 @@ Use Emacs as (wo)man:
 
 #+begin_src shell
 eman() (
-  # WoMan is slightly better asks for the section if multiple are available.
-  emacs -eval "(woman \"${1?}\")"
+  # WoMan would ask for the section but it doesn't render everything properly.
+  emacs -eval "(man \"${1?}\")"
 )
 #+end_src
 
@@ -283,8 +278,8 @@ export PAGER
 [[Android Password
 Store][https://github.com/android-password-store/Android-Password-Store]]
 defaults to ASCII-armored output, default [[Password
-Store][https://www.passwordstore.org/]] to that too (so Git's diff don't ends up
-comparing binary files).
+Store][https://www.passwordstore.org/]] to that too (so Git's diff doesn't end
+up comparing binary files).
 
 #+begin_src shell
 export PASSWORD_STORE_GPG_OPTS='--armor'
@@ -345,9 +340,6 @@ fi
 
 *** macOS
 
-This configuration is only interesting to have on macOS, so let's guard other
-OSes against it:
-
 #+begin_src shell
 if [ "$(uname)" = Darwin ]; then
 #+end_src
@@ -391,7 +383,7 @@ fi
 
 ** Tips and tricks
 
-- did you know about =CDPATH=?
+- Did you know about =CDPATH=?
 
 ** Afterword
 

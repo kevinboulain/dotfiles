@@ -3,7 +3,7 @@
   imports = [
     ../common/android.nix
     ../common/antivirus.nix
-    ../common/audio.nix
+    ../common/desktop.nix
     ../common/locale.nix
     ../common/monitoring.nix
     ../common/networking.nix
@@ -14,11 +14,10 @@
     ../common/system.nix
     ../common/virtualisation.nix
     ../common/vpn.nix
-    ../common/wayland.nix
     ../common/yubikey.nix
+    ./desktop.nix
     ./networking.nix
     ./system.nix
-    ./wayland.nix
   ] ++ lib.optional (builtins.pathExists ./local.nix) ./local.nix;
 
   networking.hostName = "acheron";

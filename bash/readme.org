@@ -310,30 +310,6 @@ A bunch of functions to manage the volume:
   declare -fx volume_mute volume_set volume_down volume_up
 #+end_src
 
-And another bunch to manage the brightness:
-
-#+begin_src shell
-  backlight_set() {
-    for file in /sys/class/backlight/*/brightness; do
-      local -r device=$(basename "$(dirname "$file")")
-      local -ri max=$(< /sys/class/backlight/"$device"/max_brightness)
-      local -ri current=$(< /sys/class/backlight/"$device"/brightness)
-      # Bash doesn't deal with floating point values.
-      local -ri new=$((current+max/100*${1?}))
-      local -ri clamped=$((new > max ? max : new < 0 ? 0 : new))
-      # The recommended way with seat management (logind).
-      busctl call org.freedesktop.login1 /org/freedesktop/login1/session/auto \
-             org.freedesktop.login1.Session SetBrightness ssu \
-             "backlight" "$device" $clamped
-      # Assume the first device is the one we want.
-      break
-    done
-  }
-  backlight_down() { backlight_set -"${1:-1}"; }
-  backlight_up() { backlight_set "${1:-1}"; }
-  declare -rfx backlight_set backlight_down backlight_up
-#+end_src
-
 #+begin_src shell
 fi
 #+end_src

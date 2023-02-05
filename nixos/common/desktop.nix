@@ -3,11 +3,22 @@
   environment.systemPackages = with pkgs; [
     firefox-wayland
     grim
+    light
     mpv
     pavucontrol
     slurp
     wl-clipboard
   ];
+
+  # https://nixos.wiki/wiki/Actkbd
+  # Global keybindings without a desktop environment.
+  services.actkbd = {
+    enable = true;
+    bindings = [
+      { keys = [ 224 ]; events = [ "rep" ]; command = "/run/current-system/sw/bin/light -U 1"; }
+      { keys = [ 225 ]; events = [ "rep" ]; command = "/run/current-system/sw/bin/light -A 1"; }
+    ];
+  };
 
   # https://nixos.wiki/wiki/Sway
   programs.sway = {

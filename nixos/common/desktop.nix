@@ -8,6 +8,7 @@
     pavucontrol
     slurp
     wl-clipboard
+    zathura
   ];
 
   # https://nixos.wiki/wiki/Actkbd

@@ -7,12 +7,15 @@
     file
     lsof
     strace
+    unzip
 
     emacs-nox
     gitFull  # I could (gitMinimal.override { sendEmailSupport = true; }) to do without the UI but that wouldn't be cached.
     hunspell
     hunspellDicts.en-us
     hunspellDicts.fr-any
+    icdiff
+    ripgrep
     stow
     tmux
   ];

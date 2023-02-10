@@ -1,16 +1,19 @@
-{ ... }:
+{ config, ... }:
 {
   # Rely on iwd for everything, including IP addressing.
-  networking = {
-    useDHCP = false;
-    wireless.iwd = {
-      enable = true;
-      settings = {
-        General = {
-          AddressRandomization = "network";  # https://iwd.wiki.kernel.org/addressrandomization
-          EnableNetworkConfiguration = true;
-        };
-        Network.EnableIPv6 = true;
+  networking.wireless.iwd = {
+    enable = true;
+    settings = {
+      General = {
+        AddressRandomization = "network";  # https://iwd.wiki.kernel.org/addressrandomization
+        EnableNetworkConfiguration = true;
+      };
+      Network = {
+        EnableIPv6 = true;
+        # Otherwise we would get a DNS from DHCP advertisements and
+        # systemd-resolved would use that alongside the local Unbound (see
+        # resolvectl).
+        NameResolvingService = assert config.services.unbound.enable; "none";
       };
     };
   };

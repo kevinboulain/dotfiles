@@ -1,20 +1,26 @@
-# qemu-kvm -display curses -netdev bridge,br=nat0,id=net0,helper="$(which qemu-bridge-helper)" -device virtio-net-pci,netdev=net0 -m 1024M -drive file=debian-live.iso,media=cdrom
-{ pkgs, ... }:
+# qemu-kvm -nographic -netdev bridge,br=nat0,id=net0,helper="$(which qemu-bridge-helper)" -device virtio-net-pci,netdev=net0 -m 4096M -drive file=path/to.iso,media=cdrom
+{ config, lib, noIPv6 ? false, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
     qemu
+  ] ++ lib.lists.optionals noIPv6 [
+    jool-cli
+  ];
+
+  # It's still required to run:
+  #  jool instance add --netfilter --pool6 64:ff9b::/96
+  boot.extraModulePackages = with config.boot.kernelPackages; lib.lists.optionals noIPv6 [
+    jool
   ];
 
   # A bridge without any physical interface serving as a gateway.
   # TAP interfaces can be attached for NAT.
   networking.bridges.nat0.interfaces = [];
   networking.interfaces.nat0 = {
-    ipv4.addresses = [
-      {
-        address = "192.168.42.1";
-        prefixLength = 24;
-      }
-    ];
+    ipv6.addresses = [{
+      address = "fd2a::1";
+      prefixLength = 64;
+    }];
   };
   networking.nat = {
     enable = true;
@@ -22,19 +28,7 @@
     internalInterfaces = [ "nat0" ];
   };
 
-  # Set up dnsmasq to provide DHCP and DNS to clients attached to nat0.
-  networking.firewall.interfaces.nat0.allowedUDPPorts = [ 53 67 ];
-  services.dnsmasq = {
-    enable = true;
-    resolveLocalQueries = false;
-    settings = {
-      interface = "nat0";
-      bind-interfaces = true;
-      dhcp-range = "192.168.42.100,192.168.42.200,1d";
-      dhcp-authoritative = true;
-    };
-  };
-
+  # Allow bridging nat0 from QEMU.
   environment.etc."qemu/bridge.conf" = {
     mode = "0644";
     text = ''
@@ -46,5 +40,32 @@
     owner = "root";
     group = "root";
     source = "${pkgs.qemu}/libexec/qemu-bridge-helper";
+  };
+
+  # Send router advertisements to clients.
+  # systemd-networkd 248 has support for RDNSS (IPv6AcceptRA{,.UseDNS}).
+  services.radvd = {
+    enable = assert config.services.unbound.enable; true;
+    config = ''
+      interface nat0 {
+        IgnoreIfMissing off;
+        AdvSendAdvert on;
+        prefix fd2a::/64 {};
+        route ::/0 {};
+        RDNSS fd2a::1 {};
+      };
+    '';
+  };
+  # And allow to access the local Unbound.
+  networking.firewall.interfaces.nat0.allowedUDPPorts = [ 53 ];
+  services.unbound.settings.server = {
+    interface = [ "fd2a::1" ];
+    access-control = [ "fd2a::/64 allow" ];
+  } // lib.attrsets.optionalAttrs noIPv6 {
+    module-config = ''"dns64 validator iterator"'';
+    dns64-prefix = "64:ff9b::/96";
+    # Ignore all AAAA records, necessary when there's truly no IPv6
+    # connectivity.
+    dns64-synthall = true;
   };
 }

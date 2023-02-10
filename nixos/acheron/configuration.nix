@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+arguments@{ lib, pkgs, ... }:
 {
   imports = [
     ../common/android.nix
@@ -6,14 +6,12 @@
     ../common/desktop.nix
     ../common/locale.nix
     ../common/monitoring.nix
-    ../common/networking.nix
+    (import ../common/networking.nix (arguments // { withVPN = true; }))
     ../common/nginx.nix
     ../common/nix.nix
     ../common/packages.nix
     ../common/steam.nix
     ../common/system.nix
-    ../common/virtualisation.nix
-    ../common/vpn.nix
     ../common/yubikey.nix
     ./desktop.nix
     ./networking.nix

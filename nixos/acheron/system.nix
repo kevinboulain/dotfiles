@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 {
-  fileSystems."/boot/efi".device = "/dev/disk/by-uuid/8EEA-1769";
+  fileSystems = {
+    "/boot/efi".device = "/dev/disk/by-uuid/8EEA-1769";
+    "/".fsType = "ext4";
+  };
 
   environment.systemPackages = with pkgs; [
     # https://01.org/linuxgraphics/documentation/development/how-debug-suspend-resume-issues

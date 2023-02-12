@@ -1,8 +1,10 @@
 # The evaluation will fail is these options are left unset:
 #  fileSystems."/boot/efi".device
 #  boot.initrd.luks.devices.root.device
-{ pkgs, efiDevice, rootDevice, ... }:
+{ config, efiDevice, pkgs, rootDevice, ... }:
 {
+  # This system uses LVM 2 on top of LUKS 2. GRUB needs to be patched to find
+  # the header.
   nixpkgs.overlays = [
     (import ../common/overlays/grub2)
   ];
@@ -43,15 +45,9 @@
     };
   };
 
-  # This system uses LVM 2 on top of LUKS 2. GRUB needs to be patched to find
-  # the header.
-  fileSystems."/" = {
-    device = "/dev/system/root";
-    fsType = "ext4";
-  };
-  swapDevices = [
-    { device = "/dev/system/swap"; }
-  ];
+  # The file system type must be specified to ensure modules are available.
+  fileSystems."/".device = assert config.fileSystems."/".fsType != "auto"; "/dev/system/root";
+  swapDevices = [ { device = "/dev/system/swap"; } ];
   boot.initrd = {
     systemd.enable = true;  # Use systemd in the initrd.
     kernelModules = [ "dm-snapshot" ];

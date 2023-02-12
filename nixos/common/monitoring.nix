@@ -1,10 +1,7 @@
 { ... }:
 {
   # Keep the Prometheus database separate, in case I reformat.
-  fileSystems."/var/lib/prometheus2" = {
-    device = "/dev/system/prometheus";
-    fsType = "ext4";
-  };
+  fileSystems."/var/lib/prometheus2".device = "/dev/system/prometheus";
 
   services.prometheus = {
     enable = true;

@@ -1,0 +1,11 @@
+# Disable pagination (annoying for long backtraces).
+set pagination off
+# Trust everything (or it'especially annoying for rust-gdb on NixOS).
+set auto-load safe-path /
+
+# Use xxd to dump a memory region. Requires the address and a number of bytes.
+# The offset isn't preserved in the output.
+define xxd
+  dump binary memory /tmp/gdb.xxd.bin $arg0 $arg0+$arg1
+  shell xxd /tmp/gdb.xxd.bin
+end

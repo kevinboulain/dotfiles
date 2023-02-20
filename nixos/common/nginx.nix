@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   # 499 is a special case of 502 and is refused by nginx.
   errorCodes = map builtins.toString ((lib.range 400 498) ++ (lib.range 500 599));
@@ -24,6 +24,9 @@ let
       "rt=$request_time uct=$upstream_connect_time uht=$upstream_header_time urt=$upstream_response_time";
 in
 {
+  # For Git repositories.
+  services.fcgiwrap.enable = true;
+
   # A dumb configuration to serve files.
   services.nginx = {
     enable = true;
@@ -43,6 +46,16 @@ in
         "= /robots.txt".extraConfig = ''
           add_header X-Robots-Tag "noindex";
           return 200 'User-agent: *\nDisallow: /\n';
+        '';
+        "~ \\.git".extraConfig = ''
+          # https://git-scm.com/docs/git-http-backend
+          client_max_body_size 0;
+          include ${config.services.nginx.package}/conf/fastcgi_params;
+          fastcgi_pass unix:/var/run/fcgiwrap.sock;
+          fastcgi_param SCRIPT_FILENAME ${pkgs.git}/bin/git-http-backend;
+          fastcgi_param GIT_HTTP_EXPORT_ALL "";
+          fastcgi_param GIT_PROJECT_ROOT /srv/www;
+          fastcgi_param PATH_INFO $uri;
         '';
         "/".extraConfig = ''
            root "/srv/www";

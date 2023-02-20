@@ -43,7 +43,7 @@
   #       # https://nixos.org/manual/nix/stable/expressions/builtins.html#builtins-filterSource
   #       # src = builtins.filterSource
   #       #   (path: type: type != "directory" || baseNameOf path != ".git")
-  #       #   /home/ether/source/linux;
+  #       #   /home/ether/sources/linux;
   #       version = "6.0.2";
   #       modDirVersion = builtins.replaceStrings ["-"] [".0-"] version;
   #       kernelPatches = with (pkgs.callPackage <nixos/pkgs/os-specific/linux/kernel/patches.nix> {}); [

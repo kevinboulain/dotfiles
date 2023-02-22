@@ -7,7 +7,6 @@ arguments@{ lib, pkgs, ... }:
     ../common/locale.nix
     ../common/monitoring.nix
     (import ../common/networking.nix (arguments // { withVPN = true; }))
-    ../common/nginx.nix
     ../common/nix.nix
     ../common/packages.nix
     ../common/steam.nix

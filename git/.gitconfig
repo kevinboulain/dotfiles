@@ -6,7 +6,7 @@
   ft = fetch --all --tags --prune
   # git fp outgoing -1
   # git send-email outgoing/* --to $email
-  fp = format-patch --find-renames --find-copies --ignore-all-space --cover-letter --no-signature --output-directory
+  fp = format-patch --find-renames --find-copies --cover-letter --no-signature --output-directory
 [core]
   # pager = less -R
   whitespace = trailing-space, space-before-tab, tab-in-indent

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   # https://github.com/NixOS/nixpkgs/issues/182465#issuecomment-1207234828
   mkWOFF2From = { name, pkg, ext }: pkgs.stdenvNoCC.mkDerivation {
@@ -35,6 +35,7 @@ in
     man-pages
     man-pages-posix
 
+    config.boot.kernelPackages.perf
     file
     lsof
     strace

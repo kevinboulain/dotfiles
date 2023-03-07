@@ -47,7 +47,6 @@ When newer, stored alongside its source."
           (message "Unable to tangle %s" path-org)
           nil)
       (when (file-newer-than-file-p path-org path-el)
-        (setq gnus-home-directory (expand-file-name "gnus" user-emacs-directory)) ; See readme.org.
         (require 'ob-tangle) ; Use the embedded Org.
         (org-babel-tangle-file path-org path-el "emacs-lisp"))
       t)))

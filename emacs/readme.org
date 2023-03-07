@@ -47,7 +47,6 @@
     - [[#social][Social]]
       - [[#irc][IRC]]
       - [[#notmuch][Notmuch]]
-      - [[#slack][Slack]]
 
 * Personal Emacs configuration
 
@@ -1131,33 +1130,3 @@ Your setup might look like this:
 
 I use Notmuch for emails and feeds (via gwene.org) but the configuration is too
 personal to have it here. I tried Gnus.
-
-**** [[https://slack.com/][Slack]]
-
-*Disabled for now*.
-
-#+begin_src emacs-lisp :tangle no
-(use-package slack
-  :straight (:host github :repo "yuya373/emacs-slack")
-  :hook (slack-mode . (lambda () (setq-local right-margin-width 5)))
-  :config
-  ;; Timestamp setup, same as with Circe.
-  (setq lui-time-stamp-format "%H:%M"
-        lui-time-stamp-position 'right-margin))
-#+end_src
-
-Your setup should like look like this:
-
-#+begin_src emacs-lisp :tangle no
-(slack-register-team
-  :name "team"
-  :default t
-  :client-id "_x_id"
-  :client-secret "password"
-  :token "xoxs-"
-  :full-and-display-names t)
-#+end_src
-
-The easiest way to fill above information is to open your browser's network tab
-and search for =_x_id= & =xoxs-=. Or you may want to create an application to
-access the API.

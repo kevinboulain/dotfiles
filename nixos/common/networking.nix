@@ -37,7 +37,7 @@
   services.unbound = {
     enable = true;
     # Used by unbound-control and the Prometheus exporter.
-    localControlSocketPath = "/run/unbound/controlpipe";  # That's how it's named in tests.
+    # localControlSocketPath = "/run/unbound/controlpipe";  # That's how it's named in tests.
     settings = {
       server = {
         interface = [ "127.0.0.1" "::1" ];
@@ -58,19 +58,20 @@
       };
     };
   };
-  services.prometheus.exporters.unbound = {
-    enable = true;
-    controlInterface = config.services.unbound.localControlSocketPath;
-    listenAddress = "[::1]";  # The exporter written in Rust doesn't accept localhost.
-    port = 9120;
-   };
-  systemd.services.prometheus-unbound-exporter.serviceConfig.SupplementaryGroups = [
-    "unbound"  # To access the socket.
-  ];
-  services.prometheus.scrapeConfigs = [{
-    job_name = "unbound";
-    static_configs = [ { targets = [ "[::1]:9120" ]; } ];
-  }];
+  # https://github.com/svartalf/unbound-telemetry has been archived and spams the logs.
+  # services.prometheus.exporters.unbound = {
+  #   enable = true;
+  #   controlInterface = config.services.unbound.localControlSocketPath;
+  #   listenAddress = "[::1]";  # The exporter written in Rust doesn't accept localhost.
+  #   port = 9120;
+  #  };
+  # systemd.services.prometheus-unbound-exporter.serviceConfig.SupplementaryGroups = [
+  #   "unbound"  # To access the socket.
+  # ];
+  # services.prometheus.scrapeConfigs = [{
+  #   job_name = "unbound";
+  #   static_configs = [ { targets = [ "[::1]:9120" ]; } ];
+  # }];
 
   # Enable mDNS (discovery of printers, chromecasts, ...).
   services.avahi = {

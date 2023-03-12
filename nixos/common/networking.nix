@@ -5,12 +5,13 @@
     iw
     mtr
     tcpdump
-  ] ++ lib.lists.optionals withVPN [
-    mullvad  # CLI client.
   ];
 
-  # TODO: all users can access account details.
   services.mullvad-vpn.enable = withVPN;
+  systemd.services.mullvad-daemon.environment = {
+    # https://github.com/mullvad/mullvadvpn-app/#environment-variables-used-by-the-service
+    MULLVAD_MANAGEMENT_SOCKET_GROUP = "wheel";
+  };
 
   # The dhcpcd module is a bit too inflexible.
   networking.useDHCP = false;

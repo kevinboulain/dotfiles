@@ -1,17 +1,6 @@
-# Invoked as a non-interactive shell.
+# Don't do anything when invoked as a non-interactive shell.
 if [[ $- != *i* ]]; then
-  # Get essential variables when running from an SSH session.
-  # In the case of Guix, this sources ~/.guix-profile/etc/profile and others.
-  if [ -n "${SSH_CLIENT:-}" -a -f /etc/profile ]; then
-    . /etc/profile
-  fi
-  # Don't do anything else.
   return
-fi
-
-# Source the system-wide file.
-if [ -f /etc/bashrc ]; then
-  . /etc/bashrc
 fi
 
 # Find out where this script is located, should work as long as it's only

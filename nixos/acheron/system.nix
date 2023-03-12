@@ -1,9 +1,75 @@
-{ config, pkgs, ... }:
+arguments@{ config, pkgs, ... }:
+let
+  inherit (import ../common/lib.nix arguments) mount;
+  efiDevice = "/dev/disk/by-uuid/87AC-02CE";
+  rescueDevice = "/dev/disk/by-uuid/96b89522-deab-42d3-ab43-0040bbb0e47b";
+  luksRootDevice = "/dev/disk/by-uuid/a8cb3a4c-3b49-44db-a476-fc02551063b3";
+in
 {
-  fileSystems = {
-    "/boot/efi".device = "/dev/disk/by-uuid/8EEA-1769";
-    "/".fsType = "ext4";
+  boot.initrd = {
+    availableKernelModules = [
+      # To mount the root filesystem.
+      "nvme"
+      # Everything else pretty much just works (including the keyboard).
+    ];
+
+    # Sets up /dev/mapper/root.
+    luks.devices.root = {
+      device = luksRootDevice;
+      keyFile = "/root.key";
+    };
+    # A LUKS key to avoid entering the passphrase twice. This is safe as long as
+    # the boot partition is encrypted (the resulting initrd has restricted
+    # permissions so users other than root can't peek).
+    secrets."/root.key" = "/srv/secrets/root.key";
   };
+
+  fileSystems = {
+    "/" = mount.tmpfs {
+      options = [
+        "mode=755"
+        # Systemd mounts the sysroot before resuming from hiberation:
+        # https://github.com/NixOS/nixpkgs/issues/213122
+        "x-systemd.after=local-fs-pre.target"
+      ];
+    };
+    "/boot" = mount.btrfs { subvolume = "system/boot"; };
+    "/boot/efi" = {
+      device = efiDevice;
+      depends = [ "/boot" ];
+    };
+    "/boot/rescue" = {
+      device = rescueDevice;
+      fsType = "ext4";
+      depends = [ "/boot" ];
+    };
+    "/nix" = mount.btrfs {
+      subvolume = "system/nix";
+      options = [ "noatime" ];
+    };
+    "/swap" = mount.btrfs { subvolume = "system/swap"; };
+    "/tmp" = mount.btrfs {
+      subvolume = "system/tmp";
+      # Stolen from
+      # https://github.com/NixOS/nixpkgs/blob/nixos-22.11/nixos/modules/system/boot/tmp.nix
+      options = [ "mode=1777" "nodev" "nosuid" "strictatime" ];
+    };
+    "/srv" = mount.btrfs {
+      subvolume = "state";
+      # /srv/secrets hosts user passwords and are read at startup.
+      neededForBoot = true;
+    };
+  };
+
+  services.snapshot.subvolumes = [ "/srv" ];
+
+  boot.resumeDevice = "/dev/mapper/root";
+  swapDevices = [{
+    device = assert builtins.elem "resume_offset=26486016" config.boot.kernelParams; "/swap/swap";
+    # Setting the size would generate a service that would try to create the
+    # swap file when it doesn't match. That is unlikely to do what we expect on
+    # Btrfs.
+  }];
 
   environment.systemPackages = with pkgs; [
     # https://01.org/linuxgraphics/documentation/development/how-debug-suspend-resume-issues
@@ -17,7 +83,12 @@
     # Audio has been broken between 6.0.3 and 6.0.4:
     # https://bugzilla.kernel.org/show_bug.cgi?id=216613
     kernelPackages = pkgs.linuxPackages;
-    kernelParams = [];
+    kernelParams = [
+      # Run 'btrfs inspect-internal map-swapfile path/to/swap' to find out.
+      # A full rebalance might break it:
+      # https://bugzilla.kernel.org/show_bug.cgi?id=217066
+      "resume_offset=26486016"
+    ];
   };
 
   # Tells ccache to set up the environment for a package:
@@ -62,17 +133,7 @@
   #     kernel = pkgs.callPackage kernelPackage {};
   #   in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
 
-  boot.initrd = {
-    luks.devices.root.device = "/dev/disk/by-uuid/896ef078-adb2-4405-afb8-ec62ea116399";
-    availableKernelModules = [
-      # To mount the root filesystem.
-      "nvme"
-      # Everything else pretty much just works (including the keyboard).
-    ];
-  };
-
   # Power management.
-  boot.resumeDevice = "/dev/system/swap";
   # TODO: suspend-then-hibernate is buggy but worked fine on Arch IIRC, here's
   # an excerpt:
   #  sdhci-pci 0000:6e:00.0: Unable to change power state from D3hot to D0, device inaccessible

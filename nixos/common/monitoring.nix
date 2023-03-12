@@ -1,7 +1,15 @@
-{ ... }:
+arguments@{ ... }:
+let
+  inherit (import ./lib.nix arguments) mount;
+in
 {
-  # Keep the Prometheus database separate, in case I reformat.
-  fileSystems."/var/lib/prometheus2".device = "/dev/system/prometheus";
+  # TODO: enable the Btrfs exporter:
+  # https://github.com/prometheus/node_exporter/pull/2634
+
+  fileSystems = mount.systemBinds [
+    # Stores timeseries.
+    "/var/lib/prometheus2"
+  ];
 
   services.prometheus = {
     enable = true;

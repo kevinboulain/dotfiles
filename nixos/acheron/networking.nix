@@ -1,4 +1,7 @@
-{ config, ... }:
+arguments@{ config, ... }:
+let
+  inherit (import ../common/lib.nix arguments) mount;
+in
 {
   # Rely on iwd for everything, including IP addressing.
   networking.wireless.iwd = {
@@ -17,6 +20,10 @@
       };
     };
   };
+  fileSystems = mount.systemBinds [
+    # Stores SSIDs and PSKs.
+    "/var/lib/iwd"
+  ];
 
   # Prometheus should collect Wi-Fi statistics.
   services.prometheus.exporters.node.enabledCollectors = [ "wifi" ];

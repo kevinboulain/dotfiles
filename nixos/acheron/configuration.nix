@@ -1,13 +1,19 @@
-arguments@{ lib, pkgs, ... }:
+arguments@{ config, lib, pkgs, ... }:
 {
+  systemd.tmpfiles.rules = [
+    "L /etc/nixos/configuration.nix - - - - ${config.users.users.ether.home}/sources/dotfiles/nixos/${config.networking.hostName}/configuration.nix"
+  ];
+
   imports = [
     ../common/android.nix
+    ../common/backup.nix
     ../common/desktop.nix
     ../common/locale.nix
     ../common/monitoring.nix
     (import ../common/networking.nix (arguments // { withVPN = true; }))
     ../common/nix.nix
     ../common/packages.nix
+    ../common/rescue.nix
     ../common/steam.nix
     ../common/system.nix
     ../common/yubikey.nix

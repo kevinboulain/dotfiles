@@ -1,7 +1,9 @@
-# The evaluation will fail is these options are left unset:
-#  fileSystems."/boot/efi".device
-#  boot.initrd.luks.devices.root.device
-{ config, efiDevice, pkgs, rootDevice, ... }:
+arguments@{ config, lib, pkgs, ... }:
+let
+  inherit (import ./lib.nix arguments) mount;
+  secretsDirectory = "/srv/secrets";
+  userPasswordsDirectory = "${secretsDirectory}/users";
+in
 {
   # This system uses LVM 2 on top of LUKS 2. GRUB needs to be patched to find
   # the header.
@@ -15,21 +17,8 @@
     pciutils
   ];
 
-  # Enable non-free firmware.
-  nixpkgs.config.allowUnfree = true;
-  hardware = {
-    enableRedistributableFirmware = true;
-    cpu.intel.updateMicrocode = true;
-  };
-
-  # Using a tmpfs can cause issues with large builds:
-  # https://github.com/NixOS/nixpkgs/issues/54707
-  # It's however not as trivial as setting TMPDIR for nix-daemon: root doesn't
-  # appear to use the nix-daemon and a 'sudo nixos-rebuild boot' after a
-  # 'nixos-rebuild build` as user can actually result in a rebuild.
-  # boot.tmpOnTmpfs = true;
-
   # This system boots via EFI.
+  # The evaluation will fail if fileSystems."/boot/efi".device is left unset.
   fileSystems."/boot/efi".fsType = "vfat";
   boot.loader = {
     efi = {
@@ -44,35 +33,38 @@
       enableCryptodisk = true;
     };
   };
+  # Use systemd in the initrd. Be wary, not all features are ready yet:
+  # https://github.com/NixOS/nixpkgs/projects/51
+  boot.initrd.systemd.enable = true;
 
-  # The file system type must be specified to ensure modules are available.
-  fileSystems."/".device = assert config.fileSystems."/".fsType != "auto"; "/dev/system/root";
-  swapDevices = [ { device = "/dev/system/swap"; } ];
-  boot.initrd = {
-    systemd.enable = true;  # Use systemd in the initrd.
-    kernelModules = [ "dm-snapshot" ];
-    luks.devices = {
-      root = {
-        keyFile = "/root.key";
-        preLVM = true;
+  systemd.tmpfiles.rules = with lib; [
+    "d ${secretsDirectory} 700 root root - -"
+    "d ${userPasswordsDirectory} 700 root root - -"
+    "d /srv/users 750 root users - -"
+  ];
+  # users.users.*.passwordFile is applied at boot time and only a script
+  # displays a warning when the file is missing.
+  warnings = lib.optional (!builtins.pathExists "${userPasswordsDirectory}/root")
+    "${userPasswordsDirectory}/root doesn't exist, defaulting to 'root'";
+  users = {
+    mutableUsers = false;
+    users = {
+      root =
+        if (builtins.pathExists "${userPasswordsDirectory}/root")
+        then { passwordFile = assert config.fileSystems."/srv".neededForBoot; "${userPasswordsDirectory}/root"; }
+        else { initialPassword = "root"; };
+      ether = {
+        isNormalUser = true;
+        passwordFile = "${userPasswordsDirectory}/ether";
+        home = "/srv/users/ether";
+        extraGroups = [ "wheel" ];
       };
-    };
-    # A LUKS key to avoid entering the passphrase twice. This is safe as long
-    # as the permissions aren't too wide (the resulting initrd doesn't end up
-    # in the store but /boot/kernels).
-    secrets."/root.key" = "/etc/secrets/root.key";
-  };
-
-  users.users = {
-    ether = {
-      isNormalUser = true;
-      home = "/home/ether";
-      extraGroups = [ "wheel" ];
-    };
-    untrusted = {
-      isNormalUser = true;
-      home = "/home/untrusted";
-      homeMode = "0750";
+      untrusted = {
+        isNormalUser = true;
+        passwordFile = "${userPasswordsDirectory}/untrusted";
+        home = "/srv/users/untrusted";
+        homeMode = "0750";
+      };
     };
   };
   services.logind.extraConfig = ''
@@ -81,4 +73,25 @@
 
   # Prevent anyone not in the wheel group to run sudo.
   security.sudo.execWheelOnly = true;
+
+  # Enable non-free firmware.
+  nixpkgs.config.allowUnfree = true;
+  hardware = {
+    enableRedistributableFirmware = true;
+    cpu.intel.updateMicrocode = true;
+  };
+
+  # Using a tmpfs can cause issues with large builds:
+  # https://github.com/NixOS/nixpkgs/issues/54707
+  # It's however not as trivial as setting TMPDIR for nix-daemon: root doesn't
+  # appear to use the nix-daemon and a 'sudo nixos-rebuild boot' after a
+  # 'nixos-rebuild build` as user can actually result in a rebuild.
+  boot.tmpOnTmpfs = false;
+  # Don't do unncessary things (I'm ignoring systemd is configured to wipe this
+  # directory less frequently). Can't use systemd.tmpfiles.rules without
+  # creating a conflict.
+  fileSystems."/var/tmp" = mount.bind {
+    device = "/tmp";
+    depends = [ (assert builtins.hasAttr "/tmp" config.fileSystems; "/tmp") ];
+  };
 }

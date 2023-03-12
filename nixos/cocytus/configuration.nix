@@ -1,6 +1,11 @@
-arguments@{ lib, pkgs, ... }:
+arguments@{ config, lib, pkgs, ... }:
 {
+  systemd.tmpfiles.rules = [
+    "L /etc/nixos/configuration.nix - - - - ${config.users.users.ether.home}/sources/dotfiles/nixos/${config.networking.hostName}/configuration.nix"
+  ];
+
   imports = [
+    ../common/backup.nix
     ../common/locale.nix
     ../common/monitoring.nix
     (import ../common/networking.nix arguments)

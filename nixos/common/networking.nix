@@ -1,4 +1,7 @@
-{ config, lib, pkgs, withVPN ? false, ... }:
+arguments@{ config, lib, pkgs, withVPN ? false, ... }:
+let
+  inherit (import ./lib.nix arguments) mount;
+in
 {
   environment.systemPackages = with pkgs; [
     dnsutils
@@ -12,6 +15,8 @@
     # https://github.com/mullvad/mullvadvpn-app/#environment-variables-used-by-the-service
     MULLVAD_MANAGEMENT_SOCKET_GROUP = "wheel";
   };
+  # Stores the account number.
+  fileSystems = mount.systemBinds (lib.optional withVPN "/etc/mullvad-vpn");
 
   # The dhcpcd module is a bit too inflexible.
   networking.useDHCP = false;
@@ -90,5 +95,11 @@
       # Only allow users with privileges to log in remotely.
       AllowGroups root wheel
     '';
+    hostKeys = [{
+      # Not a bind mount because /etc/ssh hosts other things we don't care
+      # about, like symlinks to /etc/static. The directory is created for us.
+      path = "/srv/system/etc/ssh/ssh_host_ed25519_key";
+      type = "ed25519";
+    }];
   };
 }

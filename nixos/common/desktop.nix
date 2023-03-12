@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+arguments@{ pkgs, ... }:
+let
+  inherit (import ./lib.nix arguments) mount;
+in
 {
   environment.systemPackages = with pkgs; [
     firefox-wayland
@@ -60,11 +63,14 @@
       Policy.AutoEnable = false;
     };
   };
-  # https://github.com/NixOS/nixpkgs/issues/170573
-  systemd.tmpfiles.rules = [
-    "d /var/lib/bluetooth 700 root root - -"
+  fileSystems = mount.systemBinds [
+    # Stores paired devices.
+    # See also https://github.com/NixOS/nixpkgs/issues/170573.
+    # TODO? permissions
+    "/var/lib/bluetooth"
+    # Stores display backlight.
+    "/var/lib/systemd/backlight"
   ];
-  systemd.targets.bluetooth.after = ["systemd-tmpfiles-setup.service"];
 
   # Handle media key on bluetooth headsets.
   # https://wiki.archlinux.org/title/MPRIS#Bluetooth

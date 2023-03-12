@@ -143,8 +143,8 @@ the beginning of a new session (I like to start fresh):
 
 #+begin_src shell
 hist() {
-  if hash ag &> /dev/null; then
-    ag "$@" "$history_directory"
+  if type -p rg &> /dev/null; then
+    rg "$@" "$history_directory"
   else
     grep -r "$@" "$history_directory"
   fi
@@ -177,7 +177,7 @@ directory and if the last command resulted in an error (exit code wasn't zero).
 First, some termcaps:
 
 #+begin_src shell
-if hash tput &> /dev/null; then
+if type -p tput &> /dev/null; then
   # Will result in an empty string if termcaps aren't available.
   foreground_grey=$(tput setaf 8)
   reset=$(tput sgr0)
@@ -248,14 +248,13 @@ eman() (
 Nothing special, only in order of preference:
 
 #+begin_src shell
-if hash emacs &> /dev/null; then
+if type -p emacs &> /dev/null; then
   EDITOR='emacs -nw'
-elif hash mg &> /dev/null; then
+elif type -p mg &> /dev/null; then
   EDITOR=mg
-elif hash nano &> /dev/null; then
+elif type -p nano &> /dev/null; then
   EDITOR=nano
 fi
-
 export EDITOR
 #+end_src
 
@@ -264,12 +263,11 @@ export EDITOR
 Nothing special, only in order of preference:
 
 #+begin_src shell
-if hash less &> /dev/null; then
+if type -p less &> /dev/null; then
   PAGER='less -r'
-elif hash most &> /dev/null; then
+elif type -p most &> /dev/null; then
   PAGER=most
 fi
-
 export PAGER
 #+end_src
 

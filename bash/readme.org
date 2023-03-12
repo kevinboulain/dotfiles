@@ -273,11 +273,10 @@ export PAGER
 
 *** Pass
 
-[[Android Password
-Store][https://github.com/android-password-store/Android-Password-Store]]
-defaults to ASCII-armored output, default [[Password
-Store][https://www.passwordstore.org/]] to that too (so Git's diff doesn't end
-up comparing binary files).
+[[https://github.com/android-password-store/Android-Password-Store][Android
+Password Store]] defaults to ASCII-armored output, default
+[[https://www.passwordstore.org/][Password Store]] to that too (so Git's diff
+doesn't end up comparing binary files).
 
 #+begin_src shell
 export PASSWORD_STORE_GPG_OPTS='--armor'

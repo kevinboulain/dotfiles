@@ -26,40 +26,41 @@
   # A custom kernel package to ease bisection.
   # https://euank.com/2022/05/11/nixos-bisect.html
   # https://nixos.wiki/wiki/Linux_kernel
-  # boot.kernelPackages = let
-  #   kernelPackage = { fetchurl, buildLinux, lib, ... }@args:
-  #     buildLinux (args // rec {
-  #       # Additionally, the environment needs to be overridden with ccache's.
-  #       # https://github.com/NixOS/nixpkgs/issues/153343
-  #       stdenv = pkgs.ccacheStdenv;
-  #       # To fetch the source from somewhere:
-  #       src = fetchurl {
-  #         # If the method and parameters are the same (the hash changes
-  #         # depending on the method) we can hit cache.nixos.org.
-  #         url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
-  #         sha256 = "17awx4c5fz7f656ig5bydccci052jsai0lczrn2bdk5cihw2cg51";
-  #       };
-  #       # Or instead, to copy it locally (will always cause ccache misses?):
-  #       # https://nixos.org/manual/nix/stable/expressions/builtins.html#builtins-filterSource
-  #       # src = builtins.filterSource
-  #       #   (path: type: type != "directory" || baseNameOf path != ".git")
-  #       #   /home/ether/sources/linux;
-  #       version = "6.0.2";
-  #       modDirVersion = builtins.replaceStrings ["-"] [".0-"] version;
-  #       kernelPatches = with (pkgs.callPackage <nixos/pkgs/os-specific/linux/kernel/patches.nix> {}); [
-  #         # https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/linux-kernels.nix
-  #         bridge_stp_helper
-  #         request_key_helper
-  #         { name = "https://gitlab.freedesktop.org/drm/intel/-/issues/6506";
-  #           patch = ./drm_resume.patch; }
-  #       ];
-  #       # Sometimes it's too much work to fiddle with structuredExtraConfig
-  #       # when incompatible options are set.
-  #       # ignoreConfigErrors = true;
-  #       # structuredExtraConfig = with lib.kernel; {};
-  #     } // (args.argsOverride or {}));
-  #   kernel = pkgs.callPackage kernelPackage {};
-  # in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
+  # boot.kernelPackages =
+  #   let
+  #     kernelPackage = { fetchurl, buildLinux, lib, ... }@args:
+  #       buildLinux (args // rec {
+  #         # Additionally, the environment needs to be overridden with ccache's.
+  #         # https://github.com/NixOS/nixpkgs/issues/153343
+  #         stdenv = pkgs.ccacheStdenv;
+  #         # To fetch the source from somewhere:
+  #         src = fetchurl {
+  #           # If the method and parameters are the same (the hash changes
+  #           # depending on the method) we can hit cache.nixos.org.
+  #           url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
+  #           sha256 = "17awx4c5fz7f656ig5bydccci052jsai0lczrn2bdk5cihw2cg51";
+  #         };
+  #         # Or instead, to copy it locally (will always cause ccache misses?):
+  #         # https://nixos.org/manual/nix/stable/expressions/builtins.html#builtins-filterSource
+  #         # src = builtins.filterSource
+  #         #   (path: type: type != "directory" || baseNameOf path != ".git")
+  #         #   /home/ether/sources/linux;
+  #         version = "6.0.2";
+  #         modDirVersion = builtins.replaceStrings ["-"] [".0-"] version;
+  #         kernelPatches = with (pkgs.callPackage <nixos/pkgs/os-specific/linux/kernel/patches.nix> {}); [
+  #           # https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/linux-kernels.nix
+  #           bridge_stp_helper
+  #           request_key_helper
+  #           { name = "https://gitlab.freedesktop.org/drm/intel/-/issues/6506";
+  #             patch = ./drm_resume.patch; }
+  #         ];
+  #         # Sometimes it's too much work to fiddle with structuredExtraConfig
+  #         # when incompatible options are set.
+  #         # ignoreConfigErrors = true;
+  #         # structuredExtraConfig = with lib.kernel; {};
+  #       } // (args.argsOverride or {}));
+  #     kernel = pkgs.callPackage kernelPackage {};
+  #   in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
 
   boot.initrd = {
     luks.devices.root.device = "/dev/disk/by-uuid/896ef078-adb2-4405-afb8-ec62ea116399";

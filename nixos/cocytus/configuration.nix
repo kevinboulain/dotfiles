@@ -1,7 +1,6 @@
 arguments@{ lib, pkgs, ... }:
 {
   imports = [
-    ../common/antivirus.nix
     ../common/locale.nix
     ../common/monitoring.nix
     (import ../common/networking.nix arguments)

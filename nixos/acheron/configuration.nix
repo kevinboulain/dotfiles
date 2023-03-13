@@ -2,7 +2,6 @@ arguments@{ lib, pkgs, ... }:
 {
   imports = [
     ../common/android.nix
-    ../common/antivirus.nix
     ../common/desktop.nix
     ../common/locale.nix
     ../common/monitoring.nix

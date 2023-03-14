@@ -49,13 +49,16 @@
   bind "<ctrl>e" { "move-cursor" (paragraph-ends, 1, 0) };
   bind "<shift><ctrl>e" { "move-cursor" (paragraph-ends, 1, 1) };
 
-  bind "<ctrl>w" { "cut-clipboard" () };
+  /* Prevents from closing a tab in Firefox. */
+  /* bind "<ctrl>w" { "cut-clipboard" () }; */
   bind "<ctrl>y" { "paste-clipboard" () };
 
   bind "<ctrl>d" { "delete-from-cursor" (chars, 1) };
   bind "<alt>d" { "delete-from-cursor" (word-ends, 1) };
-  bind "<ctrl>k" { "delete-from-cursor" (paragraph-ends, 1) };
+  bind "<ctrl>k" { "move-cursor" (paragraph-ends, 1, 1)
+                   "cut-clipboard" () };
   bind "<alt>backslash" { "delete-from-cursor" (whitespace, 1) };
+  bind "<alt>BackSpace" { "delete-from-cursor" (word-ends, -1 /* no selection */) };
 
   bind "<alt>space" { "delete-from-cursor" (whitespace, 1)
                       "insert-at-cursor" (" ") };
@@ -68,7 +71,8 @@
                    "delete-from-cursor" (paragraph-ends, 1) };
 
   bind "<ctrl>h" { "delete-from-cursor" (chars, -1) };
-  bind "<ctrl>w" { "delete-from-cursor" (word-ends, -1) };
+  /* Prevents from closing a tab in Firefox. */
+  /* bind "<ctrl>w" { "delete-from-cursor" (word-ends, -1) }; */
 }
 
 /*

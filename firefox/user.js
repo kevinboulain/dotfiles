@@ -8,3 +8,6 @@ user_pref("privacy.webrtc.legacyGlobalIndicator", false);
 
 // Never ask me to remember passwords.
 user_pref("signon.rememberSignons", false);
+
+// Kinda best-effort (ignores the GTK theme)...
+user_pref("devtools.editor.keymap", "emacs");

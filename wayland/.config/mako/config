@@ -1,5 +1,5 @@
 # (insert (my-export-theme-mako))
-font=Iosevka Term 8
+font=Iosevka Term 10
 background-color=#171717
 text-color=#DADADA
 border-color=#616161

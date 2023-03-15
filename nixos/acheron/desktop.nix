@@ -10,10 +10,12 @@
   environment.etc = {
     "sway/config.d/cursor".text = ''
       set $cursor_theme Adwaita
-      set $cursor_size 18
+      # The cursor theme has to support the size or the cursor will change when
+      # hovering X windows.
+      set $cursor_size 22
       seat seat0 xcursor_theme $cursor_theme $cursor_size
       exec_always {
-        dconf write /org/gnome/desktop/interface/cursor-theme $cursor_theme
+        dconf write /org/gnome/desktop/interface/cursor-theme "'$cursor_theme'"
         dconf write /org/gnome/desktop/interface/cursor-size $cursor_size
       }
     '';

@@ -12,7 +12,7 @@
 
 (defun my-export-theme-foot ()
   (s-format "# (insert (my-export-theme-foot))
-font = Iosevka Term:size=8
+font = Iosevka Term:size=10
 
 [colors]
 background = ${background}
@@ -48,7 +48,7 @@ bar {
 
 (defun my-export-theme-mako ()
   (s-format "# (insert (my-export-theme-mako))
-font=Iosevka Term 8
+font=Iosevka Term 10
 background-color=${background}
 text-color=${foreground}
 border-color=${status}

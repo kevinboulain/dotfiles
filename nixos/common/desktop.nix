@@ -2,14 +2,20 @@
 {
   environment.systemPackages = with pkgs; [
     firefox-wayland
-    grim
     imv
-    light
     mpv
+    zathura
+
+    light
     pavucontrol
+
+    grim
     slurp
     wl-clipboard
-    zathura
+
+    notmuch
+    notmuch.emacs
+    slrn
   ];
 
   # https://nixos.wiki/wiki/Actkbd

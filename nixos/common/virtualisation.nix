@@ -1,4 +1,4 @@
-# qemu-kvm -nographic -netdev bridge,br=nat0,id=net0,helper="$(which qemu-bridge-helper)" -device virtio-net-pci,netdev=net0 -m 4096M -drive file=path/to.iso,media=cdrom
+# qemu-kvm -display curses -netdev bridge,br=nat0,id=net0,helper="$(which qemu-bridge-helper)" -device virtio-net-pci,netdev=net0 -m 4096M -drive file=path/to.iso,media=cdrom
 { config, lib, noIPv6 ? false, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [

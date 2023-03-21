@@ -1,3 +1,0 @@
---target /etc/nixos
-# NixOS resolves the import relative to the resolved symlink.
---ignore ^(?!configuration.nix).*$

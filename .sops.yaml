@@ -1,0 +1,20 @@
+keys:
+ # Encrypt with PGP and not the SSH key listed in flake.nix:
+ # https://github.com/Mic92/sops-nix/issues/297
+ - &myself 7098af172f287ddc11270307856556eca9f7b7f1
+ # Generate an age key from the host's key:
+ #  nix-shell -p ssh-to-age --run 'cat /srv/system/etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age'
+ # Encrypt a file:
+ #  nix-shell -p sops --run "sops hosts/modules/system.yaml"
+ # Rekey a file:
+ #  nix-shell -p sops --run "sops updatekeys hosts/modules/system.yaml"
+ - &acheron age1y6jvnvd0329zev8jt5xy0gms5f2jdn8ak5hjqcfekq79jjnem5hqdrgc63
+ - &cocytus age1d2dl7sfxrv3ngv6tkvn3tlcar4a8dpgdmf0tprk23n5w60ynne2q0acnan
+creation_rules:
+ - path_regex: .*\.yaml$
+   key_groups:
+   - pgp:
+      - *myself
+     age:
+      - *acheron
+      - *cocytus

@@ -1,3 +1,0 @@
-# Have to be copied, symlinks aren't supported.
-^/Library/KeyBindings/DefaultKeyBinding.dict
-^/Library/Keyboard Layouts/U.S. International - PC - BQN.keylayout

@@ -1,9 +1,25 @@
 { config, myLib, myPublicKey, myStateDirectory, pkgs, ... }:
 let
-  inherit (myLib) mount;
+  inherit (myLib) mount state;
   userHomeDirectory = "${myStateDirectory}/users";
 in
 {
+  fileSystems = {
+    # This system boots via EFI, see the boot loader configuration below.
+    # The evaluation will fail if fileSystems."/boot/efi".device is left unset.
+    "/boot/efi".fsType = "vfat";
+    # Don't do unncessary things (I'm ignoring systemd is configured to wipe
+    # this directory less frequently). Can't use systemd.tmpfiles.rules without
+    # creating a conflict.
+    "/var/tmp" = mount.bind {
+      device = "/tmp";
+      depends = [ (assert builtins.hasAttr "/tmp" config.fileSystems; "/tmp") ];
+    };
+  } // state.binds [
+    # Where systemd store persistent timers.
+    "/var/lib/systemd/timers"
+  ];
+
   # Current GRUB version needs to be patched to find the LUKS 2 header.
   nixpkgs.overlays = [
     # https://discourse.nixos.org/t/is-there-grub-patched-for-booting-from-partition-encrypted-with-luks2/18398
@@ -20,9 +36,6 @@ in
     pciutils
   ];
 
-  # This system boots via EFI.
-  # The evaluation will fail if fileSystems."/boot/efi".device is left unset.
-  fileSystems."/boot/efi".fsType = "vfat";
   boot.loader = {
     efi = {
       canTouchEfiVariables = true;
@@ -93,11 +106,4 @@ in
   # appear to use the nix-daemon and a 'sudo nixos-rebuild boot' after a
   # 'nixos-rebuild build` as user can actually result in a rebuild.
   boot.tmpOnTmpfs = false;
-  # Don't do unncessary things (I'm ignoring systemd is configured to wipe this
-  # directory less frequently). Can't use systemd.tmpfiles.rules without
-  # creating a conflict.
-  fileSystems."/var/tmp" = mount.bind {
-    device = "/tmp";
-    depends = [ (assert builtins.hasAttr "/tmp" config.fileSystems; "/tmp") ];
-  };
 }

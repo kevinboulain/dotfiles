@@ -39,6 +39,7 @@
               ./hosts/modules/desktop.nix
               ./hosts/modules/home-manager.nix
               ./hosts/modules/impermanence
+              ./hosts/modules/impermanence/backup.nix
               ./hosts/modules/locale.nix
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking.nix
@@ -105,6 +106,7 @@
               ./hosts/cocytus
               ./hosts/modules/home-manager.nix
               ./hosts/modules/impermanence
+              ./hosts/modules/impermanence/backup.nix
               ./hosts/modules/locale.nix
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking.nix

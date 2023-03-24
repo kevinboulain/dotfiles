@@ -1,4 +1,4 @@
-{ config, myLib, myPublicKey, myStateDirectory, pkgs, ... }:
+{ config, myLib, myPublicKey, myStateDirectory, mySystemDirectory, pkgs, ... }:
 let
   inherit (myLib) mount state;
   userHomeDirectory = "${myStateDirectory}/users";
@@ -18,7 +18,14 @@ in
   } // state.binds [
     # Where systemd store persistent timers.
     "/var/lib/systemd/timers"
+    # Log files.
+    "/var/log"
   ];
+  # Journal entries are keyed by machine ID. Note it's considered confidential:
+  # https://www.freedesktop.org/software/systemd/man/machine-id.html
+  # This symlink is created earlier than systemd.tmpfiles and is suitable for
+  # the early init.
+  environment.etc.machine-id.source = "${mySystemDirectory}/etc/machine-id";
 
   # Current GRUB version needs to be patched to find the LUKS 2 header.
   nixpkgs.overlays = [

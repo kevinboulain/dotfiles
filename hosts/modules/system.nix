@@ -112,5 +112,5 @@ in
   # It's however not as trivial as setting TMPDIR for nix-daemon: root doesn't
   # appear to use the nix-daemon and a 'sudo nixos-rebuild boot' after a
   # 'nixos-rebuild build` as user can actually result in a rebuild.
-  boot.tmpOnTmpfs = false;
+  boot.tmp.useTmpfs = false;
 }

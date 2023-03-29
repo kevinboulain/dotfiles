@@ -149,7 +149,6 @@ in
 
   hardware = {
     opengl.enable = true;
-    video.hidpi.enable = true;  # Also impacts the console.
     # This system has an Nvidia graphic card.
     # Driver 520.56.06 fixes the diagonal tearing in XWayland under PRIME:
     # https://gitlab.freedesktop.org/xorg/xserver/-/issues/1317

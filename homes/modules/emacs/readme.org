@@ -165,7 +165,6 @@ But I prefer more reporting when it's related to the point:
 (column-number-mode 1) ; Show column number in the mode-line.
 
 (global-hl-line-mode) ; Highlight the line containing the cursor.
-(set-face-attribute 'hl-line nil :foreground 'unspecified) ; Don't override the foreground.
 
 (show-paren-mode 1) ; Show matching parenthesis/bracket/...
 #+end_src
@@ -281,6 +280,8 @@ faces provided by the theme:
    ;; vertical-border, see the [[*Mode-line]].
    '(mode-line ((t (:inherit vertical-border))))
    '(mode-line-inactive ((t (:inherit vertical-border))))
+   ;; With d44ecab the background has been made darker, make it more noticeable.
+   '(hl-line ((t (:inherit secondary-selection))))
    ;; `sieve-mode' does it own thing, overwrite the few faces.
    '(sieve-action-commands ((t (:inherit font-lock-keyword-face))))
    '(sieve-control-commands ((t (:inherit font-lock-keyword-face))))

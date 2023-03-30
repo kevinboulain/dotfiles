@@ -25,7 +25,7 @@ in
     logRefusedPackets = true;  # Wasted my time debugging dropped packets...
   };
 
-  # DNS resolution is handed off to systemd-resolved...
+  # DNS resolution is handed off to systemd-resolved (including mDNS)...
   services.resolved = {
     enable = true;
     dnssec = "true";
@@ -35,6 +35,7 @@ in
     # /etc/resolv.conf (e.g.: dig) are redirected to resolved and that the DNS
     # servers are used as configured.
   };
+  networking.firewall.allowedUDPPorts = [ 5353 ];  # Allow mDNS.
   # ...but it uses the local DNS server.
   # Note it's still possible to add a link-local DNS and it will have higher
   # priority if it specifies Domains=~. (like Mullvad does, see resolvectl).
@@ -77,16 +78,6 @@ in
   #   job_name = "unbound";
   #   static_configs = [ { targets = [ "[::1]:9120" ]; } ];
   # }];
-
-  # Enable mDNS (discovery of printers, chromecasts, ...).
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-    publish = {
-      enable = true;
-      addresses = true;
-    };
-  };
 
   services.openssh = {
     enable = true;

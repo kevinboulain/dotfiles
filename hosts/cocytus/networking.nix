@@ -11,6 +11,8 @@
         # resolvectl).
         UseDNS = assert config.services.unbound.enable; false;
       };
+      # mDNS needs to be enabled at the link level when using systemd-networkd.
+      networkConfig.MulticastDNS = true;
     };
   };
 

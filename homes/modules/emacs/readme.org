@@ -156,6 +156,8 @@ Quiet down Emacs a bit:
   "Disable 'For information about GNU Emacs...' in the minibuffer.
 `inhibit-startup-echo-area-message' must be set in the init
 file to your username... Let's override the function instead...")
+
+(setq native-comp-async-report-warnings-errors 'silent) ; Prevents loads of compilation warnings.
 #+end_src
 
 But I prefer more reporting when it's related to the point:

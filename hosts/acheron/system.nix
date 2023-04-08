@@ -101,17 +101,10 @@ in
   #   in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor kernel);
 
   # Power management.
-  # TODO: suspend-then-hibernate is buggy but worked fine on Arch IIRC, here's
-  # an excerpt:
-  #  sdhci-pci 0000:6e:00.0: Unable to change power state from D3hot to D0, device inaccessible
-  #  xhci_hcd 0000:3a:00.0: xHC error in resume, USBSTS 0x401, Reinit
-  #  i2c_hid_acpi i2c-ELAN0406:00: i2c_hid_get_input: incomplete report (14/3583)
-  #  i2c_hid_acpi i2c-ELAN0406:00: i2c_hid_get_input: IRQ triggered but there's no data
-  #  mmc0: Reset 0x1 never completed.
-  #  mmc0: Controller never released inhibit bit(s).
-  #  mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
-  #  mmc0: 3.3V regulator output did not become stable
-  #  nvidia-modeset: ERROR: GPU:0: Failed detecting connected display devices
+  # suspend-then-hibernate is a bit buggy (but as of 6.1.22 and after a BIOS
+  # update, the machine can actually wake up properly without losing the
+  # graphical session and dumping kernel oopses).
+  # I still prefer hibernating right away when the lid is closed though.
   services.logind.lidSwitch = "hibernate";
   systemd.sleep.extraConfig = ''
     # https://wiki.archlinux.org/title/Power_management#Hybrid-sleep_on_suspend_or_hibernation_request

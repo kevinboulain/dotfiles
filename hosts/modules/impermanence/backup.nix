@@ -17,7 +17,10 @@ with lib;
     # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/backup/borgbackup.nix
     # I'm not reusing it because I'd like to encrypt some details.
     systemd.timers.backup = {
-      after = [ "network-online.target" ];
+      after = [
+        # TODO: this seems to be triggered before iwd gets an IP from the DHCP.
+        "network-online.target"
+      ];
       wantedBy = [ "timers.target" ];
       timerConfig = {
         Persistent = true;

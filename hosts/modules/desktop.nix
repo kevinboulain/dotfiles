@@ -24,6 +24,7 @@ in
   # https://discourse.nixos.org/t/some-loose-ends-for-sway-on-nixos-which-we-should-fix/17728
   # https://github.com/NixOS/nixpkgs/issues/57602
   xdg.portal.enable = true;
+  # TODO: xdg-document-portal and xdg-permission-store often prevent shutdown.
 
   hardware.bluetooth = {
     enable = true;

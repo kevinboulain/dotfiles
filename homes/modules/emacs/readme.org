@@ -644,8 +644,14 @@ and often breaks in the terminal).
 #+begin_src emacs-lisp
 (use-package eglot
   :config
-  (setq eglot-sync-connect nil ; Asynchronously establish the connection.
-        eldoc-display-functions '(eldoc-display-in-buffer))) ; Eliminate all noise in minibuffer.
+  (setq eglot-sync-connect nil) ; Asynchronously establish the connection.
+  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider) ; Eliminate noisy hints.
+  ;; In case a language server is too verbose and pollutes the echo area, it's
+  ;; possible to omit hover information with:
+  ;;  (setq eldoc-display-functions '(eldoc-display-in-buffer)) ; Available with C-h .
+  ;; Or limit the number of lines with `eldoc-echo-area-use-multiline-p' as done
+  ;; for rust-analyzer below...
+  )
 #+end_src
 
 **** Literate programming
@@ -803,14 +809,45 @@ features and a better integration (like out of the box support for Flycheck).
   :config
   (setq rustic-format-on-save t
         rustic-indent-offset tab-width
-        rustic-lsp-client nil))
+        rustic-lsp-client nil) ; See the directory variables below.
+  ;; TODO: `eglot--hover-info' does its best and renders the single giant
+  ;; markdown file (with `gfm-view-mode') that rust-analyzer returns.
+  ;; Definitions are one of the major offenders:
+  ;;  ```rust
+  ;;  type
+  ;;  ```
+  ;;
+  ;;  ```rust
+  ;;  function
+  ;;  ```
+  ;;
+  ;;  ---
+  ;;
+  ;;  documentation...
+  ;;
+  ;; Setting `eldoc-echo-area-use-multiline-p' to a number of lines appears to
+  ;; be the best, but still quite lacking, workaround. ElDoc isn't aware of the
+  ;; rendering done by the mode so the number is about actual text lines.
+  (setq eldoc-echo-area-use-multiline-p
+        (+ 6 ; For definitions, include up to the first line of code in the second code block.
+           1)) ; For `eldoc-echo-area-display-truncation-message'.
+  ;; For the above example, that amounts to 4 rendered lines:
+  ;;  type
+  ;;
+  ;;  function
+  ;;  (Documentation truncated. Use `M-x eldoc-doc-buffer' to see rest)
+  ;;
+  ;; It doesn't seem possible to tell ElDoc to strip the empty lines (preferably
+  ;; only in the echo area, likely by advicing `eldoc--echo-area-render').
+  ;; Of course, that means stuff might actually display 7 lines worth of content
+  ;; or be truncated inconsistenly.
+  )
 #+end_src
 
 Set up =.dir-locals.el=:
 
 #+begin_src emacs-lisp :tangle no
-((rustic-mode . ((eval . (progn (setq rustic-lsp-client 'eglot
-                                      rustic-lsp-server 'rust-analyzer)
+((rustic-mode . ((eval . (progn (setq rustic-lsp-client 'eglot)
                                 (eglot-ensure))))))
 #+end_src
 

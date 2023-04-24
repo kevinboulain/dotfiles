@@ -36,6 +36,7 @@
       - [[#rust][Rust]]
       - [[#scheme][Scheme]]
       - [[#shell][Shell]]
+      - [[#wgsl][WGSL]]
       - [[#yaml][YAML]]
     - [[#text][Text]]
       - [[#spell-checking][Spell checking]]
@@ -866,6 +867,14 @@ handle all of Bash's tricks.
 #+begin_src emacs-lisp
 (setq sh-basic-offset tab-width)
 (add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; Disable the annoying heredoc EOF completion.
+#+end_src
+
+**** [[https://www.w3.org/TR/WGSL/][WGSL]]
+
+Mainly for syntax highlighting and indentation.
+
+#+begin_src emacs-lisp
+(use-package wgsl-mode)
 #+end_src
 
 **** [[https://yaml.org/][YAML]]

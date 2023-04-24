@@ -38,6 +38,7 @@
       toc-org
       use-package
       vertico
+      wgsl-mode
       which-key
       yasnippet
     ];

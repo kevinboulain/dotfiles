@@ -37,8 +37,11 @@ in
               # https://github.com/restic/restic/issues/2564
               umount "$2"/latest || true
               mount --bind "$2"/"$name" "$2"/latest
-              # Keep at least three snapshots, no older than a week.
-              find "$2" -mindepth 1 -maxdepth 1 -mtime 7 -print0 \
+              # Remove snapshots older than a week (but always keep three of
+              # them, in case reboots are infrequent).
+              # Use atime instead of mtime because it would be the filesystem's,
+              # not the snapshot's.
+              find "$2" -mindepth 1 -maxdepth 1 -atime +7 -print0 \
                 | sort -z | head -zn -3 \
                 | xargs -0I{} btrfs subvolume delete {}
             '';

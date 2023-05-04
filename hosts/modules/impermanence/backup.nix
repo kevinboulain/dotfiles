@@ -87,6 +87,7 @@ with lib;
                 (map (path: "--exclude=${path}")
                   (map (subvolume: strings.removePrefix "/" "${subvolume}/.snapshots/latest/.snapshots") config.services.snapshot.subvolumes))} \
               --exclude-from ${escapeShellArg config.sops.secrets.backupExclude.path} \
+              --exclude-nodump \
               ::"$archive".failed \
               ${escapeShellArgs (map (subvolume: "${subvolume}/.snapshots/latest") config.services.snapshot.subvolumes)}
             borg rename --debug ::"$archive".failed "$archive"

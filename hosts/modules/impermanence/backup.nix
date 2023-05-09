@@ -38,7 +38,10 @@ with lib;
         borgBaseDir = "${mySystemDirectory}/var/lib/borg";
       in
         {
-          Type = "oneshot";
+          # Oneshot would slow down the boot by a few seconds when the
+          # persistent timer has been missed. Instead, only ensure the script
+          # can be executed.
+          Type = "exec";
           CPUSchedulingPolicy = "idle";
           IOSchedulingClass = "idle";
           ProtectSystem = "strict";
@@ -74,6 +77,14 @@ with lib;
             # https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html#sftp
             export BORG_RSH="ssh -v -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$(printf '%q' "$public_key_file") -o ServerAliveInterval=60 -o ServerAliveCountMax=240 -i ${escapeShellArg (builtins.elemAt config.services.openssh.hostKeys 0).path}"
             export BORG_REPO="$user@$host:"${escapeShellArg config.networking.hostName}
+
+            # Wait until the network is reachable: for some reason
+            # network-online is reached before iwd can get an IP.
+            declare -i pings=0
+            while [ $pings -lt 10 ] && ! borg info; do
+              sleep 30
+              pings=$((pings+1))
+            done
 
             archive=$(date '+%F-%H-%M-%S')
             # Regarding --exclude, there's actually no recursion since each

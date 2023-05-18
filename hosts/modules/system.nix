@@ -50,7 +50,6 @@ in
     };
     grub = {
       enable = true;
-      version = 2;
       device = "nodev";  # No BIOS.
       efiSupport = true;
       enableCryptodisk = true;

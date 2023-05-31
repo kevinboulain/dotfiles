@@ -848,6 +848,7 @@ Set up =.dir-locals.el=:
 
 #+begin_src emacs-lisp :tangle no
 ((rustic-mode . ((eval . (progn (setq rustic-lsp-client 'eglot)
+                                (setq rustic-compile-directory-method 'rustic-buffer-workspace)
                                 (eglot-ensure))))))
 #+end_src
 

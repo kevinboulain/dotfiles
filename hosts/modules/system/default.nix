@@ -1,4 +1,4 @@
-{ config, myLib, mySystemDirectory, pkgs, ... }:
+{ config, lib, myLib, mySystemDirectory, ... }:
 let
   inherit (myLib) mount state;
 in
@@ -23,12 +23,6 @@ in
   # the early init.
   environment.etc.machine-id.source = "${mySystemDirectory}/etc/machine-id";
 
-  environment.systemPackages = with pkgs; [
-    dmidecode
-    pciutils
-    usbutils
-  ];
-
   # Use systemd in the initrd. Be wary, not all features are ready yet:
   # https://github.com/NixOS/nixpkgs/projects/51
   boot.initrd.systemd.enable = true;
@@ -41,5 +35,5 @@ in
   # It's however not as trivial as setting TMPDIR for nix-daemon: root doesn't
   # appear to use the nix-daemon and a 'sudo nixos-rebuild boot' after a
   # 'nixos-rebuild build` as user can actually result in a rebuild.
-  boot.tmp.useTmpfs = false;
+  boot.tmp.useTmpfs = lib.mkDefault false;
 }

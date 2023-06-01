@@ -44,14 +44,20 @@
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking
               ./hosts/modules/networking/iwd.nix
+              ./hosts/modules/networking/resolver.nix
               ./hosts/modules/nix
               ./hosts/modules/nix/ccache.nix
-              ./hosts/modules/packages.nix
+              ./hosts/modules/nix/extras.nix
+              ./hosts/modules/packages
+              ./hosts/modules/packages/extras.nix
               ./hosts/modules/rescue.nix
               ./hosts/modules/steam.nix
               ./hosts/modules/system
               ./hosts/modules/system/efi.nix
+              ./hosts/modules/system/extras.nix
               ./hosts/modules/system/users
+              ./hosts/modules/system/users/ether.nix
+              ./hosts/modules/system/users/root.nix
               ./hosts/modules/system/users/untrusted.nix
               ./hosts/modules/usbguard.nix
               ./hosts/modules/virtualization.nix
@@ -113,12 +119,15 @@
               ./hosts/modules/locale.nix
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking
+              ./hosts/modules/networking/resolver.nix
               ./hosts/modules/nginx.nix
               ./hosts/modules/nix
-              ./hosts/modules/packages.nix
+              ./hosts/modules/packages
               ./hosts/modules/system
               ./hosts/modules/system/efi.nix
               ./hosts/modules/system/users
+              ./hosts/modules/system/users/ether.nix
+              ./hosts/modules/system/users/root.nix
               home-manager.nixosModules.home-manager
               sops-nix.nixosModules.sops
             ] ++ [{
@@ -147,6 +156,42 @@
               };
             }];
           };
+
+          octoprint =
+            let
+              system = "armv6l-linux";
+            in
+              nixpkgs.lib.nixosSystem {
+                inherit specialArgs system;
+                modules = [
+                  ./hosts/octoprint
+                  ./hosts/modules/locale.nix
+                  ./hosts/modules/networking
+                  ./hosts/modules/networking/iwd.nix
+                  ./hosts/modules/networking/resolver.nix
+                  ./hosts/modules/nix
+                  ./hosts/modules/packages
+                  ./hosts/modules/pi0w.nix
+                  ./hosts/modules/system
+                ] ++ [{
+                  networking.hostName = "printer";
+                  time.timeZone = "Europe/Paris";
+                  system.stateVersion = "22.11";
+
+                  nixpkgs = {
+                    # The build platform can't yet be determined automatically:
+                    # https://github.com/NixOS/nix/issues/3843
+                    buildPlatform.system = "x86_64-linux";
+                    hostPlatform = { inherit system; };
+                    overlays = [
+                      # https://github.com/NixOS/nixpkgs/issues/126755
+                      (final: parent: {
+                        makeModulesClosure = args: parent.makeModulesClosure (args // { allowMissing = true; });
+                      })
+                    ];
+                  };
+                }];
+              };
         };
   };
 }

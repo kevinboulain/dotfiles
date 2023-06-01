@@ -1,29 +1,12 @@
-{ config, myPublicKey, myStateDirectory, ... }:
+{ config, lib, myStateDirectory, ... }:
 let
-  inherit (import ./lib.nix { inherit myStateDirectory; }) sopsUserPassword userHomeDirectory;
+  inherit (import ./lib.nix { inherit myStateDirectory; }) userHomeDirectory;
 in
 {
-  systemd.tmpfiles.rules = [ "d ${userHomeDirectory} 750 root users - -" ];
-
-  sops.secrets = {
-    ether = sopsUserPassword;
-    root = sopsUserPassword;
-  };
-
-  users = {
-    mutableUsers = false;
-    users = {
-      ether = {
-        isNormalUser = true;
-        passwordFile = config.sops.secrets.ether.path;
-        openssh.authorizedKeys.keys = [ myPublicKey ];
-        home = "${userHomeDirectory}/ether";
-        extraGroups = [ "wheel" ];
-      };
-      root = {
-        passwordFile = config.sops.secrets.root.path;
-        openssh.authorizedKeys.keys = [ myPublicKey ];
-      };
-    };
-  };
+  users.mutableUsers = false;
+  systemd.tmpfiles.rules = lib.lists.optional
+    (builtins.any
+      (user: lib.strings.hasPrefix "${userHomeDirectory}/" user.home)
+      (builtins.attrValues config.users.users))
+    "d ${userHomeDirectory} 750 root users - -";
 }

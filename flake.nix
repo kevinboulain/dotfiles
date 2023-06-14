@@ -54,10 +54,8 @@
               sops-nix.nixosModules.sops
             ] ++ [{
               networking.hostName = "acheron";
-              time.timeZone = "Europe/Zurich";
+              time.timeZone = "Europe/Paris";
               system.stateVersion = "22.11";
-
-              networking.noIPv6Internet = true;
 
               fileSystems."/boot/efi".device = "/dev/disk/by-uuid/87AC-02CE";
               fileSystems."/boot/rescue".device = "/dev/disk/by-uuid/96b89522-deab-42d3-ab43-0040bbb0e47b";
@@ -118,7 +116,7 @@
               sops-nix.nixosModules.sops
             ] ++ [{
               networking.hostName = "cocytus";
-              time.timeZone = "Europe/Zurich";
+              time.timeZone = "Europe/Paris";
               system.stateVersion = "22.11";
 
               fileSystems."/boot".device = "/dev/disk/by-uuid/a6068654-68d4-4389-8197-becf0f9ecec8";

@@ -38,9 +38,10 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-    efibootmgr  # For editing EFI boot entries.
     dmidecode
+    efibootmgr  # For editing EFI boot entries.
     pciutils
+    usbutils
   ];
 
   boot.loader = {

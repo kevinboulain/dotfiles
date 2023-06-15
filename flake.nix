@@ -48,6 +48,7 @@
               ./hosts/modules/rescue.nix
               ./hosts/modules/steam.nix
               ./hosts/modules/system.nix
+              ./hosts/modules/usbguard.nix
               ./hosts/modules/virtualization.nix
               ./hosts/modules/yubikey.nix
               home-manager.nixosModules.home-manager

@@ -40,44 +40,51 @@ in
   # Note it's still possible to add a link-local DNS and it will have higher
   # priority if it specifies Domains=~. (like Mullvad does, see resolvectl).
   networking.nameservers = [ "::1" ];  # Sets the DNS= entry in resolved.conf.
-  services.unbound = {
+  # Unbound doesn't allow to limit DNS64 to a view/interface/etc. dnsmasq
+  # doesn't seem to support DNS64. The stable BIND version doesn't support TLS
+  # forwarders. PowerDNS doesn't support AAAA exclusion without Lua scripting.
+  services.kresd = {
     enable = true;
-    # Used by unbound-control and the Prometheus exporter.
-    # localControlSocketPath = "/run/unbound/controlpipe";  # That's how it's named in tests.
-    settings = {
-      server = {
-        interface = [ "127.0.0.1" "::1" ];
-        access-control = [ "127.0.0.1/32 allow" "::1/128 allow" ];
-        extended-statistics = true;
-      };
-      forward-zone = {
-        # Locally recursing isn't more privacy friendly than forwarding
-        # everything to a (hopefully, trusted) DNS, as long as it's encrypted:
-        # recursion is unlikely to ever be fully shielded.
-        name = ".";
-        forward-tls-upstream = true;
-        forward-addr = [
-          # https://mullvad.net/en/help/dns-over-https-and-dns-over-tls/
-          "2a07:e340::2@853#doh.mullvad.net"
-          "194.242.2.2@853#doh.mullvad.net"
-        ];
-      };
+    package = pkgs.knot-resolver.override {
+      # For cqueues (dependency of the HTTP module).
+      extraFeatures = true;
     };
+    listenPlain = [ "127.0.0.1:53" "[::1]:53" ];
+    extraConfig = ''
+      log_level('info')
+
+      modules = {
+       'dns64',
+       'http', -- Prometheus.
+       'policy',
+       'stats',
+       'view',
+      }
+
+      -- HTTP, including Prometheus.
+      net.listen('127.0.0.1', 8453, { kind = 'webmgmt' })
+      net.listen('::1', 8453, { kind = 'webmgmt' })
+
+      -- Forward all requests via DoT.
+      -- Locally recursing isn't more privacy friendly than forwarding
+      -- everything to a (hopefully, trusted) DNS, as long as it's encrypted:
+      -- recursion is unlikely to ever be fully shielded.
+      policy.add(policy.all(policy.TLS_FORWARD({
+        -- https://mullvad.net/en/help/dns-over-https-and-dns-over-tls/
+        { '194.242.2.2', hostname='doh.mullvad.net' },
+        { '2a07:e340::2', hostname='doh.mullvad.net' },
+      })))
+
+      -- Disable DNS64 by default.
+      view:addr('0.0.0.0/0', policy.all(policy.FLAGS('DNS64_DISABLE')))
+      view:addr('::/0', policy.all(policy.FLAGS('DNS64_DISABLE')))
+    '';
   };
-  # https://github.com/svartalf/unbound-telemetry has been archived and spams the logs.
-  # services.prometheus.exporters.unbound = {
-  #   enable = true;
-  #   controlInterface = config.services.unbound.localControlSocketPath;
-  #   listenAddress = "[::1]";  # The exporter written in Rust doesn't accept localhost.
-  #   port = 9120;
-  #  };
-  # systemd.services.prometheus-unbound-exporter.serviceConfig.SupplementaryGroups = [
-  #   "unbound"  # To access the socket.
-  # ];
-  # services.prometheus.scrapeConfigs = [{
-  #   job_name = "unbound";
-  #   static_configs = [ { targets = [ "[::1]:9120" ]; } ];
-  # }];
+
+  services.prometheus.scrapeConfigs = [{
+    job_name = "kresd";
+    static_configs = [ { targets = [ "localhost:8453" ]; } ];
+  }];
 
   services.openssh = {
     enable = true;

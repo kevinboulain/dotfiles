@@ -7,9 +7,9 @@ let
       DHCP = "ipv4";
       dhcpV4Config = {
         # Otherwise we would get a DNS from DHCP advertisements and
-        # systemd-resolved would use that alongside the local Unbound (see
+        # systemd-resolved would use that alongside the local Knot Resolver (see
         # resolvectl).
-        UseDNS = assert config.services.unbound.enable; false;
+        UseDNS = assert config.services.krsed.enable; false;
       };
       # mDNS needs to be enabled at the link level when using systemd-networkd.
       networkConfig.MulticastDNS = true;

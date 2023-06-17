@@ -16,9 +16,9 @@ in
       Network = {
         EnableIPv6 = true;
         # Otherwise we would get a DNS from DHCP advertisements and
-        # systemd-resolved would use that alongside the local Unbound (see
+        # systemd-resolved would use that alongside the local Knot Resolver (see
         # resolvectl).
-        NameResolvingService = assert config.services.unbound.enable; "none";
+        NameResolvingService = assert config.services.kresd.enable; "none";
       };
     };
   };

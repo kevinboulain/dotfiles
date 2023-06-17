@@ -1,4 +1,4 @@
-# qemu-kvm -display curses -netdev bridge,br=nat0,id=net0,helper="$(which qemu-bridge-helper)" -device virtio-net-pci,netdev=net0 -m 4096M -drive file=path/to.iso,media=cdrom
+# qemu-kvm -display curses -netdev bridge,br=nat64,id=net0,helper="$(which qemu-bridge-helper)" -device virtio-net-pci,netdev=net0 -m 4096M -drive file=path/to.iso,media=cdrom
 { config, lib, pkgs, ... }:
 with lib;
 let
@@ -27,8 +27,8 @@ in
 
     # A bridge without any physical interface serving as a gateway.
     # TAP interfaces can be attached for NAT.
-    networking.bridges.nat0.interfaces = [];
-    networking.interfaces.nat0 = {
+    networking.bridges.nat64.interfaces = [];
+    networking.interfaces.nat64 = {
       ipv6.addresses = [{
         address = "fd2a::1";
         prefixLength = 64;
@@ -37,14 +37,14 @@ in
     networking.nat = {
       enable = true;
       enableIPv6 = true;
-      internalInterfaces = [ "nat0" ];
+      internalInterfaces = [ "nat64" ];
     };
 
-    # Allow bridging nat0 from QEMU.
+    # Allow bridging nat64 from QEMU.
     environment.etc."qemu/bridge.conf" = {
       mode = "0644";
       text = ''
-      allow nat0
+      allow nat64
     '';
     };
     security.wrappers.qemu-bridge-helper = {
@@ -57,9 +57,9 @@ in
     # Send router advertisements to clients.
     # systemd-networkd 248 has support for RDNSS (IPv6AcceptRA{,.UseDNS}).
     services.radvd = {
-      enable = assert config.services.unbound.enable; true;
+      enable = assert config.services.kresd.enable; true;
       config = ''
-      interface nat0 {
+      interface nat64 {
         IgnoreIfMissing off;
         AdvSendAdvert on;
         prefix fd2a::/64 {};
@@ -68,17 +68,20 @@ in
       };
     '';
     };
-    # And allow to access the local Unbound.
-    networking.firewall.interfaces.nat0.allowedUDPPorts = [ 53 ];
-    services.unbound.settings.server = {
-      interface = [ "fd2a::1" ];
-      access-control = [ "fd2a::/64 allow" ];
-    } // attrsets.optionalAttrs noIPv6Internet {
-      module-config = ''"dns64 validator iterator"'';
-      dns64-prefix = "64:ff9b::/96";
-      # Ignore all AAAA records, necessary when there's truly no IPv6
-      # connectivity.
-      dns64-synthall = true;
+    # And allow to access the local Knot Resolver.
+    networking.firewall.interfaces.nat64.allowedUDPPorts = [ 53 ];
+    services.kresd = {
+      listenPlain = [ "[fd2a::1]:53" ];
+      extraConfig = lib.mkAfter ''
+        dns64.config({
+          prefix = '64:ff9b::', -- /96
+          -- Ignore AAAA records (for example, when there's truly no IPv6
+          -- connectivity and IPv4 has to be forced).
+          exclude_subnets = { '::ffff/96', ${lib.strings.optionalString noIPv6Internet "'::/0',"} },
+        })
+        -- Allow DNS64 for this network.
+        view:addr('fd2a::/64', policy.all(policy.FLAGS(nil, 'DNS64_DISABLE')))
+      '';
     };
   };
 }

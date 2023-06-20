@@ -9,7 +9,7 @@ in
   # the same version.
   # https://discourse.nixos.org/t/do-flakes-also-set-the-system-channel/19798
   nix = {
-    settings.experimental-features = ["nix-command" "flakes"];
+    settings.experimental-features = [ "nix-command" "flakes" ];
     registry.nixpkgs.flake = nixpkgs;
     nixPath = [ "nixpkgs=/etc/${nixpkgsPath}" ];
   };

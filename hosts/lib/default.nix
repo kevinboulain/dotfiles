@@ -1,5 +1,4 @@
-{ lib, mySystemDirectory, ... }:
-rec {
+{ lib, mySystemDirectory, ... }: rec {
   mount = {
     bind = { device, depends ? [] }: {
       inherit device depends;

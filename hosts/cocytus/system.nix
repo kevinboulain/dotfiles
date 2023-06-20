@@ -1,4 +1,4 @@
-{ lib, myLib, pkgs, ... }:
+{ myLib, pkgs, ... }:
 let
   inherit (myLib) mount;
 in

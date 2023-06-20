@@ -3,6 +3,18 @@ let
   inherit (myLib) mount;
 in
 {
+  nixpkgs.config.allowUnfree = true;  # Nvidia.
+
+  hardware = {
+    cpu.intel.updateMicrocode = true;
+    # To get a list of loaded firmwares, see https://serverfault.com/a/1044209.
+    firmware = with pkgs; [
+      linux-firmware
+      sof-firmware
+      wireless-regdb
+    ];
+  };
+
   boot.initrd = {
     availableKernelModules = [
       # To mount the root filesystem.

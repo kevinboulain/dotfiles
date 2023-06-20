@@ -23,6 +23,7 @@ in
   imports = [
     ./modules/bash
     ./modules/emacs
+    ./modules/gdb
     ./modules/git.nix
     ./modules/tmux
   ];

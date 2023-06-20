@@ -42,12 +42,17 @@
               ./hosts/modules/impermanence/backup.nix
               ./hosts/modules/locale.nix
               ./hosts/modules/monitoring.nix
-              ./hosts/modules/networking.nix
+              ./hosts/modules/networking
+              ./hosts/modules/networking/iwd.nix
               ./hosts/modules/nix
+              ./hosts/modules/nix/ccache.nix
               ./hosts/modules/packages.nix
               ./hosts/modules/rescue.nix
               ./hosts/modules/steam.nix
-              ./hosts/modules/system.nix
+              ./hosts/modules/system
+              ./hosts/modules/system/efi.nix
+              ./hosts/modules/system/users
+              ./hosts/modules/system/users/untrusted.nix
               ./hosts/modules/usbguard.nix
               ./hosts/modules/virtualization.nix
               ./hosts/modules/yubikey.nix
@@ -85,7 +90,6 @@
                         inherit home wayland;
                         imports = [
                           ./homes/desktop.nix
-                          ./homes/modules/gdb
                           ./homes/modules/yubikey.nix
                         ];
                       };
@@ -108,11 +112,13 @@
               ./hosts/modules/impermanence/backup.nix
               ./hosts/modules/locale.nix
               ./hosts/modules/monitoring.nix
-              ./hosts/modules/networking.nix
+              ./hosts/modules/networking
               ./hosts/modules/nginx.nix
               ./hosts/modules/nix
               ./hosts/modules/packages.nix
-              ./hosts/modules/system.nix
+              ./hosts/modules/system
+              ./hosts/modules/system/efi.nix
+              ./hosts/modules/system/users
               home-manager.nixosModules.home-manager
               sops-nix.nixosModules.sops
             ] ++ [{
@@ -137,7 +143,6 @@
                     {
                       root = minimal;
                       ether = minimal;
-                      untrusted = minimal;
                     };
               };
             }];

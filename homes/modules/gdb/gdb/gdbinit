@@ -1,6 +1,6 @@
 # Disable pagination (annoying for long backtraces).
 set pagination off
-# Trust everything (or it'especially annoying for rust-gdb on NixOS).
+# Trust everything (or it's especially annoying for rust-gdb on NixOS).
 set auto-load safe-path /
 
 # Use xxd to dump a memory region. Requires the address and a number of bytes.

@@ -80,6 +80,10 @@
               ];
               boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/a8cb3a4c-3b49-44db-a476-fc02551063b3";
 
+              # xdp-tools (for knot-resolver) doesn't cross-compile cleanly.
+              # TODO: report that.
+              # boot.binfmt.emulatedSystems = [ "armv6l-linux" ];
+
               home-manager = {
                 extraSpecialArgs.myLib = import ./homes/lib { inherit (nixpkgs) lib; };
                 users =
@@ -177,6 +181,13 @@
                   networking.hostName = "printer";
                   time.timeZone = "Europe/Paris";
                   system.stateVersion = "22.11";
+
+                  # The shebang for
+                  # /nix/store/5nxl03vkldxa4rmkrxfy4161f3zsw901-yaml-merge-armv6l-unknown-linux-gnueabihf-unstable-2022-01-12/bin/.yaml-merge-wrapped
+                  # is
+                  # /nix/store/5a457g4zr7q11b4mz0ifc9z88kwcp8g7-python3-3.10.12/bin/python3.10
+                  # ELF 64-bit LSB executable, x86-64
+                  # ...
 
                   nixpkgs = {
                     # The build platform can't yet be determined automatically:

@@ -1,8 +1,10 @@
-{ myLib, pkgs, ... }:
+{ myLib, ... }:
 let
   inherit (myLib) mount;
 in
 {
+  imports = [ ./users.nix ];
+
   fileSystems = {
     "/boot".fsType = "ext4";
     "/boot/efi".depends = [ "/boot" ];
@@ -15,7 +17,7 @@ in
   swapDevices = [{ device = "/swap/swap"; }];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages;
-    kernelParams = [ "fbcon=rotate:1" ];
+    initrd.availableKernelModules = [ "virtio_pci" "virtio_scsi" ];
+    kernelParams = [ "console=ttyS0,115200" ];
   };
 }

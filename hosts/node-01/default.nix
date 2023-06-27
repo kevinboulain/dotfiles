@@ -1,6 +1,6 @@
 { ... }: {
   imports = [
     ./networking.nix
-    ./system.nix
+    ./system
   ];
 }

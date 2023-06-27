@@ -3,6 +3,8 @@ let
   inherit (myLib) mount;
 in
 {
+  imports = [ ./users.nix ];
+
   nixpkgs.config.allowUnfree = true;  # Nvidia.
 
   hardware = {

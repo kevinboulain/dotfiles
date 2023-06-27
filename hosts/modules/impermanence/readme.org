@@ -19,7 +19,7 @@ mkfs.fat -n EFI -F32 "${device?}"?(p)1
 
 *** Encrypted boot, system and data
 
-More geared towards a laptop (e.g.: [[../../acheron/system.nix]]). It's safe to
+More geared towards a laptop (e.g.: [[../../acheron/system/default.nix]]). It's safe to
 store a LUKS key in the initrd since it's on the encrypted partition (GRUB will
 prompt the password).
 
@@ -54,6 +54,9 @@ btrfs subvolume create /mnt/state
 # Add more subvolumes as necessary:
 # btrfs subvolume create /mnt/state/users/untrusted
 # chattr +C /mnt/state/users/untrusted
+mkdir -p /mnt/state/system/etc/ssh
+ssh-keygen -t ed25519 -N '' -f /mnt/state/system/etc/ssh/ssh_host_ed25519_key
+# Don't forget to update the UUIDs in the Nix configuration and the SOPS files.
 umount /mnt
 #+end_src
 
@@ -66,24 +69,24 @@ mount -o subvol=system/boot,compress=zstd /dev/mapper/root /mnt/boot
 mkdir /mnt/boot/efi
 mount --label EFI --target /mnt/boot/efi
 mount -o subvol=system/nix,compress=zstd,noatime /dev/mapper/root /mnt/nix
-mount -o subvol=system/nix,compress=zstd /dev/mapper/root /mnt/swap
+mount -o subvol=system/swap,compress=zstd /dev/mapper/root /mnt/swap
 btrfs filesystem mkswapfile --size 16G /mnt/swap/swap # GiB
 # Update the kernel's resume_offset with this value:
 btrfs inspect-internal map-swapfile --resume-offset /mnt/swap/swap
 mount -o subvol=state,compress=zstd /dev/mapper/root /mnt/srv
 
-mkdir --mode 0700 /mnt/system/etc/luks
-dd if=/dev/urandom of=/mnt/system/etc/luks/root.key bs=1024 count=4
-chmod 0400 /mnt/srv/secrets/root.key
-cryptsetup luksAddKey "${device?}"?(p)3 /mnt/srv/secrets/root.key
+mkdir --mode 0700 /mnt/srv/system/etc/luks
+dd if=/dev/urandom of=/mnt/srv/system/etc/luks/root.key bs=1024 count=4
+chmod 0400 /mnt/srv/system/etc/luks/root.key
+cryptsetup luksAddKey "${device?}"?(p)3 /mnt/srv/system/etc/luks/root.key
 #+end_src
 
 *** Encrypted system and data
 
-More geared towards a server (e.g.: [[../../cocytus/system.nix]]). It's not safe
-to store a LUKS key in the initrd (and the environment of the machine has to be
-trusted, or Secure Boot enabled) but SSH can be started early for remote
-unlocking.
+More geared towards a server (e.g.: [[../../node-01/system/default.nix]]). It's
+not safe to store a LUKS key in the initrd (and the environment of the machine
+has to be trusted, or Secure Boot enabled) but SSH can be started early for
+remote unlocking.
 
 Add a boot partition:
 
@@ -113,7 +116,10 @@ btrfs subvolume create /mnt/system/swap
 btrfs subvolume create /mnt/system/tmp
 btrfs subvolume create /mnt/state
 # Add more subvolumes as necessary, see the full disk encryption section.
-ssh-keygen -t ed25519 -N '' -f /srv/system/etc/ssh/ssh_initrd_ed25519_key
+mkdir -p /mnt/state/system/etc/ssh
+ssh-keygen -t ed25519 -N '' -f /mnt/state/system/etc/ssh/ssh_host_ed25519_key
+# Don't forget to update the UUIDs in the Nix configuration and the SOPS files.
+ssh-keygen -t ed25519 -N '' -f /mnt/state/system/etc/ssh/ssh_initrd_ed25519_key
 # Then set boot.initrd.network.ssh.hostKeys = [ /srv/system/etc/ssh/ssh_initrd_ed25519_key ]
 umount /mnt
 #+end_src
@@ -127,7 +133,7 @@ mount --label boot /mnt/boot
 mkdir /mnt/boot/efi
 mount --label EFI --target /mnt/boot/efi
 mount -o subvol=system/nix,compress=zstd,noatime /dev/mapper/root /mnt/nix
-mount -o subvol=system/nix,compress=zstd /dev/mapper/root /mnt/swap
+mount -o subvol=system/swap,compress=zstd /dev/mapper/root /mnt/swap
 btrfs filesystem mkswapfile --size 2G /mnt/swap/swap # GiB
 mount -o subvol=state,compress=zstd /dev/mapper/root /mnt/srv
 #+end_src
@@ -137,7 +143,15 @@ mount -o subvol=state,compress=zstd /dev/mapper/root /mnt/srv
 Install NixOS:
 
 #+begin_src bash
-# nixos-generate-config --root /mnt
+git clone https://github.com/ether42/dotfiles
+cd dotfiles
+nixos-install --no-root-password --root /mnt --flake .#${hostname?}
+#+end_src
+
+Or from scratch, without flakes:
+
+#+begin_src bash
+nixos-generate-config --root /mnt # Useful to check boot.initrd.availableKernelModules.
 cd /mnt/etc/nixos
 ln -s ../../path/to/configuration.nix
 nixos-install --no-root-password --root /mnt

@@ -1,10 +1,8 @@
 { config, myStateDirectory, ... }:
 let
-  inherit (import ./lib.nix { inherit myStateDirectory; }) sopsUserPassword userHomeDirectory;
+  inherit (import ./lib.nix { inherit myStateDirectory; }) userHomeDirectory;
 in
 {
-  sops.secrets.untrusted = sopsUserPassword;
-
   users.users.untrusted = {
     isNormalUser = true;
     passwordFile = config.sops.secrets.untrusted.path;

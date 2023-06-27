@@ -1,7 +1,7 @@
 { ... }: {
   imports = [
     ./networking.nix
-    ./system.nix
+    ./system
     ./usbguard.nix
   ];
 }

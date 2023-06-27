@@ -1,14 +1,9 @@
 { config, myPublicKey, myStateDirectory, ... }:
 let
-  inherit (import ./lib.nix { inherit myStateDirectory; }) sopsUserPassword userHomeDirectory;
+  inherit (import ./lib.nix { inherit myStateDirectory; }) userHomeDirectory;
 in
 {
   systemd.tmpfiles.rules = [ "d ${userHomeDirectory} 750 root users - -" ];
-
-  sops.secrets = {
-    ether = sopsUserPassword;
-    root = sopsUserPassword;
-  };
 
   users = {
     mutableUsers = false;

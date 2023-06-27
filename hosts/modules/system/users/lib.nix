@@ -1,6 +1,6 @@
 { myStateDirectory, ... }: {
-  sopsUserPassword = {
-    sopsFile = ./lib.yaml;
+  sopsUserPassword = sopsFile: {
+    inherit sopsFile;
     neededForUsers = true;
   };
   userHomeDirectory = "${myStateDirectory}/users";

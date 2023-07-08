@@ -65,7 +65,6 @@
 
               fileSystems."/boot/efi".device = "/dev/disk/by-uuid/87AC-02CE";
               fileSystems."/boot/rescue".device = "/dev/disk/by-uuid/96b89522-deab-42d3-ab43-0040bbb0e47b";
-              boot.rescue.isos = [ "nixos-minimal-23.05.1597.c7a18f89ef1-x86_64-linux.iso" ];
               boot.kernelParams = [
                 # Run 'btrfs inspect-internal map-swapfile path/to/swap' to find out.
                 # A full rebalance might break it:

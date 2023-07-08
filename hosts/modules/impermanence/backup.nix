@@ -69,12 +69,28 @@ with lib;
             # https://borgbackup.readthedocs.io/en/stable/usage/notes.html#append-only-mode-forbid-compaction
             # But see https://github.com/borgbackup/borg/issues/1772
             # I kinda wish I could use restic instead but
-            #   rclone serve restic --stdio --append-only path/to/repository
+            #  rclone serve restic --stdio --append-only path/to/repository
             # isn't supported by my provider while
-            #   borg serve --append-only --restrict-to-repository path/to/repository
+            #  borg serve --append-only --restrict-to-repository path/to/repository
             # is...
             # For some inspiration, see also
             # https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html#sftp
+            #
+            # To set up a new repository, on a trusted machine:
+            #  sudo BORG_RSH='ssh -vi ~$user/.ssh/$key' BORG_BASE_DIR=/srv/system/var/lib/borg borg init --encryption keyfile $user@$host:$hostname
+            # No need for a passphrase since the keyfile will only be stored on
+            # the trusted machine. Back it up and copy it to the machine to be
+            # backed up:
+            #  sudo mkdir -pm 0700 /srv/system/var/lib/borg/.config/borg/keys
+            #  sudo chmod -R 0700 /srv/system/var/lib/borg
+            #  sudo chmod 0600 /srv/system/var/lib/borg/.config/borg/keys/$key
+            # Add the machine's public key to the (restricted) authorized keys
+            # on the repository server:
+            #  restrict,command="borg serve --append-only --restrict-to-repository $hostname" $pubkey
+            # Start a backup:
+            #  sudo systemctl start backup.service
+            # And finally, verify the backup on the trusted machine:
+            #  sudo BORG_RSH='ssh -i ~$user/.ssh/$key' BORG_BASE_DIR=/srv/system/var/lib/borg borg mount $user@$host:$hostname /mnt
             export BORG_RSH="ssh -v -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$(printf '%q' "$public_key_file") -o ServerAliveInterval=60 -o ServerAliveCountMax=240 -i ${escapeShellArg (builtins.elemAt config.services.openssh.hostKeys 0).path}"
             export BORG_REPO="$user@$host:"${escapeShellArg config.networking.hostName}
 

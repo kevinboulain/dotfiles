@@ -1,3 +1,6 @@
-{ myLib, ... }: {
-  xdg.configFile = myLib.copyTrees ./. [ "gdb" ] ;
+{ ... }: {
+  xdg.configFile.gdb = {
+    source = ./gdb;
+    recursive = true;
+  };
 }

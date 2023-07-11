@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, mySystemDirectory, ... }:
 let
   network = {
     enable = true;
@@ -31,7 +31,10 @@ in
     #  - boot.initrd.network.ssh.hostKeys.
     # Once SSH'd in:
     #  systemd-tty-ask-password-agent
-    network.ssh.enable = true;
+    network.ssh = {
+      enable = true;
+      hostKeys = [ "${mySystemDirectory}/etc/ssh/ssh_initrd_ed25519_key" ];
+    };
   };
 
   services.fail2ban = {

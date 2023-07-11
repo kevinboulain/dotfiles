@@ -143,10 +143,15 @@ in
   services.tlp = {
     enable = true;
     settings = {
-      # Not enabled by default.
-      # https://linrunner.de/tlp/settings/processor.html
-      CPU_SCALING_GOVERNOR_ON_AC = "powersave";
+      # Not enabled by default. https://linrunner.de/tlp/settings/processor.html
+      # Use config.boot.kernelPackages.cpupower frequency-info to confirm
+      # intel_pstate is in use, see:
+      # https://www.kernel.org/doc/html/latest/admin-guide/pm/cpufreq.html
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+      # Appears to noticeably decrease the wattage and temperature. Shouldn't
+      # affect performance much under load (and gamemode can always temporarily
+      # change it).
+      CPU_SCALING_GOVERNOR_ON_AC = "powersave";
     };
   };
   powerManagement.resumeCommands = ''

@@ -128,7 +128,6 @@
               fileSystems."/boot".device = "/dev/disk/by-uuid/bde2fa2e-dd10-4a8c-8c1b-2993b8b8b8d3";
               fileSystems."/boot/efi".device = "/dev/disk/by-uuid/5206-7A9C";
               boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/7cfc7623-2ee6-4122-8faf-483f3db15264";
-              boot.initrd.network.ssh.hostKeys = [ "${mySystemDirectory}/etc/ssh/ssh_initrd_ed25519_key" ];
 
               home-manager = {
                 extraSpecialArgs.myLib = import ./homes/lib { inherit (nixpkgs) lib; };

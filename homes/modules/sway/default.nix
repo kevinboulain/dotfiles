@@ -1,4 +1,4 @@
-{ config, lib, myLib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.wayland.windowManager.sway;
@@ -18,12 +18,24 @@ in
         settings.main.include = "~/.config/foot/theme.ini";
       };
 
-      xdg.configFile = myLib.copyTrees ./. [
-        "foot"
-        "gammastep"
-        "mako"
-        "sway"
-      ];
+      xdg.configFile = {
+        foot = {
+          source = ./foot;
+          recursive = true;
+        };
+        gammastep = {
+          source = ./gammastep;
+          recursive = true;
+        };
+        mako = {
+          source = ./mako;
+          recursive = true;
+        };
+        sway = {
+          source = ./sway;
+          recursive = true;
+        };
+      };
 
       home.packages = with pkgs; [
         fzf

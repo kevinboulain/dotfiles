@@ -1,4 +1,4 @@
-{ myLib, ... }: {
+{ ... }: {
   gtk = {
     enable = true;
     gtk3.extraConfig = {
@@ -10,5 +10,8 @@
       # gtk-key-theme-name = Emacs
     };
   };
-  xdg.configFile = myLib.copyTrees ./. [ "gtk-3.0" ];
+  xdg.configFile."gtk-3.0" = {
+    source = ./gtk-3.0;
+    recursive = true;
+  };
 }

@@ -13,6 +13,8 @@
   ];
   services.gpg-agent = {
     enable = true;
+    # Add the following to .ssh/config to work around unavoidable issues:
+    #  Match host * exec "gpg-connect-agent updatestartuptty /bye"
     pinentryFlavor = "curses";
     enableSshSupport = true;
   };

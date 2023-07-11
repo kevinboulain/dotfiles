@@ -1,4 +1,4 @@
-{ myLib, pkgs, ... }: {
+{ pkgs, ... }: {
   programs.emacs = {
     enable = true;
     package = pkgs.emacs-nox;
@@ -43,7 +43,11 @@
     ];
   };
   # https://www.gnu.org/software/emacs/manual/html_node/emacs/Find-Init.html
-  home.file = (myLib.copyTrees ./. [ ".emacs.d" ]) // {
+  home.file = {
+    ".emacs.d" = {
+      source = ./.emacs.d;
+      recursive = true;
+    };
     ".emacs.d/readme.org".source = ./readme.org;
   };
   home.packages = with pkgs; [

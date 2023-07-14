@@ -17,6 +17,17 @@
       "browser.privatebrowsing.autostart" = true;
       # Why isn't that the default...
       "privacy.resistFingerprinting" = true;
+      # Always use the system resolver.
+      # https://wiki.mozilla.org/Trusted_Recursive_Resolver
+      "network.trr.mode" = 5;
+      # Compact mode.
+      "browser.uidensity" = 1;
+      # Disable Pocket.
+      "extensions.pocket.enabled" = false;
+      # Disable the new tab, riddled with sponsors.
+      "browser.newtabpage.enabled" = false;
+      # And point the home page to the new tab page.
+      "browser.startup.homepage" = "about:newtab";
     };
   };
 }

@@ -23,7 +23,6 @@ in
         "gammastep"
         "mako"
         "sway"
-        "xkb"
       ];
 
       home.packages = with pkgs; [

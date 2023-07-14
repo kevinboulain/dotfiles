@@ -4,7 +4,7 @@
 
     # Always apply the policy (even for already connected devices) and block by
     # default.
-    implictPolicyTarget = "block";  # Typo...
+    implicitPolicyTarget = "block";
     presentDevicePolicy = "apply-policy";
     presentControllerPolicy = "apply-policy";
     insertedDevicePolicy = "apply-policy";

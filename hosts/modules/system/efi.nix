@@ -3,23 +3,14 @@
   # The evaluation will fail if fileSystems."/boot/efi".device is left unset.
   fileSystems."/boot/efi".fsType = "vfat";
 
-  # Current GRUB version needs to be patched to find the LUKS 2 header.
-  nixpkgs.overlays = [
-    # https://discourse.nixos.org/t/is-there-grub-patched-for-booting-from-partition-encrypted-with-luks2/18398
-    (final: parent: {
-      grub2 = parent.grub2.overrideAttrs (old: {
-        patches = old.patches ++ [ ./grub2_luks2.patch ];
-      });
-    })
-  ];
-
   boot.loader = {
     efi = {
       canTouchEfiVariables = true;
       efiSysMountPoint = "/boot/efi";
     };
     grub = {
-      enable = true;
+      # LUKS 2 support was introduced in GRUB 2.12.
+      enable = assert builtins.compareVersions pkgs.grub2.version "2.12" >= 0; true;
       device = "nodev";  # No BIOS.
       efiSupport = true;
       enableCryptodisk = true;

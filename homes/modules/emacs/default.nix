@@ -16,6 +16,7 @@
       flycheck
       geiser
       geiser-guile
+      glsl-mode
       go-mode
       htmlize
       idris-mode

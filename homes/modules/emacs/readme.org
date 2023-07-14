@@ -27,6 +27,7 @@
       - [[#bqn][BQN]]
       - [[#c][C]]
       - [[#dart][Dart]]
+      - [[#glsl][GLSL]]
       - [[#go][Go]]
       - [[#idris][Idris]]
       - [[#lua][Lua]]
@@ -733,13 +734,24 @@ pub global activate dart_language_server
 (use-package dart-mode)
 #+end_src
 
+**** [[https://www.opengl.org/][GLSL]]
+
+Mainly for syntax highlighting and indentation.
+
+#+begin_src emacs-lisp
+(use-package glsl-mode
+  :config
+  ;; Same as https://github.com/dominikh/go-mode.el/pull/212
+  (modify-syntax-entry ?_ "_" glsl-mode-syntax-table))
+#+end_src
+
 **** [[https://golang.org/][Go]]
 
 #+begin_src emacs-lisp
 (use-package go-mode
   :config
   ;; https://github.com/dominikh/go-mode.el/pull/212
-  (modify-syntax-entry ?_  "_" go-mode-syntax-table))
+  (modify-syntax-entry ?_ "_" go-mode-syntax-table))
 #+end_src
 
 **** [[https://www.idris-lang.org/][Idris]]

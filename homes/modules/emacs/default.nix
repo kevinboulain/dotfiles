@@ -21,6 +21,7 @@
       htmlize
       idris-mode
       interaction-log
+      jinx
       lua-mode
       magit
       marginalia
@@ -52,7 +53,6 @@
     ".emacs.d/readme.org".source = ./readme.org;
   };
   home.packages = with pkgs; [
-    hunspell
     hunspellDicts.en-us
     hunspellDicts.fr-any
   ];

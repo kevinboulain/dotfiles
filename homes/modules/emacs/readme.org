@@ -902,49 +902,24 @@ I only want comments to work out of the box.
 
 **** Spell checking
 
-You'll need to install [[https://hunspell.github.io/][Hunspell]].
-
 Dictionaries may or may not be provided by your distribution. On Debian,
 dictionaries are available via =hunspell-*= packages. You can always retrieve
 =.aff= & =.dic= files here:
 - =en_*=: http://wordlist.aspell.net/dicts/
 - =fr-*=: https://grammalecte.net/download.php?prj=fr
 
-Setup is a bit tricky:
+I used to use =ispell= and =flyspell= but
+[[https://github.com/minad/jinx][Jinx]] is less tricky to set up and feels
+snappier:
 
 #+begin_src emacs-lisp
-;; http://emacs.stackexchange.com/a/21379
-
-(defconst my--spellchecker "hunspell")
-(defconst my--languages "fr-toutesvariantes,en_US")
-
-(if (and (>= emacs-major-version 25)
-         (executable-find my--spellchecker)
-         (require 'ispell nil t))
-    (progn
-      (setq ispell-program-name my--spellchecker)
-      (setq ispell-dictionary my--languages)
-      ;; The following may crash with:
-      ;;   Wrong type argument: stringp, nil
-      ;; If Hunspell isn't able to find dictionaries:
-      ;;   export LC_ALL=en_US.UTF-8
-      ;;   export DICPATH=~/Library/Spelling
-      ;; Use 'hunspell -D' to check Hunspell's environment.
-      (ispell-set-spellchecker-params)
-      (ispell-hunspell-add-multi-dic my--languages)
-      ;; It significantly slows down Emacs, so no `prog-mode-hook' for now.
-      ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-      ;; (add-hook 'text-mode-hook 'ispell-buffer)
-      ;; (add-hook 'prog-mode-hook 'ispell-comments-and-strings)
-      ;; (add-hook 'text-mode-hook 'flyspell-buffer)
-      (add-hook 'text-mode-hook 'flyspell-mode))
-  (message "Unable to load ispell due to missing dependency."))
+(use-package jinx
+  :hook (after-init . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages))
+  :config
+  (setq jinx-languages "fr-toutesvariantes en_US"))
 #+end_src
-
-If not run automatically, use =M-x flyspell-{buffer,mode}=. Use =M-$= to correct
-an highlighted word.
-
-It may cause noticeable slowdowns.
 
 **** [[https://wiki.contextgarden.net/][ConTeXt]]
 
@@ -1033,8 +1008,7 @@ IRC clients:
         lui-time-stamp-position 'right-margin)
   (add-hook 'circe-mode-hook (lambda () (setq-local right-margin-width 5)))
 
-  (setq lui-flyspell-p t ; Enable spell checking (see [[Spell checking]]).
-        lui-max-buffer-size (* 1 1024 1024)) ; Scrollback.
+  (setq lui-max-buffer-size (* 1 1024 1024)) ; Scrollback.
 
   ;; Periodically ping the server.
   (require 'circe-lagmon)

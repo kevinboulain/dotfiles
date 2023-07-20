@@ -36,7 +36,8 @@ bindsym $mod+Control+$down splitv
 # Floating mode.
 bindsym $mod+Shift+space floating toggle
 # bindsym $mod+space focus mode_toggle
-floating_modifier $mod normal  # Move and resize with left and right click.
+# Move and resize with left and right click.
+floating_modifier $mod
 
 # I'll probably never user that, let's see. It's a bit counter intuitive
 # compared to bspwm.

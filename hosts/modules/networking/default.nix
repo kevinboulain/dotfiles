@@ -51,7 +51,7 @@ in
     };
     listenPlain = [ "127.0.0.1:53" "[::1]:53" ];
     extraConfig = ''
-      log_level('info')
+      log_level('warning') -- info includes Prometheus scrapes.
 
       modules = {
        'dns64',

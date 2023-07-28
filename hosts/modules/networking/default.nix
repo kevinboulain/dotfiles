@@ -89,8 +89,8 @@ in
   services.openssh = {
     enable = true;
     extraConfig = ''
-      # Only allow users with privileges to log in remotely.
-      AllowGroups root wheel
+      # Don't allow anyone by default.
+      AllowUsers !*
     '';
     hostKeys = [{
       # Not a bind mount because /etc/ssh hosts other things we don't care

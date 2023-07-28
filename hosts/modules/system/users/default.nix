@@ -1,4 +1,4 @@
-{ config, myPublicKey, myStateDirectory, ... }:
+{ config, lib, myPublicKey, myStateDirectory, ... }:
 let
   inherit (import ./lib.nix { inherit myStateDirectory; }) userHomeDirectory;
 in
@@ -21,4 +21,8 @@ in
       };
     };
   };
+
+  services.openssh.extraConfig = lib.mkAfter ''
+    AllowUsers root ether
+  '';
 }

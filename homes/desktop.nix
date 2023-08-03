@@ -18,11 +18,6 @@
     slurp
     wl-clipboard
 
-    # For Emacs.
-    notmuch
-    notmuch.emacs
-    slrn
-
     # More fonts.
     (iosevka-bin.override { variant = "aile"; })
     (iosevka-bin.override { variant = "etoile"; })

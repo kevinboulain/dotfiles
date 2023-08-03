@@ -5,6 +5,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    sin = {
+      url = "github:ether42/sin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     sops-nix = {
       url = "github:mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,7 +18,7 @@
     };
   };
 
-  outputs = { home-manager, nixpkgs, sops-nix, ... }: {
+  outputs = { home-manager, nixpkgs, sin, sops-nix, ... }: {
     nixosConfigurations =
       let
         # Sadly, it doesn't look like there's an easy way to get the public key
@@ -74,7 +78,10 @@
               boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/a8cb3a4c-3b49-44db-a476-fc02551063b3";
 
               home-manager = {
-                extraSpecialArgs.myLib = import ./homes/lib { inherit (nixpkgs) lib; };
+                extraSpecialArgs = {
+                  inherit sin;
+                  myLib = import ./homes/lib { inherit (nixpkgs) lib; };
+                };
                 users =
                   let
                     home.stateVersion = "22.11";
@@ -89,6 +96,7 @@
                         inherit home wayland;
                         imports = [
                           ./homes/desktop.nix
+                          ./homes/modules/emacs/notmuch.nix
                           ./homes/modules/yubikey.nix
                         ];
                       };

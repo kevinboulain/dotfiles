@@ -40,7 +40,28 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "sin": "sin",
         "sops-nix": "sops-nix"
+      }
+    },
+    "sin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1691099038,
+        "narHash": "sha256-uLXPQs/gUsgvra46UWPhgcS3C1RGxZdNwDYvQ5m+wKc=",
+        "owner": "ether42",
+        "repo": "sin",
+        "rev": "2522a496400e40645dfd6a4523528747239a19a6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ether42",
+        "repo": "sin",
+        "type": "github"
       }
     },
     "sops-nix": {

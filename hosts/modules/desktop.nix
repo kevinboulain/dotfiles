@@ -1,4 +1,4 @@
-{ myLib, pkgs, ... }:
+{ config, myLib, pkgs, ... }:
 let
   inherit (myLib) state;
 in
@@ -52,4 +52,8 @@ in
     alsa.enable = true;
     pulse.enable = true;
   };
+
+  # Requires Avahi for printer discovery:
+  # https://github.com/apple/cups/issues/5452
+  services.printing.enable = assert config.services.avahi.enable; true;
 }

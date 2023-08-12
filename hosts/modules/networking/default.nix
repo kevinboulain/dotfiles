@@ -25,17 +25,20 @@ in
     logRefusedPackets = true;  # Wasted my time debugging dropped packets...
   };
 
-  # DNS resolution is handed off to systemd-resolved (including mDNS)...
+  # DNS resolution is handed off to systemd-resolved...
   services.resolved = {
     enable = true;
     dnssec = "true";
     llmnr = "false";
     fallbackDns = config.networking.nameservers;  # Never fallback to the compiled-in list.
+    extraConfig = assert config.services.avahi.enable; ''
+      # Conflicts with Avahi.
+      MulticastDNS=false
+    '';
     # Do not disable the stub listener: it ensures clients using
     # /etc/resolv.conf (e.g.: dig) are redirected to resolved and that the DNS
     # servers are used as configured.
   };
-  networking.firewall.allowedUDPPorts = [ 5353 ];  # Allow mDNS.
   # ...but it uses the local DNS server.
   # Note it's still possible to add a link-local DNS and it will have higher
   # priority if it specifies Domains=~. (like Mullvad does, see resolvectl).
@@ -79,6 +82,17 @@ in
       view:addr('0.0.0.0/0', policy.all(policy.FLAGS('DNS64_DISABLE')))
       view:addr('::/0', policy.all(policy.FLAGS('DNS64_DISABLE')))
     '';
+  };
+
+  # Enable mDNS (discovery of printers, chromecasts, ...).
+  # resolved support is spotty: https://github.com/apple/cups/issues/5452
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
   };
 
   services.prometheus.scrapeConfigs = [{

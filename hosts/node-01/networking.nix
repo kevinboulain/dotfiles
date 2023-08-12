@@ -11,8 +11,6 @@ let
         # resolvectl).
         UseDNS = assert config.services.kresd.enable; false;
       };
-      # mDNS needs to be enabled at the link level when using systemd-networkd.
-      networkConfig.MulticastDNS = true;
     };
   };
 in

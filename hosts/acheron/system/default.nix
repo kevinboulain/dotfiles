@@ -70,7 +70,7 @@ in
   # https://gitlab.freedesktop.org/drm/intel/-/issues/6506
   # Audio has been broken between 6.0.3 and 6.0.4:
   # https://bugzilla.kernel.org/show_bug.cgi?id=216613
-  boot.kernelPackages = pkgs.linuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Tells ccache to set up the environment for a package:
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/programs/ccache.nix#L58

@@ -10,19 +10,14 @@
       circe
       cmake-mode
       company
-      dart-mode
       eglot
       ethan-wspace
       flycheck
-      geiser
-      geiser-guile
       glsl-mode
       go-mode
       htmlize
-      idris-mode
       interaction-log
       jinx
-      lua-mode
       magit
       marginalia
       markdown-mode
@@ -35,7 +30,6 @@
       rainbow-delimiters
       rustic
       s
-      scad-mode
       tao-theme
       toc-org
       use-package

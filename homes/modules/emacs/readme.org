@@ -621,6 +621,8 @@ but now use [[https://github.com/polymode/polymode][polymode]]:
 
 **** [[https://mlochbaum.github.io/BQN][BQN]]
 
+TODO: Tree-sitter support
+
 #+begin_src emacs-lisp
 (use-package bqn-mode
   ;; If the layout isn't installed, use \ to enter the characters.
@@ -628,6 +630,12 @@ but now use [[https://github.com/polymode/polymode][polymode]]:
 #+end_src
 
 **** C
+
+Remap to use Tree-sitter:
+
+#+begin_src emacs-lisp
+(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+#+end_src
 
 Style configuration:
 
@@ -641,7 +649,7 @@ clangd should work out of the box with =compile_commands.json=, which can be
 generated with [[https://github.com/Kitware/CMake][CMake]]:
 
 #+begin_src emacs-lisp
-(use-package cmake-mode)
+(require 'cmake-ts-mode)
 #+end_src
 
 Set up =.dir-locals.el=:
@@ -663,6 +671,8 @@ To format source code relying on
 
 **** [[https://www.opengl.org/][GLSL]]
 
+TODO: Tree-sitter support
+
 Mainly for syntax highlighting and indentation.
 
 #+begin_src emacs-lisp
@@ -675,19 +685,24 @@ Mainly for syntax highlighting and indentation.
 **** [[https://golang.org/][Go]]
 
 #+begin_src emacs-lisp
-(use-package go-mode
-  :config
-  ;; https://github.com/dominikh/go-mode.el/pull/212
-  (modify-syntax-entry ?_ "_" go-mode-syntax-table))
+(require 'go-ts-mode)
 #+end_src
 
 **** [[https://nixos.org][Nix]]
+
+TODO: Tree-sitter support
 
 #+begin_src emacs-lisp
 (use-package nix-mode)
 #+end_src
 
 **** [[https://www.python.org/][Python]]
+
+Remap to use Tree-sitter:
+
+#+begin_src emacs-lisp
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+#+end_src
 
 You'll need to install a
 [[https://github.com/python-lsp/python-lsp-server][Python language server]]
@@ -709,9 +724,11 @@ Flycheck should automatically use the installed linters, like
 
 **** [[https://www.rust-lang.org/][Rust]]
 
-[[https://github.com/brotzeit/rustic][rustic]] is a fork of
-[[https://github.com/rust-lang/rust-mode][rust-mode]] with supposedly more
-features and a better integration (like out of the box support for Flycheck).
+TODO: Tree-sitter support https://github.com/brotzeit/rustic/pull/527
+
+[[https://github.com/brotzeit/rustic][rustic]] started as a fork of
+[[https://github.com/rust-lang/rust-mode][rust-mode]] but now extends it (for
+example, with out-of-the-box Flycheck support).
 
 #+begin_src emacs-lisp
 (use-package rustic
@@ -774,19 +791,8 @@ handle all of Bash's tricks.
 
 **** [[https://yaml.org/][YAML]]
 
-I only want comments to work out of the box.
-
 #+begin_src emacs-lisp
-(defconst my--yaml-mode-syntax-table
-  (let ((st (make-syntax-table)))
-    (modify-syntax-entry ?# "<" st)
-    (modify-syntax-entry ?\n ">" st)
-    st))
-
-(define-derived-mode my-yaml-mode fundamental-mode "YAML"
-  (setq-local comment-start "#"))
-
-(add-to-list 'auto-mode-alist '("\\.ya?ml$" . my-yaml-mode))
+(require 'yaml-ts-mode)
 #+end_src
 
 *** Text

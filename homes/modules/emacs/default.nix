@@ -1,20 +1,18 @@
 { pkgs, ... }: {
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs-nox;
+    package = pkgs.emacs29-nox;
     extraPackages = epkgs: with epkgs; [
       ace-window
       avy
       benchmark-init
       bqn-mode
       circe
-      cmake-mode
       company
       eglot
       ethan-wspace
       flycheck
       glsl-mode
-      go-mode
       htmlize
       interaction-log
       jinx
@@ -32,6 +30,7 @@
       s
       tao-theme
       toc-org
+      treesit-grammars.with-all-grammars
       use-package
       vertico
       which-key

@@ -4,16 +4,6 @@
 (defconst gc-cons-threshold-backup gc-cons-threshold)
 (setq gc-cons-threshold (* 100 1024 1024))
 
-(defun my--find-loaded-user-init-file ()
-  "Find out if this file was loaded with -l or --load and return its path."
-  (require 'cl-macs)
-  (let (last)
-    (cl-dolist (argument command-line-args)
-      (when (and (member last '("-l" "--load"))
-                 (string= (file-truename argument) (file-truename load-file-name)))
-        (cl-return argument))
-      (setq last argument))))
-
 (defun my--load (path-base)
   "Try to load PATH-BASE (with or without extension) or warn about it."
   (require 'subr-x)
@@ -45,6 +35,8 @@ When newer, stored alongside its source."
   "Try to load the tangled Org file PATH-BASE (without extension)."
   (when (my--org-tangle path-base)
     (my--load path-base)))
+
+;; If needed, --init-directory will set `user-emacs-directory'.
 
 ;; The whole configuration is documented in the readme.org file.
 (my--load-org (expand-file-name "readme" user-emacs-directory))

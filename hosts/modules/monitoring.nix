@@ -3,9 +3,6 @@ let
   inherit (myLib) state;
 in
 {
-  # TODO: enable the Btrfs exporter:
-  # https://github.com/prometheus/node_exporter/pull/2634
-
   fileSystems = state.binds [
     # Stores timeseries.
     "/var/lib/prometheus2"

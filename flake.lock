@@ -41,7 +41,8 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "sin": "sin",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "swaybar": "swaybar"
       }
     },
     "sin": {
@@ -84,6 +85,26 @@
       "original": {
         "owner": "mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "swaybar": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1693167728,
+        "narHash": "sha256-LzPXZ2Ls2TL6634TYmuf46SCucUP+0yglofh2r2SE1M=",
+        "owner": "ether42",
+        "repo": "swaybar",
+        "rev": "e1269a0a692c25c053808d7d0bdb641cefdf4b55",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ether42",
+        "repo": "swaybar",
         "type": "github"
       }
     }

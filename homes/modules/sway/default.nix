@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, swaybar, ... }:
 with lib;
 let
   cfg = config.wayland.windowManager.sway;
@@ -35,6 +35,31 @@ in
           source = ./sway;
           recursive = true;
         };
+        "sway/config.d/theme".text = ''
+          # (insert (my-export-theme-sway))
+          default_border pixel 1
+          smart_gaps on
+          gaps inner 3
+          output * bg #171717 solid_color
+          client.focused #00000000 #616161 #00000000 #9E9E9E
+          client.focused_inactive #00000000 #252525 #00000000 #3C3C3C
+          client.unfocused #00000000 #252525 #00000000 #3C3C3C
+
+          bar {
+            mode dock
+            position bottom
+            font "Iosevka Term 8"
+            status_command ${swaybar.packages.${pkgs.system}.default}/bin/swaybar 2>> "''${XDG_RUNTIME_DIR:-/tmp}"/swaybar.log
+            colors {
+              background #171717
+              statusline #DADADA
+              separator #616161
+              focused_workspace #171717 #171717 #FAFAFA
+              active_workspace #171717 #171717 #DADADA
+              inactive_workspace #171717 #171717 #616161
+            }
+          }
+        '';
       };
 
       home.packages = with pkgs; [

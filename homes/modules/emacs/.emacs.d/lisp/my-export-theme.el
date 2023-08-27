@@ -35,7 +35,7 @@ bar {
   mode dock
   position bottom
   font \"Iosevka Term 8\"
-  status_command ~/.cargo/bin/swaybar 2>> /tmp/swaybar_$USER.log
+  status_command ${status-command}
   colors {
     background ${background}
     statusline ${foreground}
@@ -44,7 +44,9 @@ bar {
     active_workspace ${background} ${background} ${foreground}
     inactive_workspace ${background} ${background} ${status}
   }
-}" 'aget my-export-theme--faces))
+}" 'aget (cons ; Work around the lack of escape in s-format...
+          '("status-command" . "${swaybar.packages.${pkgs.system}.default}/bin/swaybar 2>> \"''${XDG_RUNTIME_DIR:-/tmp}\"/swaybar.log")
+          my-export-theme--faces)))
 
 (defun my-export-theme-mako ()
   (s-format "# (insert (my-export-theme-mako))

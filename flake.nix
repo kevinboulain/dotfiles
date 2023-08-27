@@ -16,9 +16,13 @@
       # dependency.
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
+    swaybar = {
+      url = "github:ether42/swaybar";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { home-manager, nixpkgs, sin, sops-nix, ... }: {
+  outputs = { home-manager, nixpkgs, sin, sops-nix, swaybar, ... }: {
     nixosConfigurations =
       let
         # Sadly, it doesn't look like there's an easy way to get the public key
@@ -79,7 +83,7 @@
 
               home-manager = {
                 extraSpecialArgs = {
-                  inherit sin;
+                  inherit sin swaybar;
                   myLib = import ./homes/lib { inherit (nixpkgs) lib; };
                 };
                 users =

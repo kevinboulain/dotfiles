@@ -176,6 +176,8 @@ in
       modesetting.enable = true;
       # The default.
       package = config.boot.kernelPackages.nvidiaPackages.stable;
+      # Opt for the open source driver.
+      open = true;
       # Largely copied from
       # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nvidia-x11/default.nix
       # I didn't manage to use an overlay:

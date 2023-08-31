@@ -1,7 +1,6 @@
 { pkgs, ... }: {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox-wayland;
     profiles."default".settings = {
       # Scroll speed is way too fast under Wayland and setting it to 2 makes
       # it behave like other applications.

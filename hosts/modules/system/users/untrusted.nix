@@ -5,7 +5,7 @@ in
 {
   users.users.untrusted = {
     isNormalUser = true;
-    passwordFile = config.sops.secrets.untrusted.path;
+    hashedPasswordFile = config.sops.secrets.untrusted.path;
     home = "${userHomeDirectory}/untrusted";
     homeMode = "0750";
   };

@@ -664,9 +664,7 @@ To format source code relying on
 [[https://clang.llvm.org/docs/ClangFormat.html][clang-format]]:
 
 #+begin_src emacs-lisp
-(when (require 'clang-format nil t)
-  ;; (global-set-key [C-M-tab] 'clang-format-region)
-  )
+(use-package clang-format)
 #+end_src
 
 **** [[https://www.opengl.org/][GLSL]]

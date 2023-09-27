@@ -8,6 +8,7 @@
       benchmark-init
       bqn-mode
       circe
+      clang-format
       company
       eglot
       ethan-wspace

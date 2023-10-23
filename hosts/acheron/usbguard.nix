@@ -22,5 +22,8 @@
 
     # Semi-permanent.
     allow label "yubikey" via-port "1-4" with-connect-type "hotplug" hash "vTQDxYra1S117L9vQ5ccQRR6oQs4kBp2oXcZtvDcCSM=" parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o="
+
+    # Others.
+    allow label "headset" via-port one-of { "1-5" "1-7" } with-connect-type "hotplug" hash one-of { "zozrkpqiuwzyta+2+UldrAOy2PBBSgdCETMwepifT1A=" "Eyk7jsp3AaJsputifdofQfImf47RwHENkFj8GaxhjcQ=" } parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o="
   '';
 }

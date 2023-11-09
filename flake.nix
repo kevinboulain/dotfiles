@@ -157,6 +157,50 @@
               };
             }];
           };
+
+          node-02 = nixpkgs.lib.nixosSystem {
+            inherit specialArgs;
+            system = "aarch64-linux";
+            modules = [
+              ./hosts/node-02
+              ./hosts/modules/home-manager.nix
+              ./hosts/modules/impermanence
+              ./hosts/modules/impermanence/backup.nix
+              ./hosts/modules/locale.nix
+              ./hosts/modules/monitoring.nix
+              ./hosts/modules/networking
+              ./hosts/modules/nix
+              ./hosts/modules/packages.nix
+              ./hosts/modules/system
+              ./hosts/modules/system/efi.nix
+              ./hosts/modules/system/users
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+            ] ++ [{
+              networking.hostName = "node-02";
+              time.timeZone = "Europe/Paris";
+              system.stateVersion = "23.05";
+
+              fileSystems."/boot".device = "/dev/disk/by-uuid/89733135-b593-4106-9801-480900e0facb";
+              fileSystems."/boot/efi".device = "/dev/disk/by-uuid/2C92-557F";
+              boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/c3427944-91ea-4314-8844-462850458ce5";
+
+              home-manager = {
+                extraSpecialArgs.myLib = import ./homes/lib { inherit (nixpkgs) lib; };
+                users =
+                  let
+                    minimal = { ... }: {
+                      imports = [ ./homes/minimal.nix ];
+                      home.stateVersion = "23.05";
+                    };
+                  in
+                    {
+                      root = minimal;
+                      ether = minimal;
+                    };
+              };
+            }];
+          };
         };
   };
 }

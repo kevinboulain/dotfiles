@@ -10,6 +10,7 @@ keys:
  #  nix-shell -p sops --run "sops updatekeys hosts/modules/impermanence/backup.yaml"
  - &acheron age1y6jvnvd0329zev8jt5xy0gms5f2jdn8ak5hjqcfekq79jjnem5hqdrgc63
  - &node-01 age1qv05n6qsv32z2a7krn48njv7jhwzesq0mlsgv3rzddu3r7p5famst79uk5
+ - &node-02 age10gz3e4g9vdsp7unpa4gde0jq36wdv3ptumldhhk6kvmkk58vjefqzz6jfg
 
 creation_rules:
  - path_regex: ^hosts/modules/.*\.yaml$
@@ -19,6 +20,7 @@ creation_rules:
      age:
       - *acheron
       - *node-01
+      - *node-02
 
  - path_regex: ^hosts/acheron/.*\.yaml$
    key_groups:
@@ -33,3 +35,10 @@ creation_rules:
       - *myself
      age:
       - *node-01
+
+ - path_regex: ^hosts/node-02/.*\.yaml$
+   key_groups:
+   - pgp:
+      - *myself
+     age:
+      - *node-02

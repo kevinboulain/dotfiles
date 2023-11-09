@@ -13,7 +13,7 @@ shopt -s extglob
 
 parted --script "${device?}" mklabel gpt
 parted --script --align optimal "${device?}" mkpart EFI 0% 256MiB
-parted "${device?}" set 1 esp on
+parted --script "${device?}" set 1 esp on
 mkfs.fat -n EFI -F32 "${device?}"?(p)1
 #+end_src
 
@@ -71,6 +71,7 @@ mount --label EFI --target /mnt/boot/efi
 mount -o subvol=system/nix,compress=zstd,noatime /dev/mapper/root /mnt/nix
 mount -o subvol=system/swap,compress=zstd /dev/mapper/root /mnt/swap
 btrfs filesystem mkswapfile --size 16G /mnt/swap/swap # GiB
+# You might want to swapon /mnt/swap/swap.
 # Update the kernel's resume_offset with this value:
 btrfs inspect-internal map-swapfile --resume-offset /mnt/swap/swap
 mount -o subvol=state,compress=zstd /dev/mapper/root /mnt/srv
@@ -135,6 +136,7 @@ mount --label EFI --target /mnt/boot/efi
 mount -o subvol=system/nix,compress=zstd,noatime /dev/mapper/root /mnt/nix
 mount -o subvol=system/swap,compress=zstd /dev/mapper/root /mnt/swap
 btrfs filesystem mkswapfile --size 2G /mnt/swap/swap # GiB
+# You might want to swapon /mnt/swap/swap.
 mount -o subvol=state,compress=zstd /dev/mapper/root /mnt/srv
 #+end_src
 

@@ -1,16 +1,5 @@
-{ config, lib, myStateDirectory, pkgs, ... }:
+{ config, lib, ... }:
 let
-  wwwDirectory = "${myStateDirectory}/www";
-  # 499 is a special case of 502 and is refused by nginx.
-  errorCodes = map builtins.toString ((lib.range 400 498) ++ (lib.range 500 599));
-  emptyLocation = code: {
-    # 'add_header' would add another content-type header instead of overwriting
-    # the default.
-    extraConfig = ''
-      types {} default_type 'text/html';
-      return ${builtins.toString code} '<!DOCTYPE html><html><head><title>...</title></head><body style="background-color:black;"></body></html>';
-    '';
-  };
   # Most of these are for the nginxlog Prometheus exporter and this is mostly an
   # extension of the default 'combined' log format:
   # https://docs.nginx.com/nginx/admin-guide/monitoring/logging/#setting-up-the-access-log
@@ -28,7 +17,6 @@ in
   # For Git repositories.
   services.fcgiwrap.enable = true;
 
-  # A dumb configuration to serve files.
   services.nginx = {
     enable = true;
     commonHttpConfig = ''
@@ -40,35 +28,10 @@ in
       # And also send a copy to the nginxlog Prometheus exporter:
       access_log syslog:server=[::1]:9110 access_format;
     '';
-    virtualHosts.localhost = {
-      extraConfig = builtins.concatStringsSep "\n" (map (code: ''error_page ${code} @${code};'') errorCodes);
-      locations = {
-        "= /" = emptyLocation 200;
-        "= /robots.txt".extraConfig = ''
-          add_header X-Robots-Tag "noindex";
-          return 200 'User-agent: *\nDisallow: /\n';
-        '';
-        "~ \\.git".extraConfig = ''
-          # https://git-scm.com/docs/git-http-backend
-          client_max_body_size 0;
-          include ${config.services.nginx.package}/conf/fastcgi_params;
-          fastcgi_pass unix:/var/run/fcgiwrap.sock;
-          fastcgi_param SCRIPT_FILENAME ${pkgs.git}/bin/git-http-backend;
-          fastcgi_param GIT_HTTP_EXPORT_ALL "";
-          fastcgi_param GIT_PROJECT_ROOT ${wwwDirectory};
-          fastcgi_param PATH_INFO $uri;
-        '';
-        "/".extraConfig = ''
-           root "${wwwDirectory}";
-           try_files $uri =404;  # Only root would result in error logs for 404s.
-        '';
-      } // builtins.listToAttrs (map
-        (code: { name = "@" + code; value = emptyLocation code; })
-        errorCodes);
-    };
   };
-  networking.firewall.allowedTCPPorts = [ 80 ];
-  systemd.tmpfiles.rules = [ "d ${wwwDirectory} 1777 root root - -" ];
+  networking.firewall.allowedTCPPorts = [ 80 ] ++ (lib.optional config.security.acme.acceptTerms 443);
+
+  security.acme.defaults.reloadServices = [ "nginx" ];
 
   services.prometheus.exporters.nginxlog = {
     enable = true;

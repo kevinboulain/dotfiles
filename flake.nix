@@ -52,6 +52,8 @@
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking
               ./hosts/modules/networking/iwd.nix
+              ./hosts/modules/nginx
+              ./hosts/modules/nginx/static.nix
               ./hosts/modules/nix
               ./hosts/modules/nix/ccache.nix
               ./hosts/modules/packages.nix
@@ -124,7 +126,8 @@
               ./hosts/modules/locale.nix
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking
-              ./hosts/modules/nginx.nix
+              ./hosts/modules/nginx
+              ./hosts/modules/nginx/static.nix
               ./hosts/modules/nix
               ./hosts/modules/packages.nix
               ./hosts/modules/system
@@ -163,12 +166,15 @@
             system = "aarch64-linux";
             modules = [
               ./hosts/node-02
+              ./hosts/modules/acme.nix
               ./hosts/modules/home-manager.nix
               ./hosts/modules/impermanence
               ./hosts/modules/impermanence/backup.nix
               ./hosts/modules/locale.nix
+              ./hosts/modules/matrix.nix
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking
+              ./hosts/modules/nginx
               ./hosts/modules/nix
               ./hosts/modules/packages.nix
               ./hosts/modules/system

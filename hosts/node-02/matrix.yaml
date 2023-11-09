@@ -1,0 +1,32 @@
+registration_shared_secret: ENC[AES256_GCM,data:MCB0/uWRMCB5wyVacFKhubvbenmSIfLdA+Y6aILXtUbNjf++,iv:aOK50LPqJyKmkprKFyjgWFlPRxYosIpeAjy7wUPPFRU=,tag:ARxBpWeQu2iJFq+emoLO2Q==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age10gz3e4g9vdsp7unpa4gde0jq36wdv3ptumldhhk6kvmkk58vjefqzz6jfg
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvZysrTVdMSkJtdmZMdXhR
+            d0FiYXROTlRnQTNnQXNlTmxFWXdsMHZqWVFnCjVnNUEvSlhYaTk5eEFmdldncVgw
+            TENIbklKYTlRS0VXRTA2NWRQbFlNZU0KLS0tIE9NWVVvWnZQSWV6ZUdMR0xuM2RQ
+            UUlXOXJRKzU3UFNiNXpwcjUzY1pNWUEKE6is+Z36gm4uELhxyx0K8S40UlOxyrkP
+            KJH/HS5hPfk7dO2f4RlIPEI3MgcBEo43K3O7HFp9l5pxSJMChk3BOQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2023-11-09T22:10:47Z"
+    mac: ENC[AES256_GCM,data:JsXUdgq7M/TWr/YMoil0sQ/2rriyxLzD4JKDSyKylVyyvOXOosyNuAMS6/fuIPRwcGwDe3Mc1SPiLjIm7zoTPW6fqRiedV/sPhaBJrVuNbKbYhGovBtc4kY9gWdVOayAEOeHFTRmsg2mIIqKM5Xst2rpG2dO8LEfhiC9sjkQ0AI=,iv:ZsYrvCW0VSRKwGmGuK/col1keHMfLXASA5pjSQUE4aE=,tag:t1YdeBNIA9esKDvD6skgMQ==,type:str]
+    pgp:
+        - created_at: "2023-11-09T22:09:16Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hF4DLdM+dvDJzsISAQdAB3G+5I1OSknnPlUakr7tbbCuOA6RdQdE0mAAp3npojww
+            1TC2gEKouVe8Y9imISkg6ZtZQLzT45me4OqSERpjZLQ8+Bsqd6ssZFhY0unWUa+L
+            0lYB20TO/FGwg8tKiCd3AmWHPOC7btQrUx6rOExG/qJTQt6Cj68rH6r50ya+zCNa
+            gEP/up8dRspy4P6YVfOfEtq2ZOFMxwu+dcMdl9zpNJg76lFkGGeYEw==
+            =HRBc
+            -----END PGP MESSAGE-----
+          fp: 7098af172f287ddc11270307856556eca9f7b7f1
+    unencrypted_suffix: _unencrypted
+    version: 3.8.1

@@ -94,10 +94,6 @@
                     wayland.windowManager.sway.hiDPIFix = true;
                   in
                     {
-                      root = { ... }: {
-                        inherit home;
-                        imports = [ ./homes/minimal.nix ];
-                      };
                       ether = { ... }: {
                         inherit home wayland;
                         imports = [
@@ -106,9 +102,20 @@
                           ./homes/modules/yubikey.nix
                         ];
                       };
+                      root = { ... }: {
+                        inherit home;
+                        imports = [ ./homes/minimal.nix ];
+                      };
                       untrusted = { ... }: {
                         inherit home wayland;
                         imports = [ ./homes/desktop.nix ];
+                      };
+                      work = { ... }: {
+                        inherit home wayland;
+                        imports = [
+                          ./homes/desktop.nix
+                          ./homes/modules/yubikey.nix
+                        ];
                       };
                     };
               };

@@ -1,4 +1,4 @@
-# qemu-kvm -display curses -netdev bridge,br=nat64,id=net0,helper="$(which qemu-bridge-helper)" -device virtio-net-pci,netdev=net0 -m 4096M -drive file=path/to.iso,media=cdrom
+# qemu-kvm -display curses -netdev bridge,br=nat0,id=net0,helper="$(which qemu-bridge-helper)" -device virtio-net-pci,netdev=net0 -m 4096M -drive file=path/to.iso,media=cdrom
 { config, lib, pkgs, ... }:
 with lib;
 let
@@ -27,8 +27,8 @@ in
 
     # A bridge without any physical interface serving as a gateway.
     # TAP interfaces can be attached for NAT.
-    networking.bridges.nat64.interfaces = [];
-    networking.interfaces.nat64 = {
+    networking.bridges.nat0.interfaces = [];
+    networking.interfaces.nat0 = {
       ipv6.addresses = [{
         address = "fd2a::1";
         prefixLength = 64;
@@ -37,14 +37,14 @@ in
     networking.nat = {
       enable = true;
       enableIPv6 = true;
-      internalInterfaces = [ "nat64" ];
+      internalInterfaces = [ "nat0" ];
     };
 
-    # Allow bridging nat64 from QEMU.
+    # Allow bridging nat0 from QEMU.
     environment.etc."qemu/bridge.conf" = {
       mode = "0644";
       text = ''
-      allow nat64
+      allow nat0
     '';
     };
     security.wrappers.qemu-bridge-helper = {
@@ -59,7 +59,7 @@ in
     services.radvd = {
       enable = assert config.services.kresd.enable; true;
       config = ''
-      interface nat64 {
+      interface nat0 {
         IgnoreIfMissing off;
         AdvSendAdvert on;
         prefix fd2a::/64 {};
@@ -69,7 +69,7 @@ in
     '';
     };
     # And allow to access the local Knot Resolver.
-    networking.firewall.interfaces.nat64.allowedUDPPorts = [ 53 ];
+    networking.firewall.interfaces.nat0.allowedUDPPorts = [ 53 ];
     services.kresd = {
       listenPlain = [ "[fd2a::1]:53" ];
       extraConfig = lib.mkAfter ''

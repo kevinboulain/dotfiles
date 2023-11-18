@@ -14,8 +14,4 @@ in
     # Should be safe. Resolving localhost would require UseDNS.
     AllowUsers untrusted@127.0.0.1 untrusted@::1
   '';
-
-  services.logind.extraConfig = ''
-    KillOnlyUsers=untrusted
-  '';
 }

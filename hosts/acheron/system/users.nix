@@ -10,7 +10,6 @@ in
     work = sopsUserPassword ./users.yaml;
   };
 
-  # TODO: KillOnlyUsers, like untrusted
   users.users.work = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.work.path;

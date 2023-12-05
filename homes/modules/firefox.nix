@@ -14,8 +14,9 @@
       "devtools.editor.keymap" = "emacs";
       # Always start in private browsing.
       "browser.privatebrowsing.autostart" = true;
-      # Why isn't that the default...
-      "privacy.resistFingerprinting" = true;
+      # It breaks stuff, like the timezone (even with
+      # privacy.resistFingerprinting.testing.setTZtoUTC).
+      "privacy.resistFingerprinting" = false;
       # Always use the system resolver.
       # https://wiki.mozilla.org/Trusted_Recursive_Resolver
       "network.trr.mode" = 5;

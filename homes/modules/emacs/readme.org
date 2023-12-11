@@ -655,9 +655,9 @@ generated with [[https://github.com/Kitware/CMake][CMake]]:
 Set up =.dir-locals.el=:
 
 #+begin_src emacs-lisp :tangle no
-((c-mode . ((eval . (progn (require 'eglot)
-                           (add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never")))
-                           (eglot-ensure))))))
+((c-ts-mode . ((eval . (progn (require 'eglot)
+                              (add-to-list 'eglot-server-programs '(c-ts-mode . ("clangd" "-header-insertion=never")))
+                              (eglot-ensure))))))
 #+end_src
 
 To format source code relying on
@@ -722,8 +722,8 @@ pip install -U python-lsp-server[all]
 Set up =.dir-locals.el=:
 
 #+begin_src emacs-lisp :tangle no
-((python-mode . ((eval . (progn (require 'eglot) ; Defaults to pylsp.
-                                (eglot-ensure))))))
+((python-ts-mode . ((eval . (progn (require 'eglot) ; Defaults to pylsp.
+                                   (eglot-ensure))))))
 #+end_src
 
 Flycheck should automatically use the installed linters, like

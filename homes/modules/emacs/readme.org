@@ -694,6 +694,15 @@ TODO: Tree-sitter support
 (use-package nix-mode)
 #+end_src
 
+Set up =.dir-locals.el=:
+
+#+begin_src emacs-lisp :tangle no
+((nix-mode . ((eval . (progn (require 'eglot)
+                             (add-to-list 'eglot-server-programs '(nix-mode . ("nixd")))
+                             (eglot-ensure)))
+              (eval add-hook 'before-save-hook #'nix-format-buffer nil t))))
+#+end_src
+
 **** [[https://www.python.org/][Python]]
 
 Remap to use Tree-sitter:

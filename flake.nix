@@ -73,6 +73,9 @@
               time.timeZone = "Europe/Paris";
               system.stateVersion = "22.11";
 
+              # To ease testing for some of the AArch64 hosts below.
+              boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
               fileSystems."/boot/efi".device = "/dev/disk/by-uuid/87AC-02CE";
               fileSystems."/boot/rescue".device = "/dev/disk/by-uuid/96b89522-deab-42d3-ab43-0040bbb0e47b";
               boot.kernelParams = [

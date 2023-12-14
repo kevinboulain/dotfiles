@@ -29,6 +29,7 @@
       - [[#python][Python]]
       - [[#rust][Rust]]
       - [[#shell][Shell]]
+      - [[#typescript][TypeScript]]
       - [[#yaml][YAML]]
     - [[#text][Text]]
       - [[#spell-checking][Spell checking]]
@@ -794,6 +795,21 @@ handle all of Bash's tricks.
 #+begin_src emacs-lisp
 (setq sh-basic-offset tab-width)
 (add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; Disable the annoying heredoc EOF completion.
+#+end_src
+
+**** [[https://www.typescriptlang.org/][TypeScript]]
+
+Also handles TSX files.
+
+#+begin_src emacs-lisp
+(require 'typescript-ts-mode)
+#+end_src
+
+Set up =.dir-locals.el=:
+
+#+begin_src emacs-lisp :tangle no
+((typescript-ts-mode . ((eval . (progn (require 'eglot) ; Defaults to typescript-language-server.
+                                       (eglot-ensure))))))
 #+end_src
 
 **** [[https://yaml.org/][YAML]]

@@ -39,4 +39,10 @@ in
     enable = true;
     bantime-increment.enable = true;
   };
+
+  sops.secrets.meshPrivateKey = {
+    group = "systemd-network";
+    mode = "0440";
+  };
+  my.mesh.privateKeyFile = config.sops.secrets.meshPrivateKey.path;
 }

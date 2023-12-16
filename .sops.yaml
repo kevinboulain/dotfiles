@@ -9,7 +9,10 @@ keys:
  # Rekey a file:
  #  nix-shell -p sops --run "sops updatekeys hosts/modules/impermanence/backup.yaml"
  - &acheron age1y6jvnvd0329zev8jt5xy0gms5f2jdn8ak5hjqcfekq79jjnem5hqdrgc63
- - &node-01 age1qv05n6qsv32z2a7krn48njv7jhwzesq0mlsgv3rzddu3r7p5famst79uk5
+ - &kubernetes-01 age1nxlu55vncq37wp7e4y6cpqzcd6ywh3df3djkct6tm0cv0v5qvynq6svj2u
+ - &kubernetes-02 age1w4mj7rlq53pgn0pze2zrwhzk879cenfw3ncyg7985thhth9yadvsgjl8n3
+ - &kubernetes-03 age148gs7f8zd5tln4ysngva6naeawpf9vyapecazgsgdft8e49zc3ns2f2wjk
+ - &kubernetes-04 age1lfzal0lh29dlr2dgaxamxuzn5mar6k0nnmpl2kz0hcx2dlsewgnqwvtkvu
  - &node-02 age10gz3e4g9vdsp7unpa4gde0jq36wdv3ptumldhhk6kvmkk58vjefqzz6jfg
 
 creation_rules:
@@ -19,7 +22,10 @@ creation_rules:
       - *myself
      age:
       - *acheron
-      - *node-01
+      - *kubernetes-01
+      - *kubernetes-02
+      - *kubernetes-03
+      - *kubernetes-04
       - *node-02
 
  - path_regex: ^hosts/acheron/.*\.yaml$
@@ -29,12 +35,43 @@ creation_rules:
      age:
       - *acheron
 
- - path_regex: ^hosts/node-01/.*\.yaml$
+ - path_regex: ^hosts/kubernetes/.*\.yaml$
    key_groups:
    - pgp:
       - *myself
      age:
-      - *node-01
+      - *kubernetes-01
+      - *kubernetes-02
+      - *kubernetes-03
+      - *kubernetes-04
+
+ - path_regex: ^hosts/kubernetes/01/.*\.yaml$
+   key_groups:
+   - pgp:
+      - *myself
+     age:
+      - *kubernetes-01
+
+ - path_regex: ^hosts/kubernetes/02/.*\.yaml$
+   key_groups:
+   - pgp:
+      - *myself
+     age:
+      - *kubernetes-02
+
+ - path_regex: ^hosts/kubernetes/03/.*\.yaml$
+   key_groups:
+   - pgp:
+      - *myself
+     age:
+      - *kubernetes-03
+
+ - path_regex: ^hosts/kubernetes/04/.*\.yaml$
+   key_groups:
+   - pgp:
+      - *myself
+     age:
+      - *kubernetes-04
 
  - path_regex: ^hosts/node-02/.*\.yaml$
    key_groups:

@@ -22,7 +22,7 @@
     };
   };
 
-  outputs = { home-manager, nixpkgs, sin, sops-nix, swaybar, ... }: {
+  outputs = { self, home-manager, nixpkgs, sin, sops-nix, swaybar, ... }: {
     nixosConfigurations =
       let
         # Sadly, it doesn't look like there's an easy way to get the public key
@@ -129,53 +129,77 @@
             }];
           };
 
-          node-01 = nixpkgs.lib.nixosSystem {
-            inherit specialArgs;
-            system = "aarch64-linux";
-            modules = [
-              ./hosts/node-01
-              ./hosts/modules/home-manager.nix
-              ./hosts/modules/impermanence
-              ./hosts/modules/impermanence/backup.nix
-              ./hosts/modules/locale.nix
-              ./hosts/modules/monitoring.nix
-              ./hosts/modules/networking
-              ./hosts/modules/nginx
-              ./hosts/modules/nginx/static.nix
-              ./hosts/modules/nix
-              ./hosts/modules/packages
-              ./hosts/modules/system
-              ./hosts/modules/system/efi.nix
-              ./hosts/modules/system/users
-              ./hosts/modules/system/users/ether.nix
-              home-manager.nixosModules.home-manager
-              sops-nix.nixosModules.sops
-            ] ++ [{
-              networking.hostName = "node-01";
-              time.timeZone = "Europe/Paris";
-              system.stateVersion = "22.11";
+        } // (
+          let
+            kubernetes = modules: nixpkgs.lib.nixosSystem {
+              inherit specialArgs;
+              system = "aarch64-linux";
+              modules = [
+                ./hosts/kubernetes
+                ./hosts/modules/impermanence
+                # ./hosts/modules/impermanence/backup.nix
+                ./hosts/modules/locale.nix
+                # ./hosts/modules/monitoring.nix
+                ./hosts/modules/networking
+                ./hosts/modules/networking/mesh.nix
+                ./hosts/modules/nix
+                ./hosts/modules/packages
+                ./hosts/modules/system
+                ./hosts/modules/system/efi.nix
+                ./hosts/modules/system/users
+                sops-nix.nixosModules.sops
+              ] ++ modules ++ [{
+                time.timeZone = "Europe/Paris";
+                system.stateVersion = "23.05";
 
-              fileSystems."/boot".device = "/dev/disk/by-uuid/bde2fa2e-dd10-4a8c-8c1b-2993b8b8b8d3";
-              fileSystems."/boot/efi".device = "/dev/disk/by-uuid/5206-7A9C";
-              boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/7cfc7623-2ee6-4122-8faf-483f3db15264";
-
-              home-manager = {
-                extraSpecialArgs.myLib = import ./homes/lib { inherit (nixpkgs) lib; };
-                users =
-                  let
-                    minimal = { ... }: {
-                      imports = [ ./homes/minimal.nix ];
-                      home.stateVersion = "22.11";
-                    };
-                  in
-                    {
-                      root = minimal;
-                      ether = minimal;
-                    };
-              };
-            }];
-          };
-
+                my.mesh.peers = map (config: config.my.mesh // { inherit (config.networking) fqdnOrHostName; }) [
+                  self.nixosConfigurations.kubernetes-01.config
+                  self.nixosConfigurations.kubernetes-02.config
+                  self.nixosConfigurations.kubernetes-03.config
+                  self.nixosConfigurations.kubernetes-04.config
+                ];
+              }];
+            };
+          in
+            {
+              kubernetes-01 = kubernetes [
+                ./hosts/kubernetes/01
+                {
+                  networking.hostName = "kubernetes-01";
+                  fileSystems."/boot".device = "/dev/disk/by-uuid/8c087709-788a-4ff4-9407-fc9762f4fa8a";
+                  fileSystems."/boot/efi".device = "/dev/disk/by-uuid/12CE-A600";
+                  boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/e7daef36-5353-4c42-b8e3-a19c09ca5626";
+                }
+              ];
+              kubernetes-02 = kubernetes [
+                ./hosts/kubernetes/02
+                {
+                  networking.hostName = "kubernetes-02";
+                  fileSystems."/boot".device = "/dev/disk/by-uuid/20765349-80aa-4eba-9e74-152ab5406718";
+                  fileSystems."/boot/efi".device = "/dev/disk/by-uuid/556C-3D0D";
+                  boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/1a95420c-c73c-42a5-92ae-4d31883d6a26";
+                }
+              ];
+              kubernetes-03 = kubernetes [
+                ./hosts/kubernetes/03
+                {
+                  networking.hostName = "kubernetes-03";
+                  fileSystems."/boot".device = "/dev/disk/by-uuid/28a59c2d-b44f-473a-ac73-306df9b1f23d";
+                  fileSystems."/boot/efi".device = "/dev/disk/by-uuid/558B-0CF9";
+                  boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/c8e88875-6eb2-48ba-831a-c222ab634296";
+                }
+              ];
+              kubernetes-04 = kubernetes [
+                ./hosts/kubernetes/04
+                {
+                  networking.hostName = "kubernetes-04";
+                  fileSystems."/boot".device = "/dev/disk/by-uuid/fa935ea7-5e96-4cf7-97fd-f36ec9885530";
+                  fileSystems."/boot/efi".device = "/dev/disk/by-uuid/55A1-8290";
+                  boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/c4a19f0b-18b4-49e6-9d9f-a36969788648";
+                }
+              ];
+            }
+        ) // {
           node-02 = nixpkgs.lib.nixosSystem {
             inherit specialArgs;
             system = "aarch64-linux";

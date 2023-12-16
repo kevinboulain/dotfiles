@@ -7,22 +7,13 @@ in
 
   users = {
     mutableUsers = false;
-    users = {
-      ether = {
-        isNormalUser = true;
-        hashedPasswordFile = config.sops.secrets.ether.path;
-        openssh.authorizedKeys.keys = [ myPublicKey ];
-        home = "${userHomeDirectory}/ether";
-        extraGroups = [ "wheel" ];
-      };
-      root = {
-        hashedPasswordFile = config.sops.secrets.root.path;
-        openssh.authorizedKeys.keys = [ myPublicKey ];
-      };
+    users.root = {
+      hashedPasswordFile = config.sops.secrets.root.path;
+      openssh.authorizedKeys.keys = [ myPublicKey ];
     };
   };
 
   services.openssh.extraConfig = lib.mkAfter ''
-    AllowUsers root ether
+    AllowUsers root
   '';
 }

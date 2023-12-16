@@ -56,12 +56,15 @@
               ./hosts/modules/nginx/static.nix
               ./hosts/modules/nix
               ./hosts/modules/nix/ccache.nix
-              ./hosts/modules/packages.nix
+              ./hosts/modules/nix/extras.nix
+              ./hosts/modules/packages
+              ./hosts/modules/packages/extras.nix
               ./hosts/modules/rescue.nix
               ./hosts/modules/steam.nix
               ./hosts/modules/system
               ./hosts/modules/system/efi.nix
               ./hosts/modules/system/users
+              ./hosts/modules/system/users/ether.nix
               ./hosts/modules/system/users/untrusted.nix
               ./hosts/modules/usbguard.nix
               ./hosts/modules/virtualization/qemu.nix
@@ -140,10 +143,11 @@
               ./hosts/modules/nginx
               ./hosts/modules/nginx/static.nix
               ./hosts/modules/nix
-              ./hosts/modules/packages.nix
+              ./hosts/modules/packages
               ./hosts/modules/system
               ./hosts/modules/system/efi.nix
               ./hosts/modules/system/users
+              ./hosts/modules/system/users/ether.nix
               home-manager.nixosModules.home-manager
               sops-nix.nixosModules.sops
             ] ++ [{
@@ -187,10 +191,11 @@
               ./hosts/modules/networking
               ./hosts/modules/nginx
               ./hosts/modules/nix
-              ./hosts/modules/packages.nix
+              ./hosts/modules/packages
               ./hosts/modules/system
               ./hosts/modules/system/efi.nix
               ./hosts/modules/system/users
+              ./hosts/modules/system/users/ether.nix
               home-manager.nixosModules.home-manager
               sops-nix.nixosModules.sops
             ] ++ [rec {

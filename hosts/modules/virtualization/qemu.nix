@@ -2,10 +2,10 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  inherit (config.networking) noIPv6Internet;
+  inherit (config.my) noIPv6Internet;
 in
 {
-  options.networking = {
+  options.my = {
     noIPv6Internet = mkOption {
       type = types.bool;
       default = false;

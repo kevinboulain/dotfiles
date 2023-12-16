@@ -9,7 +9,6 @@ in
     virtualHostFragments.disallowRobots
     virtualHostFragments.emptyCatchAll
     {
-      default = true;
       locations = {
         "~ \\.git".extraConfig = ''
            # https://git-scm.com/docs/git-http-backend

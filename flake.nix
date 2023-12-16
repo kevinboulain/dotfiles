@@ -190,6 +190,7 @@
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking
               ./hosts/modules/nginx
+              ./hosts/modules/nginx/static.nix
               ./hosts/modules/nix
               ./hosts/modules/packages
               ./hosts/modules/system

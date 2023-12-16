@@ -193,10 +193,20 @@
               ./hosts/modules/system/users
               home-manager.nixosModules.home-manager
               sops-nix.nixosModules.sops
-            ] ++ [{
+            ] ++ [rec {
               networking.hostName = "node-02";
               time.timeZone = "Europe/Paris";
               system.stateVersion = "23.05";
+
+              system.autoUpgrade = {
+                enable = true;
+                flake = "github:kevinboulain/dotfiles#${networking.hostName}";
+                flags = [
+                  "--refresh"  # https://github.com/NixOS/nix/issues/4007
+                ];
+                operation = "switch";
+                allowReboot = false;
+              };
 
               fileSystems."/boot".device = "/dev/disk/by-uuid/89733135-b593-4106-9801-480900e0facb";
               fileSystems."/boot/efi".device = "/dev/disk/by-uuid/2C92-557F";

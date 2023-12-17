@@ -72,12 +72,12 @@ in
     networking.firewall.interfaces.nat0.allowedUDPPorts = [ 53 ];
     services.kresd = {
       listenPlain = [ "[fd2a::1]:53" ];
-      extraConfig = lib.mkAfter ''
+      extraConfig = mkAfter ''
         dns64.config({
           prefix = '64:ff9b::', -- /96
           -- Ignore AAAA records (for example, when there's truly no IPv6
           -- connectivity and IPv4 has to be forced).
-          exclude_subnets = { '::ffff/96', ${lib.strings.optionalString noIPv6Internet "'::/0',"} },
+          exclude_subnets = { '::ffff/96', ${strings.optionalString noIPv6Internet "'::/0',"} },
         })
         -- Allow DNS64 for this network.
         view:addr('fd2a::/64', policy.all(policy.FLAGS(nil, 'DNS64_DISABLE')))

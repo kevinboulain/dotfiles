@@ -26,5 +26,9 @@
         (code: { name = "@" + code; value = emptyLocation code; })
         errorCodes);
     };
+
+    # Sadly, this doesn't tell which vhost is incorrectly configured but I still
+    # prefer that to copy/pasting this throw.
+    explicitServerName.serverName = lib.mkDefault (throw "serverName must be set");
   };
 }

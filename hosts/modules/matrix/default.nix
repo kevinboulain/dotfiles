@@ -2,43 +2,19 @@
 # https://nixos.org/manual/nixos/stable/index.html#module-services-matrix
 { config, lib, mySystemDirectory, pkgs, ... }:
 let
-  inherit (import ./nginx/lib.nix { inherit lib; }) mergeVirtualHostFragments virtualHostFragments;
+  inherit (import ../nginx/lib.nix { inherit lib; }) mergeVirtualHostFragments virtualHostFragments;
+  inherit (import ./lib.nix { inherit config; }) configuration;
   maxUploadSize = "50M";  # The default.
-  rootDomain = "boula.in";
-  matrixDomain = "matrix.${rootDomain}";
-  elementDomain = "element.${rootDomain}";
-  configuration = {  # It's fine to return both the client and the server configurations.
-    "m.homeserver" = {
-      base_url = "https://${matrixDomain}";
-      server_name = rootDomain;
-    };
-    "m.server" = "${matrixDomain}:443";
-  };
 in
 {
-  security.acme.defaults.email = "admin+acme@boula.in";
-  services.nginx.virtualHosts.${rootDomain} = mergeVirtualHostFragments [
+  services.nginx.virtualHosts.matrix = mergeVirtualHostFragments [
     virtualHostFragments.disallowRobots
-    virtualHostFragments.emptyCatchAll
-    {
-      default = true;
-      enableACME = true;
-      forceSSL = true;
-      # https://matrix-org.github.io/synapse/latest/delegate.html
-      locations."~ ^/.well-known/matrix/(client|server)$".extraConfig = ''
-        add_header Access-Control-Allow-Origin *;
-        default_type application/json;
-        return 200 '${builtins.toJSON configuration}';
-    '';
-    }
-  ];
-  services.nginx.virtualHosts.${matrixDomain} = mergeVirtualHostFragments [
-    virtualHostFragments.disallowRobots
+    virtualHostFragments.explicitServerName
     {
       enableACME = true;
       forceSSL = true;
       # https://matrix-org.github.io/synapse/latest/reverse_proxy.html
-      locations."~ ^(/_matrix|/_synapse/client)".extraConfig = ''
+      locations."~ ^/(_matrix|_synapse/client)/".extraConfig = ''
         proxy_pass http://localhost:8008;
         proxy_http_version 1.1;
         proxy_set_header X-Forwarded-For $remote_addr;
@@ -48,9 +24,11 @@ in
      '';
     }
   ];
+
   # https://github.com/vector-im/element-web/tree/develop#important-security-notes
-  services.nginx.virtualHosts.${elementDomain} = mergeVirtualHostFragments [
+  services.nginx.virtualHosts.element = mergeVirtualHostFragments [
     virtualHostFragments.disallowRobots
+    virtualHostFragments.explicitServerName
     {
       enableACME = true;
       forceSSL = true;

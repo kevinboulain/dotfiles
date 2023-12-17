@@ -186,10 +186,12 @@
               ./hosts/modules/impermanence
               ./hosts/modules/impermanence/backup.nix
               ./hosts/modules/locale.nix
-              ./hosts/modules/matrix.nix
+              ./hosts/modules/matrix
+              ./hosts/modules/matrix/root.nix
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking
               ./hosts/modules/nginx
+              ./hosts/modules/nginx/root.nix
               ./hosts/modules/nginx/static.nix
               ./hosts/modules/nix
               ./hosts/modules/packages
@@ -212,6 +214,18 @@
                 ];
                 operation = "switch";
                 allowReboot = false;
+              };
+
+              security.acme.defaults.email = "admin+acme@boula.in";
+              services.nginx.virtualHosts = {
+                root.serverName = "boula.in";
+                element.serverName = "element.boula.in";
+                matrix.serverName = "matrix.boula.in";
+                static = {
+                  serverName = "static.boula.in";
+                  enableACME = true;
+                  forceSSL = true;
+                };
               };
 
               fileSystems."/boot".device = "/dev/disk/by-uuid/89733135-b593-4106-9801-480900e0facb";

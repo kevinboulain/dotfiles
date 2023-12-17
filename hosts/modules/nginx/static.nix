@@ -5,6 +5,8 @@ let
 in
 {
   # A dumb configuration to serve files.
+  # No assumption is made about the vhost's server_name nor its ordering (i.e.:
+  # whether it's the first or the default one).
   services.nginx.virtualHosts.static = mergeVirtualHostFragments [
     virtualHostFragments.disallowRobots
     virtualHostFragments.emptyCatchAll

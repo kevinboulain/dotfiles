@@ -88,7 +88,8 @@ in
   # resolved support is spotty: https://github.com/apple/cups/issues/5452
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
+    nssmdns6 = true;
     publish = {
       enable = true;
       addresses = true;

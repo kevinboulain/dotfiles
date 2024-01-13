@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-  nixpkgs.config.allowUnfree = true;  # Steam.
+  my.allowedUnfreePackages = [ "steam" "steam-original" "steam-run" ];
   programs = {
     steam.enable = true;  # Installing via nix-env doesn't work: "libnvidia-glvkspirv.so is required at runtime".
     gamemode.enable = true;  # For performance-sensitive applications.

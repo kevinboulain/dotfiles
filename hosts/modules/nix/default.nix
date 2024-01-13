@@ -1,5 +1,8 @@
 { pkgs, ... }: {
-  imports = [ ./flakes.nix ];
+  imports = [
+    ./flakes.nix
+    ./unfree.nix
+  ];
 
   environment.variables = {
     NIX_SHELL_PRESERVE_PROMPT = "1";

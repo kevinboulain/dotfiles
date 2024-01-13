@@ -5,8 +5,6 @@ in
 {
   imports = [ ./users.nix ];
 
-  nixpkgs.config.allowUnfree = true;  # Nvidia.
-
   hardware = {
     cpu.intel.updateMicrocode = true;
     # To get a list of loaded firmwares, see https://serverfault.com/a/1044209.
@@ -159,6 +157,7 @@ in
     echo enable > /sys/firmware/acpi/interrupts/ff_pwr_btn
   '';
 
+  my.allowedUnfreePackages = [ "nvidia-settings" "nvidia-x11" ];
   hardware = {
     opengl.enable = true;
     # This system has an Nvidia graphic card.

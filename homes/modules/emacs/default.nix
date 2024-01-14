@@ -31,9 +31,7 @@
       s
       tao-theme
       toc-org
-      (treesit-grammars.with-grammars
-        # The build of this grammar is currently broken.
-        (packages: builtins.attrValues (pkgs.lib.filterAttrs (name: package: name != "tree-sitter-typst") packages)))
+      treesit-grammars.with-all-grammars
       use-package
       vertico
       which-key

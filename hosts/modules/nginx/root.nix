@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ lib, ... }:
 let
   inherit (import ./lib.nix { inherit lib; }) mergeVirtualHostFragments virtualHostFragments;
 in

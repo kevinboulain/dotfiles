@@ -13,6 +13,7 @@ let
         (builtins.substring 8 4 hex)
         (builtins.substring 12 4 hex)
       ];
+  # TOOD: conflict with qemu subnet
   publicKeyToIP = publicKey: "fd2a::" + (publicKeyToInterfaceIdentifier publicKey);
   publicKeyToIPCIDR = publicKey: (publicKeyToIP publicKey) + "/64";
   publicOptions = {

@@ -38,8 +38,29 @@ ca_config=$(mktemp)
 
 for kind in client peer; do
   mkdir -p certs/etcd/"$kind"
-  <<< "$(csr etcd-"$kind"-ca)" cfssl gencert -initca - | cfssljson -bare certs/etcd/"$kind"/ca
-  for k in kubernetes-0{1,2,3,4}; do
-    <<< "$(csr "$k" "$k")" cfssl gencert -ca certs/etcd/"$kind"/ca.pem -ca-key certs/etcd/"$kind"/ca-key.pem -config "$ca_config" -profile server - | cfssljson -bare certs/etcd/"$kind"/"$k"
+  if [ ! -e certs/etcd/"$kind"/ca-key.pem ]; then
+    <<< "$(csr etcd-"$kind"-ca)" cfssl gencert -initca - | cfssljson -bare certs/etcd/"$kind"/ca
+  else
+    echo "SKIPPED CA"
+  fi
+
+  subkinds=()
+  if [ "$kind" = "client" ]; then
+    subkinds+=(client server)
+  else
+    subkinds+=("")
+  fi
+
+  for subkind in "${subkinds[@]}"; do
+    for k in kubernetes-0{1,2,3,4}; do
+      base=certs/etcd/"$kind${subkind:+"/$subkind"}"
+      mkdir -p "$base"
+      base="$base"/"$k"
+      if [ ! -e "$base"-key.pem ]; then
+        <<< "$(csr "$k" "$k")" cfssl gencert -ca certs/etcd/"$kind"/ca.pem -ca-key certs/etcd/"$kind"/ca-key.pem -config "$ca_config" -profile server - | cfssljson -bare "$base"
+      else
+        echo "SKIPPED $base"
+      fi
+    done
   done
 done

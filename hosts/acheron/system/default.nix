@@ -173,8 +173,8 @@ in
       # set a few variables:
       # https://wiki.archlinux.org/title/PRIME#Configure_applications_to_render_using_GPU
       modesetting.enable = true;
-      # The default.
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      # Either latest (stable) or beta, whichever is more recent.
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
       # Opt for the open source driver.
       open = true;
       # Largely copied from

@@ -7,6 +7,7 @@ in
     ./networking.nix
     ./system.nix
     ./etcd.nix
+    ./api-server.nix # TODO: kuba-apiserver vs api-server
   ];
 
   sops.secrets =
@@ -24,6 +25,11 @@ in
         etcdClientKey = {
           sopsFile = default;
           owner = config.systemd.services.etcd.serviceConfig.User;
+        };
+
+        apiServerEtcdKey = { # Rename to apiserveretcdclientkey?
+          sopsFile = default;
+          # owner = config.systemd.services.kube-apiserver.serviceConfig.User;
         };
       };
 }

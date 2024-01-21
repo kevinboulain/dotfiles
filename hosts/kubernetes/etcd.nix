@@ -9,8 +9,14 @@
     initialCluster = map (peer: "${peer.fqdnOrHostName}=https://${peer.fqdnOrHostName}:2380") config.my.mesh.peers;
     # TODO: brackets should be derived automatically
     # 'expected IP in URL for binding (https://kubernetes-01:2380)'
-    listenClientUrls = [ "https://[${config.my.mesh.address}]:2379" "https://[::1]:2379" "https://127.0.0.1:2379" ];
-    listenPeerUrls = [ "https://[${config.my.mesh.address}]:2380" "https://[::1]:2380" "https://127.0.0.1:2380" ];
+    listenClientUrls = [
+      "https://[${config.my.mesh.address}]:2379"
+      # "https://[::1]:2379" "https://127.0.0.1:2379"
+    ];
+    listenPeerUrls = [
+      "https://[${config.my.mesh.address}]:2380"
+      # "https://[::1]:2380" "https://127.0.0.1:2380"
+    ];
 
     peerClientCertAuth = true;
     peerTrustedCaFile = ./certificates/etcd/peer/ca.pem;
@@ -20,7 +26,7 @@
     clientCertAuth = true;
     trustedCaFile = ./certificates/etcd/client/ca.pem;
     keyFile = config.sops.secrets.etcdClientKey.path;
-    certFile = ./certificates/etcd/client/. + "/${config.networking.fqdnOrHostName}.pem";
+    certFile = ./certificates/etcd/client/server/. + "/${config.networking.fqdnOrHostName}.pem";
 
     dataDir = "${mySystemDirectory}/var/lib/etcd";
   };

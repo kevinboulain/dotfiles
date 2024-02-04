@@ -21,6 +21,7 @@ with lib;
         # TODO: this seems to be triggered before iwd gets an IP from the DHCP.
         "network-online.target"
       ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "timers.target" ];
       timerConfig = {
         Persistent = true;

@@ -30,7 +30,7 @@ in
     enable = true;
     dnssec = "true";
     llmnr = "false";
-    fallbackDns = config.networking.nameservers;  # Never fallback to the compiled-in list.
+    fallbackDns = [ "" ];  # Never fallback to the compiled-in list.
     extraConfig = assert config.services.avahi.enable; ''
       # Conflicts with Avahi.
       MulticastDNS=false

@@ -129,53 +129,6 @@
             }];
           };
 
-          node-01 = nixpkgs.lib.nixosSystem {
-            inherit specialArgs;
-            system = "aarch64-linux";
-            modules = [
-              ./hosts/node-01
-              ./hosts/modules/home-manager.nix
-              ./hosts/modules/impermanence
-              ./hosts/modules/impermanence/backup.nix
-              ./hosts/modules/locale.nix
-              ./hosts/modules/monitoring.nix
-              ./hosts/modules/networking
-              ./hosts/modules/nginx
-              ./hosts/modules/nginx/static.nix
-              ./hosts/modules/nix
-              ./hosts/modules/packages
-              ./hosts/modules/system
-              ./hosts/modules/system/efi.nix
-              ./hosts/modules/system/users
-              ./hosts/modules/system/users/ether.nix
-              home-manager.nixosModules.home-manager
-              sops-nix.nixosModules.sops
-            ] ++ [{
-              networking.hostName = "node-01";
-              time.timeZone = "Europe/Paris";
-              system.stateVersion = "22.11";
-
-              fileSystems."/boot".device = "/dev/disk/by-uuid/bde2fa2e-dd10-4a8c-8c1b-2993b8b8b8d3";
-              fileSystems."/boot/efi".device = "/dev/disk/by-uuid/5206-7A9C";
-              boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/7cfc7623-2ee6-4122-8faf-483f3db15264";
-
-              home-manager = {
-                extraSpecialArgs.myLib = import ./homes/lib { inherit (nixpkgs) lib; };
-                users =
-                  let
-                    minimal = { ... }: {
-                      imports = [ ./homes/minimal.nix ];
-                      home.stateVersion = "22.11";
-                    };
-                  in
-                    {
-                      root = minimal;
-                      ether = minimal;
-                    };
-              };
-            }];
-          };
-
           node-02 = nixpkgs.lib.nixosSystem {
             inherit specialArgs;
             system = "aarch64-linux";

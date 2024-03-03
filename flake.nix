@@ -68,7 +68,6 @@
               ./hosts/modules/system/users/untrusted.nix
               ./hosts/modules/usbguard.nix
               ./hosts/modules/virtualization/qemu.nix
-              ./hosts/modules/virtualization/podman.nix
               ./hosts/modules/yubikey.nix
               home-manager.nixosModules.home-manager
               sops-nix.nixosModules.sops

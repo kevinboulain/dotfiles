@@ -14,7 +14,7 @@
     enable = true;
     # Add the following to .ssh/config to work around unavoidable issues:
     #  Match host * exec "gpg-connect-agent updatestartuptty /bye"
-    pinentryFlavor = "curses";
+    pinentryPackage = pkgs.pinentry-curses;
     enableSshSupport = true;
   };
   programs.password-store = {

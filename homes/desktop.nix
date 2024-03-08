@@ -17,10 +17,6 @@
     grim
     slurp
     wl-clipboard
-
-    # More fonts.
-    (iosevka-bin.override { variant = "aile"; })
-    (iosevka-bin.override { variant = "etoile"; })
   ];
 
   # Handle media key on bluetooth headsets.

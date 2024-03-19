@@ -29,6 +29,7 @@
       - [[#python][Python]]
       - [[#rust][Rust]]
       - [[#shell][Shell]]
+      - [[#slang][Slang]]
       - [[#typescript][TypeScript]]
       - [[#yaml][YAML]]
     - [[#text][Text]]
@@ -795,6 +796,30 @@ handle all of Bash's tricks.
 #+begin_src emacs-lisp
 (setq sh-basic-offset tab-width)
 (add-hook 'sh-mode-hook (lambda () (sh-electric-here-document-mode 0))) ; Disable the annoying heredoc EOF completion.
+#+end_src
+
+**** [[https://shader-slang.com/][Slang]]
+
+TODO: Tree-sitter support (and a proper mode would be nice...)
+
+#+begin_src emacs-lisp
+(define-derived-mode my-slang-mode
+  prog-mode
+  "Slang"
+  (setq-local comment-start "//"
+              comment-start-skip "// *"))
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(my-slang-mode . ("slangd"))))
+
+(add-to-list 'auto-mode-alist '("\\.slang$" . my-slang-mode))
+#+end_src
+
+Set up =.dir-locals.el=:
+
+#+begin_src emacs-lisp :tangle no
+((my-slang-mode . ((eval . (eglot-ensure)))))
 #+end_src
 
 **** [[https://www.typescriptlang.org/][TypeScript]]

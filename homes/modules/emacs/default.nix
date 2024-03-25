@@ -1,7 +1,7 @@
 { pkgs, ... }: {
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs29-nox;
+    package = pkgs.emacs-nox;
     extraPackages = epkgs: with epkgs; [
       ace-window
       avy

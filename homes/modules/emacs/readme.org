@@ -943,8 +943,8 @@ IRC clients:
 (use-package circe
   :config
   ;; Logging.
-  (setq lui-logging-directory "~/.logs" ; Default.
-        lui-logging-file-format "irc/{network}/{target}.txt"
+  (setq lui-logging-directory "~/.local/share/lui"
+        lui-logging-file-format "{network}/{target}.txt"
         lui-logging-format "[%F %T %Z] {text}")
 
   ;; UI.

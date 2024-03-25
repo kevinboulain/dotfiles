@@ -1,48 +1,26 @@
-* Personal Bash configuration :toc_4:
-  - [[#foreword][Foreword]]
-  - [[#behavior-change][Behavior change]]
-    - [[#system-independence][System independence]]
-    - [[#globbing][Globbing]]
-    - [[#completion][Completion]]
-    - [[#input][Input]]
-    - [[#terminal-handling][Terminal handling]]
-    - [[#history][History]]
-  - [[#unnoteworthy-configurations][Unnoteworthy configurations]]
-    - [[#prompt][Prompt]]
-    - [[#aliases][Aliases]]
-    - [[#functions][Functions]]
-    - [[#editor][EDITOR]]
-    - [[#pager][PAGER]]
-    - [[#pass][Pass]]
-  - [[#os-specific][OS-specific]]
-    - [[#linux][Linux]]
-    - [[#macos][macOS]]
-      - [[#homebrew][Homebrew]]
-      - [[#other][Other]]
-  - [[#tips-and-tricks][Tips and tricks]]
-  - [[#afterword][Afterword]]
+#+options: H:4
+* Table of contents :noexport:toc_4:
+- [[#personal-bash-configuration][Personal Bash configuration]]
+  - [[#prelude][Prelude]]
+  - [[#behavior][Behavior]]
+  - [[#history][History]]
+  - [[#prompt][Prompt]]
+  - [[#aliases][Aliases]]
+  - [[#postlude][Postlude]]
 
-** Foreword
+* Personal Bash configuration
 
-Enable undefined variables reporting to rapidly isolate problems:
+** Prelude
+
+Catch undefined variables in this configuration:
 
 #+begin_src shell
 set -u
 #+end_src
 
-** Behavior change
+** Behavior
 
-*** System independence
-
-On some systems, =PROMPT_COMMAND= may be set and may mess up things:
-
-#+begin_src shell
-PROMPT_COMMAND=
-#+end_src
-
-*** Globbing
-
-[[https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pattern-Matching][extglob]]
+[[https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pattern-Matching][=extglob=]]
 is better explained by Bash's manual. In short, it extends pattern matching and
 allows some nice things like =!(file)= meaning /all but this file/:
 
@@ -50,57 +28,29 @@ allows some nice things like =!(file)= meaning /all but this file/:
 shopt -s extglob
 #+end_src
 
-*** Completion
-
-Allow Bash to edit the readline buffer during completions (see =dirspell=, it
-will also replace variables by their value):
+Allow Bash to edit the readline buffer during completion and correct typos:
 
 #+begin_src shell
-if [ ${BASH_VERSINFO[0]} -gt 4 ] || [ ${BASH_VERSINFO[0]} -ge 4 -a ${BASH_VERSINFO[1]} -ge 3 ]; then
-  shopt -s direxpand
-fi
-#+end_src
-
-Allow Bash to correct typos:
-
-#+begin_src shell
-if shopt -q direxpand &> /dev/null; then
-  shopt -s dirspell # Fix names during tab completion.
-fi
+shopt -s direxpand
+shopt -s dirspell # Fix names during tab completion.
 shopt -s cdspell # cd will try to correct an invalid name, displaying it.
 #+end_src
 
-And disable the useless completion on an empty buffer:
-
-#+begin_src shell
-shopt -s no_empty_cmd_completion
-#+end_src
-
-I also like to disable the programmable completion altogether as it will hinder
-actual tab completion most of the time:
+Keep the completion out of the way (it tries to be smart but often prevents
+actual tab completion):
 
 #+begin_src shell
 complete -r
+shopt -s no_empty_cmd_completion
 #+end_src
 
-*** Input
-
-For good measure, make sure readline is in Emacs mode:
-
-#+begin_src shell
-set -o emacs
-#+end_src
-
-*** Terminal handling
-
-It's better to always recheck the terminal size, as it may avoid garbling the
-input method:
+Always recheck the terminal size, as it may avoid garbling the input method:
 
 #+begin_src shell
 shopt -s checkwinsize
 #+end_src
 
-*** History
+** History
 
 Append to instead of overwrite the history file on exit:
 
@@ -108,19 +58,17 @@ Append to instead of overwrite the history file on exit:
 shopt -s histappend
 #+end_src
 
-By default only 500 lines of history are remembered, make that unlimited:
+By default only 500 lines of history are preserved, make that unlimited:
 
 #+begin_src shell
-history_size=$((${BASH_VERSINFO[0]} > 4 || (${BASH_VERSINFO[0]} >= 4 && ${BASH_VERSINFO[1]} >= 3) ? -1 : 1000000000))
-HISTSIZE=$history_size
-HISTFILESIZE=$history_size
-unset history_size
+HISTSIZE=-1
+HISTFILESIZE=-1
 #+end_src
 
 But create a dedicated history file per session:
 
 #+begin_src shell
-declare -r history_directory=~/.logs/bash
+declare -r history_directory=~/.local/share/bash
 # Should be read-only to disallow spurious changes during the session
 # (for example, when sourcing again .bashrc).
 declare -r HISTFILE=$history_directory/$HOSTNAME/$(date -u +%F_%T_%Z)_$$
@@ -129,13 +77,11 @@ history_subdirectory=$(dirname "$HISTFILE")
 unset history_subdirectory
 #+end_src
 
-History may still be lost when the shell is abruptly terminated, so write it
+History may still be lost when the shell is abruptly terminated so write it
 after every command:
 
 #+begin_src shell
-# There seems to be a bug in some Bash versions where -a does nothing,
-# so rely on the less efficient -w.
-PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -w'
+PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND;}'history -a'
 #+end_src
 
 And to quickly search in all these files, since this setup won't load them at
@@ -167,12 +113,7 @@ HISTCONTROL+=:erasedups # Remove duplicates.
 HISTCONTROL+=:ignorespace # Ignore lines starting with spaces.
 #+end_src
 
-** Unnoteworthy configurations
-
-*** Prompt
-
-I prefer a clean and concise prompt, mine only tells which host I'm on, in which
-directory and if the last command resulted in an error (exit code wasn't zero).
+** Prompt
 
 First, some termcaps:
 
@@ -197,8 +138,6 @@ prompt_config() {
 }
 declare -rfx prompt_config
 
-# On macOS, $PROMPT_COMMAND may use the function update_terminal_cwd
-# to display the current directory in the window's decoration.
 PROMPT_COMMAND=prompt_config${PROMPT_COMMAND:+;$PROMPT_COMMAND}
 #+end_src
 
@@ -209,160 +148,15 @@ And finally customize the prompt itself:
 PS1='\h:\W \[$(printf -- '%s' "$prompt_color")\]\$\[$(printf -- '%s' "$reset")\] '
 #+end_src
 
-*** Aliases
+** Aliases
 
-I don't like aliases as they are often abused where functions should be used.
-However, they are fine to correct recurrent typos or really small commands:
+I usually prefer functions instead of aliases, unless it's to catch a typo:
 
 #+begin_src shell
 alias l=ls
 #+end_src
 
-*** Functions
-
-Create some CPU load:
-
-#+begin_src shell
-busy() (
-  trap 'kill $(jobs -p) &> /dev/null' SIGINT SIGQUIT SIGTERM
-  local -i i=${1:-1}
-  while [ $i -gt 0 ]; do
-    while :; do :; done &
-    i=$((i - 1))
-  done
-  wait
-)
-#+end_src
-
-Use Emacs as (wo)man:
-
-#+begin_src shell
-eman() (
-  # WoMan would ask for the section but it doesn't render everything properly.
-  emacs -eval "(man \"${1?}\")"
-)
-#+end_src
-
-*** EDITOR
-
-Nothing special, only in order of preference:
-
-#+begin_src shell
-if type -p emacs &> /dev/null; then
-  EDITOR='emacs -nw'
-elif type -p mg &> /dev/null; then
-  EDITOR=mg
-elif type -p nano &> /dev/null; then
-  EDITOR=nano
-fi
-export EDITOR
-#+end_src
-
-*** PAGER
-
-Nothing special, only in order of preference:
-
-#+begin_src shell
-if type -p less &> /dev/null; then
-  PAGER='less -r'
-elif type -p most &> /dev/null; then
-  PAGER=most
-fi
-export PAGER
-#+end_src
-
-*** Pass
-
-[[https://github.com/android-password-store/Android-Password-Store][Android
-Password Store]] defaults to ASCII-armored output, default
-[[https://www.passwordstore.org/][Password Store]] to that too (so Git's diff
-doesn't end up comparing binary files).
-
-#+begin_src shell
-export PASSWORD_STORE_GPG_OPTS='--armor'
-#+end_src
-
-** OS-specific
-
-*** Linux
-
-#+begin_src shell
-if [ "$(uname)" = Linux ]; then
-#+end_src
-
-A bunch of functions to manage the volume:
-
-#+begin_src shell
-  volume_mute() {
-    wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-  }
-  volume_set() {
-    local -ri current=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed 's/Volume: \([[:digit:]]\)\.\([[:digit:]]\+\).*/\1\2/;s/^0\+//')
-    local -ri new=$((current+${1?}))
-    local -ri clamped=$((new > 100 ? 100 : new < 0 ? 0 : new))
-    wpctl set-volume @DEFAULT_AUDIO_SINK@ $clamped%
-  }
-  volume_up() { volume_set "${1:-1}"; }
-  volume_down() { volume_set -"${1:-1}"; }
-  declare -fx volume_mute volume_set volume_down volume_up
-#+end_src
-
-#+begin_src shell
-fi
-#+end_src
-
-*** macOS
-
-#+begin_src shell
-if [ "$(uname)" = Darwin ]; then
-#+end_src
-
-**** Homebrew
-
-First things first, let's opt-out of [[https://brew.sh/][Homebrew]] analytics...
-
-#+begin_src shell
-  export HOMEBREW_NO_ANALYTICS=1
-#+end_src
-
-I also prefer to not install applications system-wide:
-
-#+begin_src shell
-  export HOMEBREW_CASK_OPTS='--appdir=~/Applications'
-#+end_src
-
-And since Homebrew has trouble in virtual environments, let's deactivate them
-when invoked:
-
-#+begin_src shell
-  brew() {
-    [ -n "$VIRTUAL_ENV" ] && deactivate
-    command brew "$@"
-  }
-  declare -rfx brew
-#+end_src
-
-**** Other
-
-Finally, make macOS's environment be sane when SSH'ing to other OSes:
-
-#+begin_src shell
-  export LC_ALL=en_US.UTF-8
-#+end_src
-
-#+begin_src shell
-fi
-#+end_src
-
-** Tips and tricks
-
-- Did you know about =CDPATH=?
-
-** Afterword
-
-Unfortunately, many scripts don't properly use parameter expansion, so revert
-what we did in the [[#foreword][foreword]] (and for the day-to-day CLI usage, it
-may be a bit too verbose):
+** Postlude
 
 #+begin_src shell
 set +u

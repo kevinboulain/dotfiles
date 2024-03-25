@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ lib, pkgs, ... }: {
   programs.emacs = {
     enable = true;
     package = pkgs.emacs-nox;
@@ -50,4 +50,10 @@
     hunspellDicts.en-us
     hunspellDicts.fr-any
   ];
+
+  programs.bash.initExtra = lib.mkAfter ''
+    if type -p emacs &> /dev/null; then
+      export EDITOR='emacs -nw'
+    fi
+  '';
 }

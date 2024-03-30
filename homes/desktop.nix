@@ -1,4 +1,22 @@
-{ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+let
+  # https://github.com/NixOS/nixpkgs/issues/182465#issuecomment-1207234828
+  mkWOFF2From = { name, pkg, ext }: pkgs.stdenvNoCC.mkDerivation {
+    name = "${name}-woff2";
+    nativeBuildInputs = [ pkgs.fontforge pkg ];
+    dontInstall = true;
+    unpackPhase = ''
+      woff2_directory=$out/share/fonts/woff2/
+      mkdir -p "$woff2_directory"
+      for file in ${pkg}/share/fonts/truetype/*.${ext}; do
+        # FontForge and Nix will kill machines without too much ram so don't
+        # parallelize this loop, at the detriment of beefier machines.
+        fontforge --lang=ff -c 'Open($1); Generate($2);' "$file" "$woff2_directory"/"$(basename $file .${ext})".woff2
+      done
+    '';
+  };
+in
+{
   imports = [
     ./minimal.nix
     ./modules/firefox.nix
@@ -17,6 +35,9 @@
     grim
     slurp
     wl-clipboard
+
+    # Mostly for Emacs.
+    (mkWOFF2From { name = "iosevka-bin"; pkg = iosevka-bin; ext = "ttc"; })
   ];
 
   # Handle media key on bluetooth headsets.

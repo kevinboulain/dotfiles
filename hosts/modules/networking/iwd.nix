@@ -1,8 +1,12 @@
-{ config, myLib, ... }:
+{ config, myLib, pkgs, ... }:
 let
   inherit (myLib) state;
 in
 {
+  environment.systemPackages = with pkgs; [
+    iw
+  ];
+
   # Rely on iwd for everything, including IP addressing.
   networking.wireless.iwd = {
     enable = true;

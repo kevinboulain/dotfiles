@@ -4,6 +4,9 @@ let
   root = "${myStateDirectory}/www";
 in
 {
+  # For Git repositories.
+  services.fcgiwrap.enable = true;
+
   # A dumb configuration to serve files.
   # No assumption is made about the vhost's server_name nor its ordering (i.e.:
   # whether it's the first or the default one).

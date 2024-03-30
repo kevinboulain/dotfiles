@@ -14,9 +14,6 @@ let
       "rt=$request_time uct=$upstream_connect_time uht=$upstream_header_time urt=$upstream_response_time";
 in
 {
-  # For Git repositories.
-  services.fcgiwrap.enable = true;
-
   services.nginx = {
     enable = true;
     commonHttpConfig = ''

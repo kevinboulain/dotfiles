@@ -52,6 +52,7 @@
               ./hosts/modules/monitoring.nix
               ./hosts/modules/networking
               ./hosts/modules/networking/iwd.nix
+              ./hosts/modules/networking/mullvad.nix
               ./hosts/modules/nginx
               ./hosts/modules/nginx/static.nix
               ./hosts/modules/nix

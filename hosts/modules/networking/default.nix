@@ -1,22 +1,11 @@
-{ config, lib, myLib, mySystemDirectory, pkgs, ... }:
-let
-  inherit (myLib) state;
-in
+{ mySystemDirectory, pkgs, ... }:
 {
   imports = [ ./dns.nix ];
 
   environment.systemPackages = with pkgs; [
-    iw
     mtr
     tcpdump
   ];
-
-  systemd.services.mullvad-daemon.environment = {
-    # https://github.com/mullvad/mullvadvpn-app/#environment-variables-used-by-the-service
-    MULLVAD_MANAGEMENT_SOCKET_GROUP = "wheel";
-  };
-  # Stores the account number.
-  fileSystems = state.binds (lib.optional config.services.mullvad-vpn.enable "/etc/mullvad-vpn");
 
   # The dhcpcd module is a bit too inflexible.
   networking.useDHCP = false;

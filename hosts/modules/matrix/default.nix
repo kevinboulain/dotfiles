@@ -7,6 +7,29 @@ let
   maxUploadSize = "50M";  # The default.
 in
 {
+  nixpkgs.overlays = [
+    (final: parent: {
+      # https://github.com/matrix-org/matrix-react-sdk/pull/10096#issuecomment-1983668974
+      element-web-unwrapped = parent.element-web-unwrapped.overrideAttrs (old: {
+        configurePhase = old.configurePhase + ''
+          patch -p1 << 'EOF'
+--- i/node_modules/matrix-react-sdk/src/components/structures/MatrixChat.tsx
++++ w/node_modules/matrix-react-sdk/src/components/structures/MatrixChat.tsx
+@@ -1941,8 +1941,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
+         }
+         if (numUnreadRooms > 0) {
+             this.subTitleStatus += `[''${numUnreadRooms}]`;
+-        } else if (notificationState.level >= NotificationLevel.Activity) {
+-            this.subTitleStatus += `*`;
+         }
+
+         this.setPageSubtitle();
+          'EOF'
+        '';
+      });
+    })
+  ];
+
   services.nginx.virtualHosts.matrix = mergeVirtualHostFragments [
     virtualHostFragments.disallowRobots
     virtualHostFragments.explicitServerName

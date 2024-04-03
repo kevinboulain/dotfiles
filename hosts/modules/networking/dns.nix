@@ -32,7 +32,10 @@ in
     # DNS resolution is handed off to systemd-resolved...
     services.resolved = {
       enable = true;
-      dnssec = "true";
+      # DNSSEC support in systemd is quite... special. For some context, see:
+      # https://github.com/systemd/systemd/issues/25676
+      # Enabling this option will result in often broken DNS resolutions.
+      # dnssec = "true";
       llmnr = "false";
       fallbackDns = [ "" ];  # Never fallback to the compiled-in list.
       extraConfig = assert config.services.avahi.enable; ''

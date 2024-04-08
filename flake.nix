@@ -117,13 +117,6 @@
                         inherit home wayland;
                         imports = [ ./homes/desktop.nix ];
                       };
-                      work = { ... }: {
-                        inherit home wayland;
-                        imports = [
-                          ./homes/desktop.nix
-                          ./homes/modules/yubikey.nix
-                        ];
-                      };
                     };
               };
             }];

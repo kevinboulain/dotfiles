@@ -26,5 +26,7 @@
     # Others.
     allow label "headset" via-port one-of { "1-5" "1-7" } with-connect-type "hotplug" hash one-of { "zozrkpqiuwzyta+2+UldrAOy2PBBSgdCETMwepifT1A=" "Eyk7jsp3AaJsputifdofQfImf47RwHENkFj8GaxhjcQ=" } parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o="
     allow label "controller" via-port "1-6" with-connect-type "hotplug" hash "e9EC07BFof4c8wzvEeknEMl+yWtsXKtgK5OEmoqkxzk=" parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o="
+    allow label "keyboard" via-port "1-7" with-connect-type "hotplug" hash "vUGB8+Dvgr/rRNWxsolEfpt0Jsl38zWjzgMaEOWvVd4=" parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o="
+    allow label "keyboard" via-port "1-7.1" with-connect-type "unknown" hash "RqDbLlyZQo+I8xpLEjAtlAA1DGq02JiaoUd8lsXt3og=" parent-hash "vUGB8+Dvgr/rRNWxsolEfpt0Jsl38zWjzgMaEOWvVd4="
   '';
 }

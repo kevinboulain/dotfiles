@@ -1,6 +1,6 @@
-{ lib, myLib, myStateDirectory, mySystemDirectory, ... }:
+{ lib, myHostsLib, myStateDirectory, mySystemDirectory, ... }:
 let
-  inherit (myLib) mount;
+  inherit (myHostsLib) mount;
 in
 {
   fileSystems = {

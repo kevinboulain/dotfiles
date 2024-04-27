@@ -1,7 +1,8 @@
-{ config, lib, ... }:
+{ config, lib, myLib, ... }:
 with lib;
 let
   inherit (config.my) allowedUnfreePackages;
+  inherit (myLib) allowUnfreePredicate;
 in
 {
   options.my = {
@@ -14,6 +15,6 @@ in
   };
 
   config = mkIf (allowedUnfreePackages != [])  {
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) allowedUnfreePackages;
+    nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate allowedUnfreePackages;
   };
 }

@@ -1,6 +1,6 @@
-{ config, myLib, pkgs, ... }:
+{ config, myHostsLib, pkgs, ... }:
 let
-  inherit (myLib) state;
+  inherit (myHostsLib) state;
 in
 {
   environment.systemPackages = with pkgs; [

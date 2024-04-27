@@ -1,6 +1,6 @@
-{ myLib, ... }:
+{ myHostsLib, ... }:
 let
-  inherit (myLib) mount;
+  inherit (myHostsLib) mount;
 in
 {
   imports = [ ./users.nix ];

@@ -1,6 +1,6 @@
-{ myLib, ... }:
+{ myHostsLib, ... }:
 let
-  inherit (myLib) state;
+  inherit (myHostsLib) state;
 in
 {
   fileSystems = state.binds [

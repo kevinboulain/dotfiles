@@ -22,7 +22,7 @@
     };
   };
 
-  outputs = { home-manager, nixpkgs, sin, sops-nix, swaybar, ... }: {
+  outputs = { home-manager, nixpkgs, self, sin, sops-nix, swaybar, ... }: {
     nixosConfigurations =
       let
         # Sadly, it doesn't look like there's an easy way to get the public key
@@ -33,8 +33,9 @@
         myStateDirectory = "/srv";
         mySystemDirectory = "${myStateDirectory}/system";
         specialArgs = rec {
-          inherit myPublicKey myStateDirectory mySystemDirectory nixpkgs;
-          myLib = import ./hosts/lib { inherit (nixpkgs) lib; inherit mySystemDirectory; };
+          inherit myPublicKey myStateDirectory mySystemDirectory nixpkgs self;
+          myLib = import ./lib { inherit (nixpkgs) lib; };
+          myHostsLib = import ./hosts/lib { inherit (nixpkgs) lib; inherit mySystemDirectory; };
         };
       in
         {
@@ -93,7 +94,7 @@
               home-manager = {
                 extraSpecialArgs = {
                   inherit sin swaybar;
-                  myLib = import ./homes/lib { inherit (nixpkgs) lib; };
+                  myHomesLib = import ./homes/lib { inherit (nixpkgs) lib; };
                 };
                 users =
                   let
@@ -179,7 +180,7 @@
               boot.initrd.luks.devices.root.device = "/dev/disk/by-uuid/c3427944-91ea-4314-8844-462850458ce5";
 
               home-manager = {
-                extraSpecialArgs.myLib = import ./homes/lib { inherit (nixpkgs) lib; };
+                extraSpecialArgs.myHomesLib = import ./homes/lib { inherit (nixpkgs) lib; };
                 users =
                   let
                     minimal = { ... }: {
@@ -194,6 +195,18 @@
               };
             }];
           };
+        };
+
+    packages.x86_64-linux =
+      let
+        myLib = import ./lib { inherit (nixpkgs) lib; };
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfreePredicate = myLib.allowUnfreePredicate [ "steam-original" "steam-run" ];
+        };
+      in
+        {
+          ngfx-ui-wrapper = pkgs.callPackage ./packages/ngfx-ui-wrapper.nix {};
         };
   };
 }

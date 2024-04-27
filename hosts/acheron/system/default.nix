@@ -1,6 +1,6 @@
-{ config, myLib, mySystemDirectory, pkgs, ... }:
+{ config, myHostsLib, mySystemDirectory, pkgs, self, ... }:
 let
-  inherit (myLib) mount;
+  inherit (myHostsLib) mount;
 in
 {
   imports = [ ./users.nix ];
@@ -61,6 +61,8 @@ in
   environment.systemPackages = with pkgs; [
     # https://01.org/linuxgraphics/documentation/development/how-debug-suspend-resume-issues
     intel-gpu-tools
+    # See the Nvidia setup below.
+    self.packages.${pkgs.system}.ngfx-ui-wrapper
   ];
 
   # Wi-Fi driver was merged somewhen between 5.15 and 5.17.
@@ -204,6 +206,10 @@ in
   # While it's named after X, it doesn't install it. This is necessary
   # to enable the Nvidia graphic card.
   services.xserver.videoDrivers = [ "nvidia" ];
+  # I don't know how much of a security issue it is (see the linked CVE) but I
+  # feel like it's less worse than starting Nsight as root?
+  # https://developer.nvidia.com/nvidia-development-tools-solutions-err_nvgpuctrperm-permission-issue-performance-counters
+  boot.kernelParams = [ "nvidia.NVreg_RestrictProfilingToAdminUsers=0" ];
 
   # Not strictly necessary but more appealing.
   boot.loader.grub.gfxmodeEfi = "1920x1080";

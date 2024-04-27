@@ -1,6 +1,6 @@
-{ config, lib, myLib, ... }:
+{ config, lib, myHostsLib, ... }:
 let
-  inherit (myLib) state;
+  inherit (myHostsLib) state;
 in
 {
   services.mullvad-vpn.enable = true;

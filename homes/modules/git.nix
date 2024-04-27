@@ -1,11 +1,12 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   programs.git = {
     enable = true;
     # I could (gitMinimal.override { sendEmailSupport = true; }) to do without
     # the UI but that wouldn't be cached.
     package = pkgs.gitFull;
     # So I can locally override some settings, like user.email & user.name.
-    includes = [{ path = "~/.config/git/local"; }];
+    includes = [ { path = "~/.config/git/local"; } ];
     extraConfig = {
       alias = {
         ft = "fetch --all --tags --prune";

@@ -1,4 +1,10 @@
-{ lib, myHostsLib, myStateDirectory, mySystemDirectory, ... }:
+{
+  lib,
+  myHostsLib,
+  myStateDirectory,
+  mySystemDirectory,
+  ...
+}:
 let
   inherit (myHostsLib) mount;
 in
@@ -22,14 +28,21 @@ in
       subvolume = "system/tmp";
       # Stolen from
       # https://github.com/NixOS/nixpkgs/blob/nixos-22.11/nixos/modules/system/boot/tmp.nix
-      options = [ "X-mount.mode=1777" "nodev" "nosuid" "strictatime" ];
+      options = [
+        "X-mount.mode=1777"
+        "nodev"
+        "nosuid"
+        "strictatime"
+      ];
     };
     "${myStateDirectory}" = mount.btrfs {
       device = "/dev/mapper/root";
       subvolume = "state";
       # sops-nix uses the host SSH key to decrypt secrets, including passwords
       # that are set at startup.
-      neededForBoot = assert lib.strings.hasPrefix "${myStateDirectory}/" mySystemDirectory; true;
+      neededForBoot =
+        assert lib.strings.hasPrefix "${myStateDirectory}/" mySystemDirectory;
+        true;
     };
   };
 

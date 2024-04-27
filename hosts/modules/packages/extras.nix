@@ -1,4 +1,5 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
   # https://discourse.nixos.org/t/missing-man-pages/4680/6
   # Some, but not all, of these are true by default.
   documentation = {

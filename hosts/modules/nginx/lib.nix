@@ -1,4 +1,5 @@
-{ lib, ... }: rec {
+{ lib, ... }:
+rec {
   # 499 is a special case of 502 and is refused by nginx.
   errorCodes = map builtins.toString ((lib.range 400 498) ++ (lib.range 500 599));
   emptyLocation = code: {
@@ -10,7 +11,7 @@
     '';
   };
 
-  mergeVirtualHostFragments = lib.lists.foldl (a: b: lib.attrsets.recursiveUpdate a b) {};
+  mergeVirtualHostFragments = lib.lists.foldl (a: b: lib.attrsets.recursiveUpdate a b) { };
 
   virtualHostFragments = {
     disallowRobots.locations."= /robots.txt".extraConfig = ''
@@ -19,12 +20,19 @@
     '';
 
     emptyCatchAll = {
-      extraConfig = builtins.concatStringsSep "\n" (map (code: ''error_page ${code} @${code};'') errorCodes);
-      locations = {
-        "= /" = emptyLocation 200;
-      } // builtins.listToAttrs (map
-        (code: { name = "@" + code; value = emptyLocation code; })
-        errorCodes);
+      extraConfig = builtins.concatStringsSep "\n" (
+        map (code: ''error_page ${code} @${code};'') errorCodes
+      );
+      locations =
+        {
+          "= /" = emptyLocation 200;
+        }
+        // builtins.listToAttrs (
+          map (code: {
+            name = "@" + code;
+            value = emptyLocation code;
+          }) errorCodes
+        );
     };
 
     # Sadly, this doesn't tell which vhost is incorrectly configured but I still

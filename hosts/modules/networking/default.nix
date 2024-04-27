@@ -12,7 +12,7 @@
 
   networking.firewall = {
     enable = true;
-    logRefusedPackets = true;  # Wasted my time debugging dropped packets...
+    logRefusedPackets = true; # Wasted my time debugging dropped packets...
   };
 
   services.openssh = {
@@ -21,11 +21,13 @@
       # Don't allow anyone by default.
       AllowUsers !*
     '';
-    hostKeys = [{
-      # Not a bind mount because /etc/ssh hosts other things we don't care
-      # about, like symlinks to /etc/static. The directory is created for us.
-      path = "${mySystemDirectory}/etc/ssh/ssh_host_ed25519_key";
-      type = "ed25519";
-    }];
+    hostKeys = [
+      {
+        # Not a bind mount because /etc/ssh hosts other things we don't care
+        # about, like symlinks to /etc/static. The directory is created for us.
+        path = "${mySystemDirectory}/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+    ];
   };
 }

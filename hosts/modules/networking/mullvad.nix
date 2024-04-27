@@ -1,4 +1,9 @@
-{ config, lib, myHostsLib, ... }:
+{
+  config,
+  lib,
+  myHostsLib,
+  ...
+}:
 let
   inherit (myHostsLib) state;
 in

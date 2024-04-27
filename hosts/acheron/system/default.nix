@@ -1,4 +1,11 @@
-{ config, myHostsLib, mySystemDirectory, pkgs, self, ... }:
+{
+  config,
+  myHostsLib,
+  mySystemDirectory,
+  pkgs,
+  self,
+  ...
+}:
 let
   inherit (myHostsLib) mount;
 in
@@ -51,12 +58,14 @@ in
   };
 
   boot.resumeDevice = "/dev/mapper/root";
-  swapDevices = [{
-    device = "/swap/swap";
-    # Setting the size would generate a service that would try to create the
-    # swap file when it doesn't match. That is unlikely to do what we expect on
-    # Btrfs.
-  }];
+  swapDevices = [
+    {
+      device = "/swap/swap";
+      # Setting the size would generate a service that would try to create the
+      # swap file when it doesn't match. That is unlikely to do what we expect
+      # on Btrfs.
+    }
+  ];
 
   environment.systemPackages = with pkgs; [
     # https://01.org/linuxgraphics/documentation/development/how-debug-suspend-resume-issues
@@ -136,7 +145,7 @@ in
     percentageAction = 5;
     criticalPowerAction = "Hibernate";
   };
-  systemd.services.upower.wantedBy = [ "multi-user.target" ];  # By default it's graphical.target.
+  systemd.services.upower.wantedBy = [ "multi-user.target" ]; # By default it's graphical.target.
   # The rest (power saving for the audio interface, automatic power management
   # of PCI devices, etc) is handled by TLP
   # (https://linrunner.de/tlp/faq/powertop.html):
@@ -159,7 +168,10 @@ in
     echo enable > /sys/firmware/acpi/interrupts/ff_pwr_btn
   '';
 
-  my.allowedUnfreePackages = [ "nvidia-settings" "nvidia-x11" ];
+  my.allowedUnfreePackages = [
+    "nvidia-settings"
+    "nvidia-x11"
+  ];
   hardware = {
     opengl.enable = true;
     # This system has an Nvidia graphic card.

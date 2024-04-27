@@ -1,4 +1,5 @@
-{ config, ... }: {
+{ config, ... }:
+{
   # Set up ccache. Note packages need to opt-in with
   # programs.ccache.packageNames and might have to overwrite the derivation's
   # stdenv with ccacheStdenv.

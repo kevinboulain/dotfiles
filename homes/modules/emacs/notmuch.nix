@@ -1,4 +1,5 @@
-{ pkgs, sin, ... }: {
+{ pkgs, sin, ... }:
+{
   home.packages = with pkgs; [
     notmuch
     notmuch.emacs

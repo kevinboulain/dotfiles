@@ -1,4 +1,5 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
   # To set up OpenPGP: https://github.com/drduh/YubiKey-Guide
   # To set up OpenSSH:
   #  ssh-keygen -t ed25519-sk -O resident -O verify-required -O application=ssh:git@github.com -f ~/.ssh/github.com
@@ -21,7 +22,7 @@
     enable = true;
     package = pkgs.pass.withExtensions (extensions: with extensions; [ pass-otp ]);
     settings = {
-      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/sources/pass";  # Override Home Manager's...
+      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/sources/pass"; # Override Home Manager's...
       # Android Password Store defaults to ASCII-armored output, so default
       # Password Store to that too to have 'prettier' diffs.
       PASSWORD_STORE_GPG_OPTS = "--armor";

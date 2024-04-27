@@ -1,4 +1,5 @@
-{ myStateDirectory, ... }: {
+{ myStateDirectory, ... }:
+{
   sopsUserPassword = sopsFile: {
     inherit sopsFile;
     neededForUsers = true;

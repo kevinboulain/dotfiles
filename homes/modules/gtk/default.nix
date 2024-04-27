@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   gtk = {
     enable = true;
     gtk3.extraConfig = {

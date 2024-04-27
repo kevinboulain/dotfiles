@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   # Because usbcore.authorized_default=0 is set, ensure the keyboard
   # is available early:
   #  - in case the disk needs to be unlocked,

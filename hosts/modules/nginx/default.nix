@@ -10,8 +10,8 @@ let
   #  - added $request_length, $request_time, $upstream_connect_time,
   #    $upstream_header_time, $upstream_response_time for the exporter
   accessFormat =
-    "$server_name $remote_addr $remote_user \"$request\" $request_length $status $bytes_sent $body_bytes_sent \"$http_referer\" \"$http_user_agent\" " +
-      "rt=$request_time uct=$upstream_connect_time uht=$upstream_header_time urt=$upstream_response_time";
+    "$server_name $remote_addr $remote_user \"$request\" $request_length $status $bytes_sent $body_bytes_sent \"$http_referer\" \"$http_user_agent\" "
+    + "rt=$request_time uct=$upstream_connect_time uht=$upstream_header_time urt=$upstream_response_time";
 in
 {
   services.nginx = {
@@ -34,25 +34,34 @@ in
     enable = true;
     listenAddress = "localhost";
     port = 9110;
-    settings.namespaces = [{
-      format = accessFormat;
-      source.syslog = {
-        listen_address = "udp://[::1]:9110";  # Uses ResolveUDPAddr and can't listen on all addresses.
-        format = "rfc3164";
-        tags = [ "nginx" ];  # Necessary.
-      };
-      # nginx is configured to log all vhosts to syslog so merge everything
-      # under a single metric.
-      # https://github.com/martin-helmich/prometheus-nginxlog-exporter#advanced-features
-      name = "nginx";
-      metrics_override = { prefix = "nginx"; };
-      relabel_configs = [
-        { target_label = "server_name"; from = "server_name"; }
-      ];
-    }];
+    settings.namespaces = [
+      {
+        format = accessFormat;
+        source.syslog = {
+          listen_address = "udp://[::1]:9110"; # Uses ResolveUDPAddr and can't listen on all addresses.
+          format = "rfc3164";
+          tags = [ "nginx" ]; # Necessary.
+        };
+        # nginx is configured to log all vhosts to syslog so merge everything
+        # under a single metric.
+        # https://github.com/martin-helmich/prometheus-nginxlog-exporter#advanced-features
+        name = "nginx";
+        metrics_override = {
+          prefix = "nginx";
+        };
+        relabel_configs = [
+          {
+            target_label = "server_name";
+            from = "server_name";
+          }
+        ];
+      }
+    ];
   };
-  services.prometheus.scrapeConfigs = [{
-    job_name = "nginx";
-    static_configs = [ { targets = [ "localhost:9110" ]; } ];
-  }];
+  services.prometheus.scrapeConfigs = [
+    {
+      job_name = "nginx";
+      static_configs = [ { targets = [ "localhost:9110" ]; } ];
+    }
+  ];
 }

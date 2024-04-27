@@ -1,31 +1,39 @@
 # TODO: https://matrix-org.github.io/synapse/latest/turn-howto.html
 # https://nixos.org/manual/nixos/stable/index.html#module-services-matrix
-{ config, lib, mySystemDirectory, pkgs, ... }:
+{
+  config,
+  lib,
+  mySystemDirectory,
+  pkgs,
+  ...
+}:
 let
   inherit (import ../nginx/lib.nix { inherit lib; }) mergeVirtualHostFragments virtualHostFragments;
   inherit (import ./lib.nix { inherit config; }) configuration;
-  maxUploadSize = "50M";  # The default.
+  maxUploadSize = "50M"; # The default.
 in
 {
   nixpkgs.overlays = [
     (final: parent: {
       # https://github.com/matrix-org/matrix-react-sdk/pull/10096#issuecomment-1983668974
       element-web-unwrapped = parent.element-web-unwrapped.overrideAttrs (old: {
-        configurePhase = old.configurePhase + ''
-          patch -p1 << 'EOF'
---- i/node_modules/matrix-react-sdk/src/components/structures/MatrixChat.tsx
-+++ w/node_modules/matrix-react-sdk/src/components/structures/MatrixChat.tsx
-@@ -1941,8 +1941,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
-         }
-         if (numUnreadRooms > 0) {
-             this.subTitleStatus += `[''${numUnreadRooms}]`;
--        } else if (notificationState.level >= NotificationLevel.Activity) {
--            this.subTitleStatus += `*`;
-         }
+        configurePhase =
+          old.configurePhase
+          + ''
+                      patch -p1 << 'EOF'
+            --- i/node_modules/matrix-react-sdk/src/components/structures/MatrixChat.tsx
+            +++ w/node_modules/matrix-react-sdk/src/components/structures/MatrixChat.tsx
+            @@ -1941,8 +1941,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
+                     }
+                     if (numUnreadRooms > 0) {
+                         this.subTitleStatus += `[''${numUnreadRooms}]`;
+            -        } else if (notificationState.level >= NotificationLevel.Activity) {
+            -            this.subTitleStatus += `*`;
+                     }
 
-         this.setPageSubtitle();
-          'EOF'
-        '';
+                     this.setPageSubtitle();
+                      'EOF'
+          '';
       });
     })
   ];
@@ -44,7 +52,7 @@ in
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Host $host;
         client_max_body_size ${maxUploadSize};
-     '';
+      '';
     }
   ];
 
@@ -88,22 +96,33 @@ in
     settings = {
       listeners = [
         {
-          bind_addresses = [ "::1" "127.0.0.1" ];
+          bind_addresses = [
+            "::1"
+            "127.0.0.1"
+          ];
           port = 8008;
           type = "http";
           tls = false;
           x_forwarded = true;
-          resources = [{
-            names = [ "client" "federation" ];
-            compress = true;
-          }];
+          resources = [
+            {
+              names = [
+                "client"
+                "federation"
+              ];
+              compress = true;
+            }
+          ];
         }
         {
-          bind_addresses = [ "::1" "127.0.0.1" ];
+          bind_addresses = [
+            "::1"
+            "127.0.0.1"
+          ];
           port = 8018;
           type = "metrics";
           tls = false;
-          resources = [];  # Required by the module.
+          resources = [ ]; # Required by the module.
         }
       ];
       enable_metrics = true;
@@ -136,9 +155,11 @@ in
   };
 
   # https://matrix-org.github.io/synapse/latest/metrics-howto.html
-  services.prometheus.scrapeConfigs = [{
-    job_name = "matrix-synapse";
-    static_configs = [ { targets = [ "localhost:8018" ]; } ];
-    metrics_path = "/_synapse/metrics";
-  }];
+  services.prometheus.scrapeConfigs = [
+    {
+      job_name = "matrix-synapse";
+      static_configs = [ { targets = [ "localhost:8018" ]; } ];
+      metrics_path = "/_synapse/metrics";
+    }
+  ];
 }

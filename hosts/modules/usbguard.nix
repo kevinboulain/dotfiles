@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   services.usbguard = {
     enable = true;
 
@@ -22,9 +23,7 @@
     # systemd.mask=usbguard.service
   ];
 
-  systemd.packages = with pkgs; [
-    usbguard-notifier
-  ];
+  systemd.packages = with pkgs; [ usbguard-notifier ];
   # https://nixos.org/manual/nixos/stable/index.html#sect-nixos-systemd-nixos
   # User services aren't automatically started.
   systemd.user.targets.default.wants = [ "usbguard-notifier.service" ];

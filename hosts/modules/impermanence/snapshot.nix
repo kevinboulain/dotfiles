@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.snapshot;
@@ -7,7 +12,7 @@ in
   options.services.snapshot = {
     subvolumes = mkOption {
       type = types.listOf types.nonEmptyStr;
-      default = [];
+      default = [ ];
     };
   };
 
@@ -27,7 +32,14 @@ in
             script = writeShellScript "snapshot" ''
               set -euo pipefail
               [ "$#" -eq 2 ]
-              export PATH="${makeBinPath [ btrfs-progs coreutils findutils util-linux ]}"
+              export PATH="${
+                makeBinPath [
+                  btrfs-progs
+                  coreutils
+                  findutils
+                  util-linux
+                ]
+              }"
               mkdir -p "$2"/latest
               # At most one snapshot per hour.
               name=$(date +'%F-%H')
@@ -45,7 +57,16 @@ in
                 | sort -z | head -zn -3 \
                 | xargs -0I{} btrfs subvolume delete {}
             '';
-          in map (subvolume: "${script} ${escapeShellArgs [ subvolume "${subvolume}/.snapshots" ] }") cfg.subvolumes;
+          in
+          map (
+            subvolume:
+            "${script} ${
+              escapeShellArgs [
+                subvolume
+                "${subvolume}/.snapshots"
+              ]
+            }"
+          ) cfg.subvolumes;
         ExecStart = "${coreutils}/bin/true";
       };
     };

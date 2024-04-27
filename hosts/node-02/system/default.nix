@@ -14,7 +14,7 @@ in
     };
   };
 
-  swapDevices = [{ device = "/swap/swap"; }];
+  swapDevices = [ { device = "/swap/swap"; } ];
 
   boot = {
     initrd.availableKernelModules = [

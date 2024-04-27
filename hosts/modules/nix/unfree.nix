@@ -1,4 +1,9 @@
-{ config, lib, myLib, ... }:
+{
+  config,
+  lib,
+  myLib,
+  ...
+}:
 with lib;
 let
   inherit (config.my) allowedUnfreePackages;
@@ -10,11 +15,11 @@ in
     # nixpkgs.config.allowUnfree, ensure I explicitly allow the ones I want.
     allowedUnfreePackages = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
     };
   };
 
-  config = mkIf (allowedUnfreePackages != [])  {
+  config = mkIf (allowedUnfreePackages != [ ]) {
     nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate allowedUnfreePackages;
   };
 }

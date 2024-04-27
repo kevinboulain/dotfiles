@@ -1,4 +1,9 @@
-{ config, lib, myStateDirectory, ... }:
+{
+  config,
+  lib,
+  myStateDirectory,
+  ...
+}:
 let
   inherit (import ./lib.nix { inherit myStateDirectory; }) userHomeDirectory;
 in

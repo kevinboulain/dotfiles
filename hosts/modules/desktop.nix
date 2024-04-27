@@ -1,4 +1,9 @@
-{ config, myHostsLib, pkgs, ... }:
+{
+  config,
+  myHostsLib,
+  pkgs,
+  ...
+}:
 let
   inherit (myHostsLib) state;
 in
@@ -8,8 +13,16 @@ in
   services.actkbd = {
     enable = true;
     bindings = [
-      { keys = [ 224 ]; events = [ "rep" ]; command = "${pkgs.light}/bin/light -U 1"; }
-      { keys = [ 225 ]; events = [ "rep" ]; command = "${pkgs.light}/bin/light -A 1"; }
+      {
+        keys = [ 224 ];
+        events = [ "rep" ];
+        command = "${pkgs.light}/bin/light -U 1";
+      }
+      {
+        keys = [ 225 ];
+        events = [ "rep" ];
+        command = "${pkgs.light}/bin/light -A 1";
+      }
     ];
   };
 
@@ -46,7 +59,7 @@ in
   ];
 
   # https://nixos.wiki/wiki/PipeWire
-  security.rtkit.enable = true;  # For PipeWire to be able to set realtime priority.
+  security.rtkit.enable = true; # For PipeWire to be able to set realtime priority.
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -55,5 +68,7 @@ in
 
   # Requires Avahi for printer discovery:
   # https://github.com/apple/cups/issues/5452
-  services.printing.enable = assert config.services.avahi.enable; true;
+  services.printing.enable =
+    assert config.services.avahi.enable;
+    true;
 }

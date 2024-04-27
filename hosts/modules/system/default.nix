@@ -1,22 +1,35 @@
-{ config, myHostsLib, mySystemDirectory, pkgs, ... }:
+{
+  config,
+  myHostsLib,
+  mySystemDirectory,
+  pkgs,
+  ...
+}:
 let
   inherit (myHostsLib) mount state;
 in
 {
-  fileSystems = {
-    # Don't do unncessary things (I'm ignoring systemd is configured to wipe
-    # this directory less frequently). Can't use systemd.tmpfiles.rules without
-    # creating a conflict.
-    "/var/tmp" = mount.bind {
-      device = "/tmp";
-      depends = [ (assert builtins.hasAttr "/tmp" config.fileSystems; "/tmp") ];
-    };
-  } // state.binds [
-    # Where systemd store persistent timers.
-    "/var/lib/systemd/timers"
-    # Log files.
-    "/var/log"
-  ];
+  fileSystems =
+    {
+      # Don't do unncessary things (I'm ignoring systemd is configured to wipe
+      # this directory less frequently). Can't use systemd.tmpfiles.rules
+      # without creating a conflict.
+      "/var/tmp" = mount.bind {
+        device = "/tmp";
+        depends = [
+          (
+            assert builtins.hasAttr "/tmp" config.fileSystems;
+            "/tmp"
+          )
+        ];
+      };
+    }
+    // state.binds [
+      # Where systemd store persistent timers.
+      "/var/lib/systemd/timers"
+      # Log files.
+      "/var/log"
+    ];
   # Journal entries are keyed by machine ID. Note it's considered confidential:
   # https://www.freedesktop.org/software/systemd/man/machine-id.html
   # This symlink is created earlier than systemd.tmpfiles and is suitable for

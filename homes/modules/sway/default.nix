@@ -1,4 +1,10 @@
-{ config, lib, pkgs, swaybar, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  swaybar,
+  ...
+}:
 with lib;
 let
   cfg = config.wayland.windowManager.sway;
@@ -49,7 +55,9 @@ in
             mode dock
             position bottom
             font "Iosevka Term 8"
-            status_command ${swaybar.packages.${pkgs.system}.default}/bin/swaybar 2>> "''${XDG_RUNTIME_DIR:-/tmp}"/swaybar.log
+            status_command ${
+              swaybar.packages.${pkgs.system}.default
+            }/bin/swaybar 2>> "''${XDG_RUNTIME_DIR:-/tmp}"/swaybar.log
             colors {
               background #171717
               statusline #DADADA
@@ -73,9 +81,7 @@ in
       # I don't really care about a fancy cursor but that's apparently required:
       # https://kevin.stravers.net/WaylandCursor
       # https://nixos.org/manual/nixos/stable/index.html#sec-gnome-icons-and-gtk-themes
-      home.packages = with pkgs; [
-        gnome.adwaita-icon-theme
-      ];
+      home.packages = with pkgs; [ gnome.adwaita-icon-theme ];
 
       xdg.configFile."sway/config.d/cursor".text = ''
         set $cursor_theme Adwaita

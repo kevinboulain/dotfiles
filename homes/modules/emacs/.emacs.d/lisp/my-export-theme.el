@@ -55,6 +55,7 @@ background-color=${background}
 text-color=${foreground}
 border-color=${status}
 progress-color=over ${light-highlight}
+max-icon-size=32
 " 'aget my-export-theme--faces))
 
 (defun my-export-theme-tmux ()

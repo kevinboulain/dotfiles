@@ -1,4 +1,3 @@
-# TODO: https://matrix-org.github.io/synapse/latest/turn-howto.html
 # https://nixos.org/manual/nixos/stable/index.html#module-services-matrix
 {
   config,

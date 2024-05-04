@@ -166,6 +166,7 @@
                 ./hosts/modules/locale.nix
                 ./hosts/modules/matrix
                 ./hosts/modules/matrix/root.nix
+                ./hosts/modules/matrix/turn.nix
                 ./hosts/modules/monitoring.nix
                 ./hosts/modules/networking
                 ./hosts/modules/nginx
@@ -206,6 +207,7 @@
                       enableACME = true;
                       forceSSL = true;
                     };
+                    turn.serverName = "turn.boula.in";
                   };
 
                   fileSystems."/boot".device = "/dev/disk/by-uuid/89733135-b593-4106-9801-480900e0facb";

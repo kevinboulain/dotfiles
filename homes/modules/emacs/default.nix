@@ -29,6 +29,7 @@
         poly-org
         poly-rst
         rainbow-delimiters
+        rust-mode
         rustic
         s
         tao-theme
@@ -39,6 +40,18 @@
         which-key
         yasnippet
       ];
+    # TODO: get rid of this once the fork is official:
+    # https://github.com/emacs-rustic/rustic/issues/1
+    overrides = final: parent: {
+      rustic = parent.melpaPackages.rustic.overrideAttrs (old: {
+        src = pkgs.fetchFromGitHub {
+          owner = "emacs-rustic";
+          repo = "rustic";
+          rev = "d0f839244a5fdd9f4954034fa22d26e66d05115e";
+          sha256 = "sha256-OfZNkuscbHKWvg+eEirt5Nhwb0Pm5Vwc0e+IcWA2tto=";
+        };
+      });
+    };
   };
   # https://www.gnu.org/software/emacs/manual/html_node/emacs/Find-Init.html
   home.file = {

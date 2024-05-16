@@ -733,13 +733,16 @@ Flycheck should automatically use the installed linters, like
 
 **** [[https://www.rust-lang.org/][Rust]]
 
-TODO: Tree-sitter support https://github.com/brotzeit/rustic/pull/527
-
-[[https://github.com/brotzeit/rustic][rustic]] started as a fork of
+[[https://github.com/emacs-rustic/rustic]] started as a fork of
 [[https://github.com/rust-lang/rust-mode][rust-mode]] but now extends it (for
 example, with out-of-the-box Flycheck support).
 
 #+begin_src emacs-lisp
+;; https://github.com/emacs-rustic/rustic#tree-sitter
+(use-package rust-mode
+  :init
+  (setq rust-mode-treesitter-derive t))
+
 (use-package rustic
   :hook (rustic-mode . (lambda () (setq fill-column 100)))
   :config

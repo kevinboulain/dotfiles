@@ -1,6 +1,9 @@
 # Get the .deb at https://developer.nvidia.com/nsight-graphics and extract it
 # somewhere. Not pretty but it does the job... Tested with
 # NVIDIA_Nsight_Graphics_2024.1.0.24079.deb.
+# You might want to change [CorePlugin.Environment]
+# CorePlugin.DefaultDocumentsFolder= (it defaults to ~/Document and hosts heavy
+# files).
 {
   lib,
   krb5,

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  myPublicKey,
   myStateDirectory,
   ...
 }:
@@ -11,6 +12,7 @@ in
   users.users.untrusted = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.untrusted.path;
+    openssh.authorizedKeys.keys = [ myPublicKey ];
     home = "${userHomeDirectory}/untrusted";
     homeMode = "0750";
   };

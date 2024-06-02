@@ -11,7 +11,8 @@
         bqn-mode
         circe
         clang-format
-        company
+        corfu
+        corfu-terminal
         eglot
         ethan-wspace
         flycheck

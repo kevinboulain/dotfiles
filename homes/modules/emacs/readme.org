@@ -435,24 +435,29 @@ And extend the results with additional information:
   :hook (after-init . marginalia-mode))
 #+end_src
 
-For in-buffer completion, [[http://company-mode.github.io/][Company]]
-is ubiquitous and extended by many packages, so we'll rely on it:
+For in-buffer completion, [[http://company-mode.github.io/][Company]] has been
+the package of choice for a long time but nowadays only its =company-capf=
+backend is really necessary (thanks to LSP). Instead, use the simpler
+[[https://github.com/minad/corfu][Corfu]], which exclusively relies on
+completion-at-point-functions.
 
 #+begin_src emacs-lisp
-(use-package company
-  :hook (after-init . global-company-mode)
+(use-package corfu
+  :hook (after-init . global-corfu-mode)
   :config
-  (setq company-dabbrev-downcase nil ; Case sensitive dabbrev completion.
-        company-idle-delay 0 ; No delay before showing completion.
-        company-minimum-prefix-length 2 ; Start completing sooner.
-        company-tooltip-align-annotations t ; Align annotations to the right.
-        ;; For some reason they enable broken backends, like company-clang, by
-        ;; default (and considering there is LSP, this is just superfluous).
-        company-backends '(company-capf)))
+  (setq corfu-auto t))
+
+;; Corfu uses child frames, which isn't supported in terminal.
+(use-package corfu-terminal
+  :hook (after-init . (lambda ()
+                        (unless (display-graphic-p)
+                          (corfu-terminal-mode 1))))
+  :init
+  (defvar corfu-terminal-mode nil)) ; https://codeberg.org/akib/emacs-corfu-terminal/pulls/28
 #+end_src
 
-Then, the completion style (honored by =company-capf=) can be tuned to
-provide more flexibility, like fuzzy matching. We do that with
+Then, the completion style (honored by completion-at-point-functions) can be
+tuned to provide more flexibility, like fuzzy matching. That's done with
 [[https://github.com/oantolin/orderless][Orderless]]:
 
 #+begin_src emacs-lisp
@@ -569,7 +574,8 @@ sometimes used as a dependency.
 *** Snippets
 
 [[https://github.com/joaotavora/yasnippet][YASnippet]] is a template system,
-sometimes used as a dependency.
+sometimes used as a dependency (for example, by Eglot to easily fill in the
+parameters of a function call).
 
 #+begin_src emacs-lisp
 (use-package yasnippet

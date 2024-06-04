@@ -44,7 +44,7 @@ in
       # Enabling this option will result in often broken DNS resolutions.
       # dnssec = "true";
       llmnr = "false";
-      fallbackDns = [ "" ]; # Never fallback to the compiled-in list.
+      fallbackDns = [ ]; # Never fallback to the compiled-in list.
       extraConfig =
         assert config.services.avahi.enable;
         ''

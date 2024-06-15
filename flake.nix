@@ -122,13 +122,13 @@
                     users =
                       let
                         home.stateVersion = "22.11";
-                        wayland.windowManager.sway.hiDPIFix = true;
+                        my.hiDPIFix = true;
                       in
                       {
                         ether =
                           { ... }:
                           {
-                            inherit home wayland;
+                            inherit home my;
                             imports = [
                               ./homes/desktop.nix
                               ./homes/modules/emacs/notmuch.nix
@@ -144,7 +144,7 @@
                         untrusted =
                           { ... }:
                           {
-                            inherit home wayland;
+                            inherit home my;
                             imports = [ ./homes/desktop.nix ];
                           };
                       };

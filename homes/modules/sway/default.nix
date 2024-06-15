@@ -7,10 +7,10 @@
 }:
 with lib;
 let
-  cfg = config.wayland.windowManager.sway;
+  inherit (config.my) hiDPIFix;
 in
 {
-  options.wayland.windowManager.sway = {
+  options.my = {
     hiDPIFix = mkOption {
       type = types.bool;
       default = false;
@@ -77,7 +77,7 @@ in
         swayidle
       ];
     }
-    (mkIf cfg.hiDPIFix {
+    (mkIf hiDPIFix {
       # I don't really care about a fancy cursor but that's apparently required:
       # https://kevin.stravers.net/WaylandCursor
       # https://nixos.org/manual/nixos/stable/index.html#sec-gnome-icons-and-gtk-themes

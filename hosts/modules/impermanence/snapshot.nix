@@ -6,7 +6,7 @@
 }:
 with lib;
 let
-  cfg = config.services.snapshot;
+  inherit (config.services.snapshot) subvolumes;
 in
 {
   options.services.snapshot = {
@@ -66,7 +66,7 @@ in
                 "${subvolume}/.snapshots"
               ]
             }"
-          ) cfg.subvolumes;
+          ) subvolumes;
         ExecStart = "${coreutils}/bin/true";
       };
     };

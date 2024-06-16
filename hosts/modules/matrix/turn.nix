@@ -102,17 +102,14 @@ in
   };
 
   # https://matrix-org.github.io/synapse/latest/setup/turn/coturn.html
-  systemd.services.matrix-synapse.serviceConfig.ExecStartPre = [
-    # services.matrix-synapse.turn_shared_secret only takes in the secret as a
-    # string and there's no turn_shared_secret_path like
-    # registration_shared_secret_path...
-    # Prefix the ExecStartPre with + to grant privileges so no fancy permissions
-    # are necessary.
-    # Also, reminder that in shell, read doesn't return 0 when reaching EOF.
-    ''
-      +/bin/sh -c 'rm -f /run/matrix-synapse/turn_shared_secret.yaml && [ -r ${config.sops.secrets.matrixTurnSharedSecret.path} ] && { read -r secret < ${config.sops.secrets.matrixTurnSharedSecret.path} || true; } && printf "turn_shared_secret: %%s\n" "$secret" > /run/matrix-synapse/turn_shared_secret.yaml && chown matrix-synapse: /run/matrix-synapse/turn_shared_secret.yaml'
-    ''
-  ];
+  # services.matrix-synapse.turn_shared_secret only takes in the secret as a
+  # string and there's no turn_shared_secret_path like
+  # registration_shared_secret_path...
+  sops.templates."matrix_turn_shared_secret.yaml" = {
+    mode = "0440";
+    group = config.systemd.services.matrix-synapse.serviceConfig.Group;
+    content = builtins.toJSON { turn_shared_secret = config.sops.placeholder.matrixTurnSharedSecret; };
+  };
   services.matrix-synapse = with config.services.coturn; {
     # No 'turn:' because it may help with privacy and restrictive environments.
     # I don't appear to be facing this issue but be aware of
@@ -121,6 +118,6 @@ in
       "turns:${realm}?transport=tcp"
       "turns:${realm}?transport=udp"
     ];
-    extraConfigFiles = [ "/run/matrix-synapse/turn_shared_secret.yaml" ];
+    extraConfigFiles = [ config.sops.templates."matrix_turn_shared_secret.yaml".path ];
   };
 }

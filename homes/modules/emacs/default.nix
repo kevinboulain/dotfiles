@@ -17,7 +17,6 @@
         ethan-wspace
         flycheck
         glsl-mode
-        htmlize
         interaction-log
         jinx
         magit
@@ -32,7 +31,6 @@
         rainbow-delimiters
         rust-mode
         rustic
-        s
         tao-theme
         toc-org
         treesit-grammars.with-all-grammars

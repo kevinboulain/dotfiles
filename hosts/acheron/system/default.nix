@@ -80,6 +80,18 @@ in
   # Audio has been broken between 6.0.3 and 6.0.4:
   # https://bugzilla.kernel.org/show_bug.cgi?id=216613
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = [
+    # On NixOS this had never been necessary (though I remember setting that on
+    # Arch) but after an upgrade (systemd 255.4 -> 255.6 and linux 6.8.9 ->
+    # 6.9.1, at least that's what I assume). logind won't be notified of the
+    # state change and will enter hibernation right away again. Note
+    # /proc/acpi/button/lid/LID0/state might still say it's closed...
+    "button.lid_init_state=open"
+    # I don't know how much of a security issue it is (see the linked CVE) but I
+    # feel like it's less worse than starting Nsight as root?
+    # https://developer.nvidia.com/nvidia-development-tools-solutions-err_nvgpuctrperm-permission-issue-performance-counters
+    "nvidia.NVreg_RestrictProfilingToAdminUsers=0"
+  ];
 
   # Tells ccache to set up the environment for a package:
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/programs/ccache.nix#L58
@@ -129,15 +141,6 @@ in
   # graphical session and dumping kernel oopses).
   # I still prefer hibernating right away when the lid is closed though.
   services.logind.lidSwitch = "hibernate";
-  systemd.sleep.extraConfig = ''
-    # https://wiki.archlinux.org/title/Power_management#Hybrid-sleep_on_suspend_or_hibernation_request
-    SuspendMode=suspend
-    SuspendState=disk
-    HibernateMode=shutdown
-    HibernateState=disk
-    # Default is 2h.
-    HibernateDelaySec=5m
-  '';
   services.upower = {
     enable = true;
     percentageLow = 20;
@@ -165,7 +168,7 @@ in
   };
   powerManagement.resumeCommands = ''
     # TODO: for some reason the power button is disabled after hibernation.
-    echo enable > /sys/firmware/acpi/interrupts/ff_pwr_btn
+    grep enabled /sys/firmware/acpi/interrupts/ff_pwr_btn || echo enable > /sys/firmware/acpi/interrupts/ff_pwr_btn
   '';
 
   my.allowedUnfreePackages = [
@@ -218,10 +221,6 @@ in
   # While it's named after X, it doesn't install it. This is necessary
   # to enable the Nvidia graphic card.
   services.xserver.videoDrivers = [ "nvidia" ];
-  # I don't know how much of a security issue it is (see the linked CVE) but I
-  # feel like it's less worse than starting Nsight as root?
-  # https://developer.nvidia.com/nvidia-development-tools-solutions-err_nvgpuctrperm-permission-issue-performance-counters
-  boot.kernelParams = [ "nvidia.NVreg_RestrictProfilingToAdminUsers=0" ];
 
   # Not strictly necessary but more appealing.
   boot.loader.grub.gfxmodeEfi = "1920x1080";

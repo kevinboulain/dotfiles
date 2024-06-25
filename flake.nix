@@ -5,6 +5,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-wayland = {
+      url = "github:nix-community/nixpkgs-wayland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     sin = {
       url = "github:ether42/sin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,6 +30,7 @@
     {
       home-manager,
       nixpkgs,
+      nixpkgs-wayland,
       self,
       sin,
       sops-nix,
@@ -103,6 +108,8 @@
 
                   # To ease testing for some of the AArch64 hosts below.
                   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+                  nixpkgs.overlays = [ nixpkgs-wayland.overlay ];
 
                   fileSystems."/boot/efi".device = "/dev/disk/by-uuid/87AC-02CE";
                   fileSystems."/boot/rescue".device = "/dev/disk/by-uuid/96b89522-deab-42d3-ab43-0040bbb0e47b";

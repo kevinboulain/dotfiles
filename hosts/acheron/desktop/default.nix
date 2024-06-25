@@ -13,7 +13,6 @@
     '';
   };
   environment.etc =
-    lib.optionalAttrs (builtins.compareVersions config.programs.sway.package.version "1.10" >= 0)
       {
         "sway/config.d/output".source =
           assert config.programs.sway.enable;

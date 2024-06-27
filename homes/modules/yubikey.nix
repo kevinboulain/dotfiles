@@ -13,11 +13,12 @@
   ];
   services.gpg-agent = {
     enable = true;
-    # Add the following to .ssh/config to work around unavoidable issues:
-    #  Match host * exec "gpg-connect-agent updatestartuptty /bye"
     pinentryPackage = pkgs.pinentry-curses;
     enableSshSupport = true;
   };
+  # To work around unavoidable issues with pinentry (the agent might prompt on a
+  # different tty).
+  programs.ssh.matchBlocks."gpg-agent".match = ''host * exec "gpg-connect-agent updatestartuptty /bye"'';
   programs.password-store = {
     enable = true;
     package = pkgs.pass.withExtensions (extensions: with extensions; [ pass-otp ]);
